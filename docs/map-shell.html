@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="The extended VeilX system graph: private data, placeholder restoration, active-cookie protection and TinyFish policy research.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-CORE' 'sha256-UI'; style-src 'sha256-STYLE'; connect-src 'none'; img-src data:; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>VeilX — Complete System Graph</title>
+  <style>
+    :root{--bg:#f5f3fb;--paper:#fff;--ink:#282638;--muted:#646075;--line:#dfdbe9;--accent:#6447ca;--soft:#eee8ff;--blue:#4264a9;--green:#2c7755;--orange:#a26627;--focus:#6640e0;--mono:ui-monospace,SFMono-Regular,Consolas,monospace}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,select{font:inherit}button,a,summary{touch-action:manipulation}a{color:var(--accent);text-underline-offset:3px}button{cursor:pointer}button:disabled{cursor:default;opacity:.45}button:focus-visible,input:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--focus);outline-offset:3px}h1,h2,h3,p{margin:0}h1{font-size:25px;letter-spacing:-.7px;line-height:1.2}h2{font-size:19px;line-height:1.25;letter-spacing:-.4px}h3{font-size:12px}p{color:var(--muted)}[hidden]{display:none!important}.skip{position:fixed;left:12px;top:-60px;z-index:9;background:white;padding:12px}.skip:focus{top:12px}
+    header{background:var(--paper);padding:20px 27px 16px;border-bottom:1px solid var(--line)}.topline,.title-row,.tools,.legend,.flow-tabs,.zoom-tools,.counts{display:flex;align-items:center;gap:12px}.topline{justify-content:space-between;margin-bottom:10px}.brand{font-weight:750;font-size:20px;letter-spacing:-1px;color:var(--ink);text-decoration:none}.brand span{color:var(--accent)}.tag{font:10px var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}.title-row{justify-content:space-between;align-items:flex-end;gap:20px}.subtitle{font-size:12px;margin-top:7px;max-width:860px}.tools{flex-wrap:wrap;justify-content:flex-end}.link-button,.control{border:1px solid var(--line);background:var(--paper);padding:7px 11px;border-radius:5px;color:var(--ink);font-size:11px;text-decoration:none;white-space:nowrap}.control:hover,.link-button:hover{background:var(--soft)}.link-button.primary{background:var(--accent);border-color:var(--accent);color:white}.workspace{padding:16px 20px 0}.flow-tabs{gap:6px;flex-wrap:wrap;margin-bottom:12px}.flow-tabs button{border:1px solid transparent;padding:7px 11px;font-size:11px;white-space:nowrap;background:transparent;border-radius:5px;color:var(--muted)}.flow-tabs button[aria-pressed=true]{background:var(--ink);color:white}.flow-tabs button:hover{border-color:var(--line)}.canvas-layout{display:grid;grid-template-columns:minmax(0,1fr) 310px;border:1px solid #d3cce4;background:var(--paper);border-radius:8px;overflow:hidden;min-height:650px;height:calc(100dvh - 213px)}.map-column{display:flex;flex-direction:column;min-width:0}.map-top{display:flex;justify-content:space-between;gap:12px;padding:11px 14px;border-bottom:1px solid var(--line);align-items:center;background:#faf9fd}.map-title{font-size:12px;font-weight:600}.counts{gap:10px;color:var(--muted);font:10px var(--mono)}.counts b{font-weight:500;color:var(--ink)}.legend{gap:15px;flex-wrap:wrap;font-size:10px;color:var(--muted);padding:10px 14px;background:#fcfbfe;border-bottom:1px solid var(--line)}.legend span{display:flex;align-items:center;gap:6px}.swatch{display:inline-block;width:17px;height:3px;background:var(--blue)}.swatch.cookie{background:var(--green)}.swatch.audit{background:#8855ba}.swatch.control{background:#9293a2;padding:0;border:0;border-radius:0}.swatch.stretch{background:var(--orange)}.viewport{position:relative;flex:1;min-height:0;overflow:hidden;background-color:#f5effd;background-image:radial-gradient(#d7cfe5 .65px,transparent .65px);background-size:18px 18px;cursor:grab;touch-action:none}.viewport.dragging{cursor:grabbing}.viewport svg{width:100%;height:100%;display:block;user-select:none}.node{cursor:pointer;transition:opacity .13s}.node:focus{outline:none}.node:focus path,.node:focus ellipse,.node:focus polygon{stroke:var(--focus);stroke-width:3}.node.selected path,.node.selected ellipse,.node.selected polygon{stroke:var(--focus);stroke-width:2.4}.edge{transition:opacity .13s}.edge.active path{stroke-width:2}.node.muted{opacity:.16}.edge.muted{opacity:.07}.cluster.muted{opacity:.35}.viewport .overlay-hint{position:absolute;bottom:14px;left:14px;font:10px/1.6 var(--mono);background:#ffffffed;border:1px solid var(--line);border-radius:4px;padding:7px 10px;pointer-events:none;max-width:calc(100% - 160px)}.zoom-tools{position:absolute;bottom:14px;right:14px;gap:2px;padding:4px;background:#ffffffed;border:1px solid var(--line);border-radius:5px}.zoom-tools button{width:31px;height:29px;border:0;background:transparent;color:var(--ink);font-size:17px}.zoom-tools button:hover{background:var(--soft)}.zoom-tools button.fit{width:auto;padding:0 9px;font-size:11px}.zoom-tools output{font:10px var(--mono);min-width:40px;text-align:center}.inspector{border-left:1px solid var(--line);overflow:auto;padding:20px;background:var(--paper)}.inspector .kicker{font:9px/1.8 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}.inspector h2{margin-bottom:12px}.inspector p{font-size:12px;line-height:1.75}.inspector .module{display:block;overflow-wrap:anywhere;border:1px solid var(--line);background:#f8f7fb;padding:10px;margin:14px 0;font:10px/1.7 var(--mono);color:var(--ink);border-radius:4px}.metadata{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:13px}.metadata span{font:9px/1.6 var(--mono);border:1px solid var(--line);border-radius:3px;padding:3px 5px}.search-label{display:block;font:10px var(--mono);color:var(--muted);margin:22px 0 6px}.search-box{width:100%;border:1px solid #c9c3d7;padding:9px 10px;border-radius:5px;background:var(--paper);color:var(--ink);font-size:12px}.search-results{margin-top:5px}.search-results button{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:var(--paper);padding:9px 3px;font-size:11px;color:var(--accent)}.search-results p{font-size:11px;padding:6px 0}.inspector .boundary{padding:12px;border-left:2px solid var(--accent);background:#f3effb;margin-top:16px;font-size:11px}.inspector details{margin-top:17px;border-top:1px solid var(--line);padding-top:12px}.inspector summary{font-size:12px;font-weight:600;cursor:pointer}.connections{list-style:none;margin:10px 0;padding:0}.connections li{border-bottom:1px solid var(--line);padding:8px 0}.connections button{padding:0;border:0;background:none;color:var(--accent);text-align:left;font-size:11px;line-height:1.5}.connections small{display:block;color:var(--muted);font:9px/1.6 var(--mono);margin:3px 0}.inspector .reset-selection{margin-top:14px;width:100%}.key-path{margin-top:20px;border-top:1px solid var(--line);padding-top:14px}.key-path strong{font-size:11px}.key-path code{font:10px/1.9 var(--mono);display:block;margin-top:7px;color:var(--green)}.below{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:24px;padding:20px 2px 25px}.below h3{margin-bottom:7px}.below p{font-size:11px;line-height:1.7}.below code{font:10px/1.8 var(--mono);color:var(--accent)}.status-line{font:10px/1.5 var(--mono);padding:9px 14px;background:#faf9fd;border-top:1px solid var(--line);color:var(--muted)}.sources{display:flex;gap:15px;flex-wrap:wrap;margin-top:10px}.sources a{font-size:10px}.notice{display:block;padding:10px 20px;background:#fff1da;color:#6e4b1c;font-size:12px}.node text,.edge text{pointer-events:none}@media(max-width:1000px){.canvas-layout{grid-template-columns:minmax(0,1fr) 270px}.title-row{align-items:flex-start}.tools{max-width:220px}.workspace{padding:12px}.counts{flex-wrap:wrap;gap:4px 10px}.canvas-layout{height:calc(100dvh - 230px)}.below{gap:16px}.overlay-hint{display:none}}@media(max-width:750px){header{padding:16px}.title-row{display:block}.tools{max-width:none;justify-content:flex-start;margin-top:12px}.topline{gap:10px}.tag{font-size:8px}h1{font-size:23px}.workspace{padding:10px}.canvas-layout{grid-template-columns:minmax(0,1fr);height:auto;min-height:0}.map-column{height:65dvh;min-height:430px}.inspector{border-left:0;border-top:1px solid var(--line);max-height:480px;padding:18px}.flow-tabs{gap:3px}.flow-tabs button{padding:7px;font-size:10px}.legend{gap:8px 13px;font-size:9px}.below{grid-template-columns:1fr;gap:18px}.counts{font-size:9px}.map-top{padding:10px}.zoom-tools{bottom:10px;right:10px}.inspector .search-label{margin-top:16px}}@media(prefers-reduced-motion:reduce){*{transition:none!important}}@media print{header{padding:10px}.flow-tabs,.inspector,.zoom-tools,.overlay-hint,.tools,.below,.search-box{display:none!important}.canvas-layout{display:block;height:auto;border:0}.map-column{height:85vh}.workspace{padding:0}.viewport{background:white}.node.muted,.edge.muted,.cluster.muted{opacity:1}}
+  </style>
+</head>
+<body>
+  <a class="skip" href="#map-heading">Skip to system graph</a>
+  <header><div class="topline"><a class="brand" href="#">veil<span>x</span> <span class="tag">/ system architecture</span></a><span class="tag">Proposed design · no application built</span></div><div class="title-row"><div><h1>Every feature. Every connection.</h1><p class="subtitle">Names, addresses, email and mobile → local placeholders → AI → locally restored answer. Cookie protection and TinyFish policy research, connected to the full design.</p></div><div class="tools"><a class="link-button primary" href="docs/veilx-system-map.svg" download>Download full SVG ↗</a><a class="link-button" href="docs/architecture.dot" download>Graph source</a><a class="link-button" href="walkthrough.html">Earlier walkthrough</a></div></div></header>
+  <noscript class="notice">The full SVG graph below is visible without JavaScript. Download it to zoom. Interactive inspection and focus views require JavaScript.</noscript>
+  <main class="workspace">
+    <nav class="flow-tabs" id="flow-tabs" aria-label="Trace a feature through the graph"><!-- FLOW_BUTTONS --></nav>
+    <div class="canvas-layout">
+      <div class="map-column">
+        <div class="map-top"><h2 class="map-title" id="map-heading">Complete system map</h2><div class="counts"><span><b><!-- NODE_COUNT --></b> components</span><span><b><!-- EDGE_COUNT --></b> connections</span><span><b>13</b> groups</span></div></div>
+        <div class="legend" aria-label="Connection legend"><span><i class="swatch"></i>Personal-data path</span><span><i class="swatch cookie"></i>Cookie safeguards</span><span><i class="swatch audit"></i>Public policy / TinyFish</span><span><i class="swatch control"></i>UI / dependency / control</span><span><i class="swatch stretch"></i>Stretch</span></div>
+        <div class="viewport" id="graph-viewport" tabindex="0" role="region" aria-label="Interactive system graph. Drag to pan, plus and minus to zoom, arrow keys to pan, Home to fit, Escape to clear selection.">
+          <!-- SYSTEM_GRAPH -->
+          <div class="overlay-hint">Drag to pan · Scroll to zoom<br>Select a box to inspect its connections</div>
+          <div class="zoom-tools" role="group" aria-label="Graph zoom controls"><button type="button" id="zoom-out" aria-label="Zoom out">−</button><output id="zoom-value" aria-label="Zoom level">Fit</output><button type="button" id="zoom-in" aria-label="Zoom in">+</button><button type="button" class="fit" id="zoom-actual">100%</button><button type="button" class="fit" id="zoom-fit">Fit</button></div>
+        </div>
+        <div class="status-line" id="graph-status" role="status" aria-live="polite">All components shown. Select a feature trace or inspect a component.</div>
+      </div>
+      <aside class="inspector" id="node-details" aria-label="Component details and graph search">
+        <div class="kicker" id="detail-kicker">Architecture reading guide</div><h2 id="detail-title">Start with the full picture.</h2><p id="detail-description">Select any component to read its responsibility, proposed module and incoming/outgoing connections. Feature traces highlight one path while keeping the surrounding system visible.</p>
+        <div id="selected-metadata" hidden><code class="module" id="detail-module"></code><div class="metadata"><span id="detail-trust"></span><span id="detail-phase"></span></div></div>
+        <p class="boundary" id="detail-boundary">Raw personal values and their map stay local. TinyFish receives only a public start URL and research goal; the backend audit body receives only an approved domain.</p>
+        <button type="button" class="control reset-selection" id="clear-selection" hidden>Clear component selection</button>
+        <label class="search-label" for="component-search">FIND A COMPONENT OR FEATURE</label><input class="search-box" id="component-search" type="search" placeholder="Try address, cookie, TinyFish…" autocomplete="off" maxlength="100"><div class="search-results" id="search-results" aria-label="Matching components"></div>
+        <details id="connection-details" hidden open><summary>Direct connections <span id="connection-count"></span></summary><ul class="connections" id="connection-list"></ul></details>
+        <div class="key-path"><strong>Example: original → AI sees → you read</strong><code>Maya Chen → [PERSON_1] → Maya Chen<br>42 Example Lane → [ADDRESS_1] → 42 Example Lane<br>maya@example.com → [EMAIL_1] → maya@example.com<br>+1 (202) 555-0148 → [PHONE_1] → +1 (202) 555-0148<br>Session secret → [SESSION_1] → stays hidden</code></div>
+      </aside>
+    </div>
+    <div class="below"><article><h3>01 / Private originals never enter the protected AI path.</h3><p>Compose and restore in an extension-owned panel. Only redacted text enters the provider’s page. Provider-owned editors can observe raw typing; in-page convenience mode has a weaker boundary. Normal login still identifies the account to its provider.</p></article><article><h3>02 / Active cookies stay in Chrome.</h3><p>The session section shows local metadata; pasted secrets are blocked, and reviewed browser rules can block known trackers. This is not an encrypted cookie vault or a promise to prevent every leak. Credential placeholders are never restored.</p></article><article><h3>03 / TinyFish investigates public policy.</h3><p>Backend-held key → live public-page navigation → evidence → validation → cache → risk badge and redaction mode. All boxes and module paths describe the proposed app; this document runs no live audit.</p><div class="sources"><a href="https://github.com/tinyfish-io/tinyfish-cookbook" target="_blank" rel="noopener noreferrer">TinyFish docs ↗</a><a href="https://developer.chrome.com/docs/extensions/reference/api/cookies" target="_blank" rel="noopener noreferrer">Chrome cookies ↗</a><a href="https://developer.chrome.com/docs/extensions/reference/api/declarativeNetRequest" target="_blank" rel="noopener noreferrer">Request rules ↗</a></div></article></div>
+  </main>
+  <script id="graph-core">
+    const architecture = /* SYSTEM_MODEL */;
+    function graphSelection(flow = 'all', selected = null) {
+      let edges = architecture.edges.filter(edge => flow === 'all' || edge.flows.includes(flow));
+      if (selected) edges = edges.filter(edge => edge.from === selected || edge.to === selected);
+      const ids = new Set(edges.flatMap(edge => [edge.from,edge.to]));
+      if (selected) ids.add(selected);
+      return {nodes:architecture.nodes.filter(node => ids.has(node.id)), edges};
+    }
+    function searchComponents(query) {
+      const term = query.trim().toLocaleLowerCase();
+      if (!term) return [];
+      return architecture.nodes.filter(node => `${node.label} ${node.module} ${node.detail}`.toLocaleLowerCase().includes(term)).slice(0,8);
+    }
+  </script>
+  <script id="graph-ui">
+    const $ = id => document.getElementById(id);
+    const svg = $('architecture-svg');
+    const original = svg.getAttribute('viewBox').split(/\s+/).map(Number);
+    let view = [...original];
+    let flow = 'all';
+    let selected = null;
+    let drag = null;
+    let dragged = false;
+    const elements = new Map(architecture.nodes.map(node => [node.id,$(`node-${node.id}`)]));
+    function setView(box) {
+      view = box;
+      svg.setAttribute('viewBox',box.join(' '));
+      const scale = Math.min(svg.clientWidth / box[2],svg.clientHeight / box[3]);
+      $('zoom-value').textContent = `${Math.round(scale * 100)}%`;
+    }
+    function localPoint(clientX,clientY) { return new DOMPoint(clientX,clientY).matrixTransform(svg.getScreenCTM().inverse()); }
+    function zoom(factor,point) {
+      const center = point || {x:view[0] + view[2]/2,y:view[1]+view[3]/2};
+      const width = Math.max(150,Math.min(original[2]*2,view[2]/factor));
+      const ratio = width/view[2];
+      setView([center.x-(center.x-view[0])*ratio,center.y-(center.y-view[1])*ratio,width,view[3]*ratio]);
+    }
+    function fitNodes(ids) {
+      if (!ids.length) { setView([...original]); return; }
+      const boxes = ids.map(id => elements.get(id)).filter(Boolean).map(el => {
+        const box = el.getBoundingClientRect();
+        const a=localPoint(box.left,box.top), b=localPoint(box.right,box.bottom);
+        return {x:a.x,y:a.y,right:b.x,bottom:b.y};
+      });
+      const left=Math.min(...boxes.map(b=>b.x))-70,top=Math.min(...boxes.map(b=>b.y))-70;
+      const right=Math.max(...boxes.map(b=>b.right))+70,bottom=Math.max(...boxes.map(b=>b.bottom))+70;
+      setView([left,top,right-left,bottom-top]);
+    }
+    function showSelection(refit=false) {
+      const focus=graphSelection(flow,selected);
+      const activeNodes=new Set(focus.nodes.map(node=>node.id)),activeEdges=new Set(focus.edges.map(edge=>edge.id));
+      elements.forEach((element,id)=>{ element.classList.toggle('muted',!activeNodes.has(id));element.classList.toggle('selected',selected===id);element.setAttribute('aria-pressed',String(selected===id)); });
+      architecture.edges.forEach(edge=>{const el=$(`edge-${edge.id}`);el.classList.toggle('muted',!activeEdges.has(edge.id));el.classList.toggle('active',activeEdges.has(edge.id)&&(flow!=='all'||Boolean(selected)));});
+      document.querySelectorAll('[data-flow]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.flow===flow)));
+      const info=architecture.flows.find(item=>item.id===flow);
+      $('map-heading').textContent=selected?'Component connections':info.label==='Full system'?'Complete system map':info.label;
+      $('graph-status').textContent=`${focus.nodes.length} components · ${focus.edges.length} connections in ${selected?'this component’s direct neighborhood':info.label.toLocaleLowerCase()}.`;
+      if(refit) { if(flow==='all'&&!selected)setView([...original]);else fitNodes(focus.nodes.map(node=>node.id)); }
+      renderDetails();
+    }
+    function selectNode(id) {
+      selected=id;
+      showSelection();
+      fitNodes([id]);
+    }
+    function renderDetails() {
+      const node=architecture.nodes.find(item=>item.id===selected);
+      $('selected-metadata').hidden=!node;
+      $('clear-selection').hidden=!node;
+      $('connection-details').hidden=!node;
+      $('connection-list').replaceChildren();
+      if(!node){const info=architecture.flows.find(item=>item.id===flow);$('detail-kicker').textContent='Architecture reading guide';$('detail-title').textContent=flow==='all'?'Start with the full picture.':info.label;$('detail-description').textContent=info.description;$('detail-boundary').textContent='All modules are proposed. Raw originals and cookie values do not enter public-policy research. Select a box for its exact responsibility and connections.';return;}
+      $('detail-kicker').textContent=architecture.groups.find(group=>group.id===node.group).label;
+      $('detail-title').textContent=node.label;
+      $('detail-description').textContent=node.detail;
+      $('detail-module').textContent=node.module;
+      $('detail-trust').textContent=`TRUST: ${node.trust.toUpperCase()}`;
+      $('detail-phase').textContent=node.phase;
+      const boundaries={local:'Local component: original data must stay within approved extension contexts. Any outgoing edge must honor the label’s payload boundary.',provider:'External provider: receives redacted message text in the protected path; normal first-party account authentication is separate.',backend:'VeilX backend: approved domain and public-policy data only. The API key stays server-side; no prompt originals or cookie values.',agent:'TinyFish: public-page URL, read-only goal, progress and public findings. No user login session or private draft.',public:'Public source pages: evidence gathering, not an authenticated user account. Treat retrieved content as untrusted data.'};
+      $('detail-boundary').textContent=boundaries[node.trust]||'Supporting component in the proposed design.';
+      const edges=architecture.edges.filter(edge=>edge.from===selected||edge.to===selected);
+      $('connection-count').textContent=`(${edges.length})`;
+      edges.forEach(edge=>{const outgoing=edge.from===selected;const target=architecture.nodes.find(item=>item.id===(outgoing?edge.to:edge.from));const li=document.createElement('li');const button=document.createElement('button');button.type='button';button.textContent=`${outgoing?'→':'←'} ${target.label}`;button.addEventListener('click',()=>selectNode(target.id));const small=document.createElement('small');small.textContent=`${edge.label} · ${edge.payload}`;li.append(button,small);$('connection-list').append(li);});
+    }
+    document.querySelectorAll('[data-flow]').forEach(button=>button.addEventListener('click',()=>{flow=button.dataset.flow;selected=null;showSelection(true);}));
+    elements.forEach((element,id)=>{
+      element.addEventListener('click',event=>{if(!dragged){event.stopPropagation();selectNode(id);}});
+      element.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();selectNode(id);}});
+    });
+    $('clear-selection').addEventListener('click',()=>{selected=null;showSelection(true);});
+    $('component-search').addEventListener('input',event=>{
+      const query=event.target.value;const results=searchComponents(query);$('search-results').replaceChildren();
+      results.forEach(node=>{const button=document.createElement('button');button.type='button';button.textContent=node.label;button.addEventListener('click',()=>{flow='all';selectNode(node.id);});$('search-results').append(button);});
+      if(query.trim()&&!results.length){const message=document.createElement('p');message.textContent='No matching component. Try a shorter name.';$('search-results').append(message);}
+    });
+    $('zoom-in').addEventListener('click',()=>zoom(1.35));
+    $('zoom-out').addEventListener('click',()=>zoom(1/1.35));
+    $('zoom-fit').addEventListener('click',()=>{selected=null;showSelection(true);});
+    $('zoom-actual').addEventListener('click',()=>{const cx=view[0]+view[2]/2,cy=view[1]+view[3]/2;setView([cx-svg.clientWidth/2,cy-svg.clientHeight/2,svg.clientWidth,svg.clientHeight]);});
+    svg.addEventListener('wheel',event=>{event.preventDefault();zoom(Math.exp(-Math.max(-120,Math.min(120,event.deltaY))*.003),localPoint(event.clientX,event.clientY));},{passive:false});
+    svg.addEventListener('pointerdown',event=>{if(event.button!==0)return;dragged=false;drag={x:event.clientX,y:event.clientY,view:[...view]};event.target.setPointerCapture(event.pointerId);$('graph-viewport').classList.add('dragging');});
+    svg.addEventListener('pointermove',event=>{if(!drag)return;const dx=event.clientX-drag.x,dy=event.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>5)dragged=true;const scale=Math.min(svg.clientWidth/drag.view[2],svg.clientHeight/drag.view[3]);setView([drag.view[0]-dx/scale,drag.view[1]-dy/scale,drag.view[2],drag.view[3]]);});
+    function finishDrag(){drag=null;$('graph-viewport').classList.remove('dragging');}
+    svg.addEventListener('pointerup',finishDrag);svg.addEventListener('pointercancel',finishDrag);
+    $('graph-viewport').addEventListener('keydown',event=>{if(event.target.closest('button'))return;const moves={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]};if(moves[event.key]){event.preventDefault();const [x,y]=moves[event.key];setView([view[0]+x*view[2]*.1,view[1]+y*view[3]*.1,view[2],view[3]]);}else if(event.key==='+'||event.key==='='){event.preventDefault();zoom(1.35);}else if(event.key==='-'){event.preventDefault();zoom(1/1.35);}else if(event.key==='Home'){event.preventDefault();showSelection(true);}else if(event.key==='Escape'){selected=null;showSelection(true);}});
+    window.addEventListener('resize',()=>setView(view));
+    showSelection();setView([...original]);
+  </script>
+</body>
+</html>

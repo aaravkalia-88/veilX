@@ -1,0 +1,481 @@
+digraph veilx {
+graph [rankdir=TB, newrank=true, bgcolor="#f5effd", fontname="Arial", fontsize=17, nodesep=.32, ranksep=.8, pad=.45, splines=ortho, outputorder=edgesfirst];
+node [shape=box, style="rounded,filled", fontname="Arial", fontsize=12, fontcolor="#302c40", color="#afa6ca", penwidth=1, margin=".16,.11", width=2.1];
+edge [fontname="Arial", fontsize=9, color="#858093", fontcolor="#686174", arrowsize=.55, penwidth=.9];
+subgraph "cluster_experience" { label="01 / PERSON + EXTENSION EXPERIENCE"; labelloc=t; labeljust=l; style="rounded,filled"; color="#d9d2e5"; fillcolor="#fdfcff"; margin=24;
+"user" [id="node-user", label=<<B>Person using VeilX</B><BR/><FONT POINT-SIZE="9">User / browser</FONT>>, fillcolor="#e8e4ff", shape=ellipse];
+"shell" [id="node-shell", label=<<B>Extension shell</B><BR/><FONT POINT-SIZE="9">sidepanel/App.tsx</FONT>>, fillcolor="#e8e4ff"];
+"composer" [id="node-composer", label=<<B>Protected prompt composer</B><BR/><FONT POINT-SIZE="9">components/ProtectedComposer.tsx</FONT>>, fillcolor="#e8e4ff"];
+"reply-panel" [id="node-reply-panel", label=<<B>Private restored answer</B><BR/><FONT POINT-SIZE="9">components/PrivateReply.tsx</FONT>>, fillcolor="#e8e4ff"];
+"popup" [id="node-popup", label=<<B>Toolbar popup</B><BR/><FONT POINT-SIZE="9">popup/App.tsx</FONT>>, fillcolor="#e8e4ff"];
+"settings" [id="node-settings", label=<<B>Local settings</B><BR/><FONT POINT-SIZE="9">options/App.tsx</FONT>>, fillcolor="#e8e4ff"];
+"onboarding" [id="node-onboarding", label=<<B>Onboarding + permission guide</B><BR/><FONT POINT-SIZE="9">components/Onboarding.tsx</FONT>>, fillcolor="#e8e4ff"];
+"why-panel" [id="node-why-panel", label=<<B>Why this risk?</B><BR/><FONT POINT-SIZE="9">components/PolicyEvidence.tsx</FONT>>, fillcolor="#e8e4ff"];
+"progress-panel" [id="node-progress-panel", label=<<B>Live agent progress</B><BR/><FONT POINT-SIZE="9">components/AuditProgress.tsx</FONT>>, fillcolor="#e8e4ff"];
+"cookie-panel" [id="node-cookie-panel", label=<<B>Active cookies / sessions section</B><BR/><FONT POINT-SIZE="9">components/CookiePanel.tsx</FONT>>, fillcolor="#e8e4ff"];
+"site-consent" [id="node-site-consent", label=<<B>Optional site consent</B><BR/><FONT POINT-SIZE="9">lib/permissions.ts</FONT>>, fillcolor="#e8e4ff"];
+"risk-badge" [id="node-risk-badge", label=<<B>Privacy risk badge</B><BR/><FONT POINT-SIZE="9">components/RiskBadge.tsx</FONT>>, fillcolor="#e8e4ff"];
+"mode-controller" [id="node-mode-controller", label=<<B>Standard / Strict mode</B><BR/><FONT POINT-SIZE="9">lib/privacy-mode.ts</FONT>>, fillcolor="#e8e4ff"];
+{rank=same; "user";}
+{rank=same; "shell";}
+"user" -> "shell" [style=invis,weight=100,minlen=1];
+{rank=same; "composer";"reply-panel";"popup";"settings";}
+"composer" -> "reply-panel" [style=invis,weight=100,constraint=false];
+"reply-panel" -> "popup" [style=invis,weight=100,constraint=false];
+"popup" -> "settings" [style=invis,weight=100,constraint=false];
+"shell" -> "composer" [style=invis,weight=100,minlen=1];
+{rank=same; "onboarding";"why-panel";"progress-panel";"cookie-panel";}
+"onboarding" -> "why-panel" [style=invis,weight=100,constraint=false];
+"why-panel" -> "progress-panel" [style=invis,weight=100,constraint=false];
+"progress-panel" -> "cookie-panel" [style=invis,weight=100,constraint=false];
+"composer" -> "onboarding" [style=invis,weight=100,minlen=1];
+{rank=same; "site-consent";"risk-badge";"mode-controller";}
+"site-consent" -> "risk-badge" [style=invis,weight=100,constraint=false];
+"risk-badge" -> "mode-controller" [style=invis,weight=100,constraint=false];
+"onboarding" -> "site-consent" [style=invis,weight=100,minlen=1];
+}
+subgraph "cluster_detection" { label="02 / ON-DEVICE INPUT + DETECTION"; labelloc=t; labeljust=l; style="rounded,filled"; color="#d9d2e5"; fillcolor="#fdfcff"; margin=24;
+"input-events" [id="node-input-events", label=<<B>Typing + paste controller</B><BR/><FONT POINT-SIZE="9">input/controller.ts</FONT>>, fillcolor="#e8f0ff"];
+"normalizer" [id="node-normalizer", label=<<B>Text spans + offset map</B><BR/><FONT POINT-SIZE="9">detection/normalize.ts</FONT>>, fillcolor="#e8f0ff"];
+"regex-engine" [id="node-regex-engine", label=<<B>Regex candidate engine</B><BR/><FONT POINT-SIZE="9">detection/regex.ts</FONT>>, fillcolor="#e8f0ff"];
+"phone-validator" [id="node-phone-validator", label=<<B>Phone validator</B><BR/><FONT POINT-SIZE="9">detection/phone.ts</FONT>>, fillcolor="#e8f0ff"];
+"card-validator" [id="node-card-validator", label=<<B>Card validator</B><BR/><FONT POINT-SIZE="9">detection/cards.ts</FONT>>, fillcolor="#e8f0ff"];
+"id-validator" [id="node-id-validator", label=<<B>ID / country rules</B><BR/><FONT POINT-SIZE="9">detection/ids.ts</FONT>>, fillcolor="#e8f0ff"];
+"address-rules" [id="node-address-rules", label=<<B>Address context rules</B><BR/><FONT POINT-SIZE="9">detection/address.ts</FONT>>, fillcolor="#e8f0ff"];
+"ner-model" [id="node-ner-model", label=<<B>In-browser NER model</B><BR/><FONT POINT-SIZE="9">detection/ner-worker.ts</FONT><BR/><FONT POINT-SIZE="8">PHASE 2</FONT>>, fillcolor="#e8f0ff"];
+"secret-scanner" [id="node-secret-scanner", label=<<B>Cookie / token secret scanner</B><BR/><FONT POINT-SIZE="9">detection/secrets.ts</FONT>>, fillcolor="#e8f0ff"];
+"overlaps" [id="node-overlaps", label=<<B>Overlap + confidence resolver</B><BR/><FONT POINT-SIZE="9">detection/resolve.ts</FONT>>, fillcolor="#e8f0ff"];
+"underline-layer" [id="node-underline-layer", label=<<B>Highlights + tooltips</B><BR/><FONT POINT-SIZE="9">components/DetectionOverlay.tsx</FONT>>, fillcolor="#e8f0ff"];
+"review" [id="node-review", label=<<B>Detection review / manual mark</B><BR/><FONT POINT-SIZE="9">components/ReviewDetections.tsx</FONT>>, fillcolor="#e8f0ff"];
+"inpage-mode" [id="node-inpage-mode", label=<<B>Optional in-page convenience mode</B><BR/><FONT POINT-SIZE="9">input/inpage.ts</FONT>>, fillcolor="#e8f0ff"];
+{rank=same; "input-events";"normalizer";"regex-engine";}
+"input-events" -> "normalizer" [style=invis,weight=100,constraint=false];
+"normalizer" -> "regex-engine" [style=invis,weight=100,constraint=false];
+{rank=same; "phone-validator";"card-validator";"id-validator";}
+"phone-validator" -> "card-validator" [style=invis,weight=100,constraint=false];
+"card-validator" -> "id-validator" [style=invis,weight=100,constraint=false];
+"input-events" -> "phone-validator" [style=invis,weight=100,minlen=1];
+{rank=same; "address-rules";"ner-model";"secret-scanner";}
+"address-rules" -> "ner-model" [style=invis,weight=100,constraint=false];
+"ner-model" -> "secret-scanner" [style=invis,weight=100,constraint=false];
+"phone-validator" -> "address-rules" [style=invis,weight=100,minlen=1];
+{rank=same; "overlaps";"underline-layer";"review";}
+"overlaps" -> "underline-layer" [style=invis,weight=100,constraint=false];
+"underline-layer" -> "review" [style=invis,weight=100,constraint=false];
+"address-rules" -> "overlaps" [style=invis,weight=100,minlen=1];
+{rank=same; "inpage-mode";}
+"overlaps" -> "inpage-mode" [style=invis,weight=100,minlen=1];
+}
+subgraph "cluster_entities" { label="03 / WHAT BECOMES A PLACEHOLDER"; labelloc=t; labeljust=l; style="rounded,filled"; color="#d9d2e5"; fillcolor="#fdfcff"; margin=24;
+"names" [id="node-names", label=<<B>Name -&gt; [PERSON_1]</B><BR/><FONT POINT-SIZE="9">entity / PERSON</FONT><BR/><FONT POINT-SIZE="8">PHASE 2 + MANUAL MVP</FONT>>, fillcolor="#eef2ff"];
+"addresses" [id="node-addresses", label=<<B>Address -&gt; [ADDRESS_1]</B><BR/><FONT POINT-SIZE="9">entity / ADDRESS</FONT>>, fillcolor="#eef2ff"];
+"email" [id="node-email", label=<<B>Email -&gt; [EMAIL_1]</B><BR/><FONT POINT-SIZE="9">entity / EMAIL</FONT>>, fillcolor="#eef2ff"];
+"phones" [id="node-phones", label=<<B>Mobile -&gt; [PHONE_1]</B><BR/><FONT POINT-SIZE="9">entity / PHONE</FONT>>, fillcolor="#eef2ff"];
+"cards" [id="node-cards", label=<<B>Card -&gt; [CARD_1]</B><BR/><FONT POINT-SIZE="9">entity / CARD</FONT>>, fillcolor="#eef2ff"];
+"ids" [id="node-ids", label=<<B>ID -&gt; [ID_1]</B><BR/><FONT POINT-SIZE="9">entity / ID</FONT>>, fillcolor="#eef2ff"];
+"sessions" [id="node-sessions", label=<<B>Secret -&gt; [SESSION_1]</B><BR/><FONT POINT-SIZE="9"> SESSION / SECRET</FONT>>, fillcolor="#eef2ff"];
+{rank=same; "names";"addresses";"email";}
+"names" -> "addresses" [style=invis,weight=100,constraint=false];
+"addresses" -> "email" [style=invis,weight=100,constraint=false];
+{rank=same; "phones";"cards";"ids";}
+"phones" -> "cards" [style=invis,weight=100,constraint=false];
+"cards" -> "ids" [style=invis,weight=100,constraint=false];
+"names" -> "phones" [style=invis,weight=100,minlen=1];
+{rank=same; "sessions";}
+"phones" -> "sessions" [style=invis,weight=100,minlen=1];
+}
+subgraph "cluster_redaction" { label="04 / LOCAL MAPPING + SAFE SEND"; labelloc=t; labeljust=l; style="rounded,filled"; color="#d9d2e5"; fillcolor="#fdfcff"; margin=24;
+"registry" [id="node-registry", label=<<B>Entity registry + numbering</B><BR/><FONT POINT-SIZE="9">redaction/registry.ts</FONT>>, fillcolor="#e6edff"];
+"placeholder-map" [id="node-placeholder-map", label=<<B>Temporary private mapping</B><BR/><FONT POINT-SIZE="9">redaction/session-map.ts</FONT>>, fillcolor="#e6edff", shape=cylinder];
+"redactor" [id="node-redactor", label=<<B>Replace spans with placeholders</B><BR/><FONT POINT-SIZE="9">redaction/replace.ts</FONT>>, fillcolor="#e6edff"];
+"auto-redact" [id="node-auto-redact", label=<<B>Auto-redact control</B><BR/><FONT POINT-SIZE="9">components/AutoRedactToggle.tsx</FONT>>, fillcolor="#e6edff"];
+"send-gate" [id="node-send-gate", label=<<B>Pre-send privacy gate</B><BR/><FONT POINT-SIZE="9">redaction/send-gate.ts</FONT>>, fillcolor="#e6edff"];
+"session-clear" [id="node-session-clear", label=<<B>Explicit clear + lifecycle cleanup</B><BR/><FONT POINT-SIZE="9">redaction/lifecycle.ts</FONT>>, fillcolor="#e6edff"];
+"missing-map" [id="node-missing-map", label=<<B>Missing / expired map state</B><BR/><FONT POINT-SIZE="9">components/UnresolvedPlaceholder.tsx</FONT>>, fillcolor="#e6edff"];
+{rank=same; "registry";"placeholder-map";"redactor";}
+"registry" -> "placeholder-map" [style=invis,weight=100,constraint=false];
+"placeholder-map" -> "redactor" [style=invis,weight=100,constraint=false];
+{rank=same; "auto-redact";"send-gate";"session-clear";}
+"auto-redact" -> "send-gate" [style=invis,weight=100,constraint=false];
+"send-gate" -> "session-clear" [style=invis,weight=100,constraint=false];
+"registry" -> "auto-redact" [style=invis,weight=100,minlen=1];
+{rank=same; "missing-map";}
+"auto-redact" -> "missing-map" [style=invis,weight=100,minlen=1];
+}
+subgraph "cluster_providers" { label="05 / CHATBOT ADAPTERS + AI BOUNDARY"; labelloc=t; labeljust=l; style="rounded,filled"; color="#d9d2e5"; fillcolor="#fdfcff"; margin=24;
+"adapter" [id="node-adapter", label=<<B>Provider adapter registry</B><BR/><FONT POINT-SIZE="9">adapters/index.ts</FONT>>, fillcolor="#fff0dc"];
+"chatgpt-adapter" [id="node-chatgpt-adapter", label=<<B>ChatGPT rich-text adapter</B><BR/><FONT POINT-SIZE="9">adapters/chatgpt.ts</FONT>>, fillcolor="#fff0dc"];
+"gemini-adapter" [id="node-gemini-adapter", label=<<B>Gemini rich-text adapter</B><BR/><FONT POINT-SIZE="9">adapters/gemini.ts</FONT>>, fillcolor="#fff0dc"];
+"claude-adapter" [id="node-claude-adapter", label=<<B>Claude rich-text adapter</B><BR/><FONT POINT-SIZE="9">adapters/claude.ts</FONT>>, fillcolor="#fff0dc"];
+"redacted-message" [id="node-redacted-message", label=<<B>Only the redacted prompt crosses</B><BR/><FONT POINT-SIZE="9">provider-visible draft</FONT>>, fillcolor="#fff0dc"];
+"ai-provider" [id="node-ai-provider", label=<<B>ChatGPT / Gemini / Claude</B><BR/><FONT POINT-SIZE="9">external AI service</FONT>>, fillcolor="#fff0dc"];
+"provider-page" [id="node-provider-page", label=<<B>Provider-owned page</B><BR/><FONT POINT-SIZE="9">external DOM / scripts</FONT>>, fillcolor="#fff0dc"];
+{rank=same; "adapter";"chatgpt-adapter";"gemini-adapter";}
+"adapter" -> "chatgpt-adapter" [style=invis,weight=100,constraint=false];
+"chatgpt-adapter" -> "gemini-adapter" [style=invis,weight=100,constraint=false];
+{rank=same; "claude-adapter";"redacted-message";"ai-provider";}
+"claude-adapter" -> "redacted-message" [style=invis,weight=100,constraint=false];
+"redacted-message" -> "ai-provider" [style=invis,weight=100,constraint=false];
+"adapter" -> "claude-adapter" [style=invis,weight=100,minlen=1];
+{rank=same; "provider-page";}
+"claude-adapter" -> "provider-page" [style=invis,weight=100,minlen=1];
+}
+subgraph "cluster_restoration" { label="06 / STREAMING REPLY + LOCAL REHYDRATION"; labelloc=t; labeljust=l; style="rounded,filled"; color="#d9d2e5"; fillcolor="#fdfcff"; margin=24;
+"observer" [id="node-observer", label=<<B>Response MutationObserver</B><BR/><FONT POINT-SIZE="9">restore/observer.ts</FONT>>, fillcolor="#e7f1ff"];
+"stream-buffer" [id="node-stream-buffer", label=<<B>Streaming token buffer</B><BR/><FONT POINT-SIZE="9">restore/buffer.ts</FONT>>, fillcolor="#e7f1ff"];
+"token-parser" [id="node-token-parser", label=<<B>Exact placeholder parser</B><BR/><FONT POINT-SIZE="9">restore/parser.ts</FONT>>, fillcolor="#e7f1ff"];
+"map-lookup" [id="node-map-lookup", label=<<B>Conversation-scoped map lookup</B><BR/><FONT POINT-SIZE="9">restore/lookup.ts</FONT>>, fillcolor="#e7f1ff"];
+"secret-filter" [id="node-secret-filter", label=<<B>Never restore credential tokens</B><BR/><FONT POINT-SIZE="9">restore/secret-filter.ts</FONT>>, fillcolor="#e7f1ff"];
+"safe-restore" [id="node-safe-restore", label=<<B>Local plain-text restoration</B><BR/><FONT POINT-SIZE="9">restore/render.ts</FONT>>, fillcolor="#e7f1ff"];
+{rank=same; "observer";"stream-buffer";"token-parser";}
+"observer" -> "stream-buffer" [style=invis,weight=100,constraint=false];
+"stream-buffer" -> "token-parser" [style=invis,weight=100,constraint=false];
+{rank=same; "map-lookup";"secret-filter";"safe-restore";}
+"map-lookup" -> "secret-filter" [style=invis,weight=100,constraint=false];
+"secret-filter" -> "safe-restore" [style=invis,weight=100,constraint=false];
+"observer" -> "map-lookup" [style=invis,weight=100,minlen=1];
+}
+subgraph "cluster_cookies" { label="07 / ACTIVE COOKIE / SESSION GUARD"; labelloc=t; labeljust=l; style="rounded,filled"; color="#d9d2e5"; fillcolor="#fdfcff"; margin=24;
+"cookie-jar" [id="node-cookie-jar", label=<<B>Browser-native cookie store</B><BR/><FONT POINT-SIZE="9">Chrome cookie jar</FONT>>, fillcolor="#e4f2e7", shape=cylinder];
+"cookie-inspector" [id="node-cookie-inspector", label=<<B>Permission-scoped cookie worker</B><BR/><FONT POINT-SIZE="9">cookies/inspect.ts</FONT>>, fillcolor="#e4f2e7"];
+"discard-values" [id="node-discard-values", label=<<B>Discard returned cookie values</B><BR/><FONT POINT-SIZE="9">cookies/project-metadata.ts</FONT>>, fillcolor="#e4f2e7"];
+"cookie-metadata" [id="node-cookie-metadata", label=<<B>Metadata-only local objects</B><BR/><FONT POINT-SIZE="9">cookies/types.ts</FONT>>, fillcolor="#e4f2e7"];
+"flag-checks" [id="node-flag-checks", label=<<B>Cookie flag checks + warnings</B><BR/><FONT POINT-SIZE="9">cookies/risk.ts</FONT>>, fillcolor="#e4f2e7"];
+"tracker-rules" [id="node-tracker-rules", label=<<B>Reviewed tracker rule set</B><BR/><FONT POINT-SIZE="9">rules/trackers.json</FONT>>, fillcolor="#e4f2e7"];
+"dnr-engine" [id="node-dnr-engine", label=<<B>Chrome declarativeNetRequest</B><BR/><FONT POINT-SIZE="9">browser-enforced request rules</FONT>>, fillcolor="#e4f2e7"];
+"tracker-blocked" [id="node-tracker-blocked", label=<<B>Known tracker request blocked</B><BR/><FONT POINT-SIZE="9">browser network boundary</FONT>>, fillcolor="#e4f2e7"];
+"native-auth" [id="node-native-auth", label=<<B>First-party login stays native</B><BR/><FONT POINT-SIZE="9">browser cookie attachment</FONT>>, fillcolor="#e4f2e7"];
+"site-pause" [id="node-site-pause", label=<<B>Per-site guard pause / resume</B><BR/><FONT POINT-SIZE="9">cookies/site-controls.ts</FONT>>, fillcolor="#e4f2e7"];
+"permission-revoked" [id="node-permission-revoked", label=<<B>Permission denied / revoked</B><BR/><FONT POINT-SIZE="9">lib/permissions.ts</FONT>>, fillcolor="#e4f2e7"];
+{rank=same; "cookie-jar";"cookie-inspector";"discard-values";}
+"cookie-jar" -> "cookie-inspector" [style=invis,weight=100,constraint=false];
+"cookie-inspector" -> "discard-values" [style=invis,weight=100,constraint=false];
+{rank=same; "cookie-metadata";"flag-checks";"tracker-rules";}
+"cookie-metadata" -> "flag-checks" [style=invis,weight=100,constraint=false];
+"flag-checks" -> "tracker-rules" [style=invis,weight=100,constraint=false];
+"cookie-jar" -> "cookie-metadata" [style=invis,weight=100,minlen=1];
+{rank=same; "dnr-engine";"tracker-blocked";"native-auth";}
+"dnr-engine" -> "tracker-blocked" [style=invis,weight=100,constraint=false];
+"tracker-blocked" -> "native-auth" [style=invis,weight=100,constraint=false];
+"cookie-metadata" -> "dnr-engine" [style=invis,weight=100,minlen=1];
+{rank=same; "site-pause";"permission-revoked";}
+"site-pause" -> "permission-revoked" [style=invis,weight=100,constraint=false];
+"dnr-engine" -> "site-pause" [style=invis,weight=100,minlen=1];
+}
+subgraph "cluster_auditclient" { label="08 / EXTENSION POLICY AUDITOR"; labelloc=t; labeljust=l; style="rounded,filled"; color="#d9d2e5"; fillcolor="#fdfcff"; margin=24;
+"domain-observer" [id="node-domain-observer", label=<<B>Approved chatbot navigation</B><BR/><FONT POINT-SIZE="9">audit/domain-observer.ts</FONT>>, fillcolor="#efe6ff"];
+"domain-gate" [id="node-domain-gate", label=<<B>Canonical domain allowlist</B><BR/><FONT POINT-SIZE="9">audit/targets.ts</FONT>>, fillcolor="#efe6ff"];
+"audit-client" [id="node-audit-client", label=<<B>Domain-only audit client</B><BR/><FONT POINT-SIZE="9">audit/client.ts</FONT>>, fillcolor="#efe6ff"];
+"audit-events" [id="node-audit-events", label=<<B>Sanitized progress reader</B><BR/><FONT POINT-SIZE="9">audit/events.ts</FONT>>, fillcolor="#efe6ff"];
+"strict-fallback" [id="node-strict-fallback", label=<<B>Unknown / offline -&gt; High + Strict</B><BR/><FONT POINT-SIZE="9">audit/fallback.ts</FONT>>, fillcolor="#efe6ff"];
+{rank=same; "domain-observer";"domain-gate";"audit-client";}
+"domain-observer" -> "domain-gate" [style=invis,weight=100,constraint=false];
+"domain-gate" -> "audit-client" [style=invis,weight=100,constraint=false];
+{rank=same; "audit-events";"strict-fallback";}
+"audit-events" -> "strict-fallback" [style=invis,weight=100,constraint=false];
+"domain-observer" -> "audit-events" [style=invis,weight=100,minlen=1];
+}
+subgraph "cluster_backend" { label="09 / DOMAIN-ONLY BACKEND + PERSISTENCE"; labelloc=t; labeljust=l; style="rounded,filled"; color="#d9d2e5"; fillcolor="#fdfcff"; margin=24;
+"audit-route" [id="node-audit-route", label=<<B>FastAPI audit endpoint</B><BR/><FONT POINT-SIZE="9">routes/audit.py</FONT>>, fillcolor="#e9efff"];
+"api-guards" [id="node-api-guards", label=<<B>Origin + auth + rate limits</B><BR/><FONT POINT-SIZE="9">app/security.py</FONT>>, fillcolor="#e9efff"];
+"url-policy" [id="node-url-policy", label=<<B>Allowlisted HTTPS destination policy</B><BR/><FONT POINT-SIZE="9">app/targets.py</FONT>>, fillcolor="#e9efff"];
+"cache-lookup" [id="node-cache-lookup", label=<<B>7-day cache lookup</B><BR/><FONT POINT-SIZE="9">app/cache.py</FONT>>, fillcolor="#e9efff"];
+"cached-result" [id="node-cached-result", label=<<B>Fresh validated cache hit</B><BR/><FONT POINT-SIZE="9">app/models.py</FONT>>, fillcolor="#e9efff"];
+"tinyfish-client" [id="node-tinyfish-client", label=<<B>Server-side TinyFish client</B><BR/><FONT POINT-SIZE="9">app/tinyfish.py</FONT>>, fillcolor="#e9efff"];
+"agent-goal" [id="node-agent-goal", label=<<B>Read-only policy goal</B><BR/><FONT POINT-SIZE="9">prompts/policy_audit.txt</FONT>>, fillcolor="#e9efff"];
+"schema-validator" [id="node-schema-validator", label=<<B>Pydantic result validation</B><BR/><FONT POINT-SIZE="9">app/models.py</FONT>>, fillcolor="#e9efff"];
+"risk-engine" [id="node-risk-engine", label=<<B>Deterministic training-risk score</B><BR/><FONT POINT-SIZE="9">app/risk.py</FONT>>, fillcolor="#e9efff"];
+"stream-relay" [id="node-stream-relay", label=<<B>Safe StreamingResponse relay</B><BR/><FONT POINT-SIZE="9">app/streaming.py</FONT>>, fillcolor="#e9efff"];
+"sqlite-cache" [id="node-sqlite-cache", label=<<B>SQLite public policy cache</B><BR/><FONT POINT-SIZE="9">data/policy.sqlite3</FONT>>, fillcolor="#e9efff", shape=cylinder];
+"api-key" [id="node-api-key", label=<<B>TinyFish API key / runtime config</B><BR/><FONT POINT-SIZE="9">app/config.py</FONT>>, fillcolor="#e9efff"];
+"audit-failure" [id="node-audit-failure", label=<<B>Timeout / blocked page / bad JSON</B><BR/><FONT POINT-SIZE="9">app/errors.py</FONT>>, fillcolor="#e9efff"];
+"safe-logs" [id="node-safe-logs", label=<<B>Content-free operational logs</B><BR/><FONT POINT-SIZE="9">app/logging.py</FONT>>, fillcolor="#e9efff"];
+{rank=same; "audit-route";"api-guards";"url-policy";}
+"audit-route" -> "api-guards" [style=invis,weight=100,constraint=false];
+"api-guards" -> "url-policy" [style=invis,weight=100,constraint=false];
+{rank=same; "cache-lookup";"cached-result";"tinyfish-client";}
+"cache-lookup" -> "cached-result" [style=invis,weight=100,constraint=false];
+"cached-result" -> "tinyfish-client" [style=invis,weight=100,constraint=false];
+"audit-route" -> "cache-lookup" [style=invis,weight=100,minlen=1];
+{rank=same; "agent-goal";"schema-validator";"risk-engine";}
+"agent-goal" -> "schema-validator" [style=invis,weight=100,constraint=false];
+"schema-validator" -> "risk-engine" [style=invis,weight=100,constraint=false];
+"cache-lookup" -> "agent-goal" [style=invis,weight=100,minlen=1];
+{rank=same; "stream-relay";"sqlite-cache";"api-key";}
+"stream-relay" -> "sqlite-cache" [style=invis,weight=100,constraint=false];
+"sqlite-cache" -> "api-key" [style=invis,weight=100,constraint=false];
+"agent-goal" -> "stream-relay" [style=invis,weight=100,minlen=1];
+{rank=same; "audit-failure";"safe-logs";}
+"audit-failure" -> "safe-logs" [style=invis,weight=100,constraint=false];
+"stream-relay" -> "audit-failure" [style=invis,weight=100,minlen=1];
+}
+subgraph "cluster_tinyfish" { label="10 / TINYFISH WEB AGENT / PUBLIC RESEARCH"; labelloc=t; labeljust=l; style="rounded,filled"; color="#d9d2e5"; fillcolor="#fdfcff"; margin=24;
+"tinyfish-api" [id="node-tinyfish-api", label=<<B>TinyFish streaming API</B><BR/><FONT POINT-SIZE="9">automation/run-sse</FONT>>, fillcolor="#f0e7ff"];
+"web-agent" [id="node-web-agent", label=<<B>Multi-step browser agent</B><BR/><FONT POINT-SIZE="9">TinyFish managed web automation</FONT>>, fillcolor="#f0e7ff"];
+"agent-progress" [id="node-agent-progress", label=<<B>Provider progress stream</B><BR/><FONT POINT-SIZE="9">TinyFish SSE events</FONT>>, fillcolor="#f0e7ff"];
+"live-preview" [id="node-live-preview", label=<<B>Live browsing preview / recording</B><BR/><FONT POINT-SIZE="9">TinyFish preview + hackathon capture</FONT>>, fillcolor="#f0e7ff"];
+"agent-result" [id="node-agent-result", label=<<B>Structured policy finding</B><BR/><FONT POINT-SIZE="9">TinyFish final result</FONT>>, fillcolor="#f0e7ff"];
+{rank=same; "tinyfish-api";"web-agent";"agent-progress";}
+"tinyfish-api" -> "web-agent" [style=invis,weight=100,constraint=false];
+"web-agent" -> "agent-progress" [style=invis,weight=100,constraint=false];
+{rank=same; "live-preview";"agent-result";}
+"live-preview" -> "agent-result" [style=invis,weight=100,constraint=false];
+"tinyfish-api" -> "live-preview" [style=invis,weight=100,minlen=1];
+}
+subgraph "cluster_publicweb" { label="11 / PUBLIC SOURCE PAGES / NO USER SESSION"; labelloc=t; labeljust=l; style="rounded,filled"; color="#d9d2e5"; fillcolor="#fdfcff"; margin=24;
+"public-home" [id="node-public-home", label=<<B>Official provider public website</B><BR/><FONT POINT-SIZE="9">public HTTPS pages</FONT>>, fillcolor="#f7f0ff"];
+"privacy-page" [id="node-privacy-page", label=<<B>Privacy policy</B><BR/><FONT POINT-SIZE="9">public provider privacy URL</FONT>>, fillcolor="#f7f0ff"];
+"terms-page" [id="node-terms-page", label=<<B>Terms of service</B><BR/><FONT POINT-SIZE="9">public provider terms URL</FONT>>, fillcolor="#f7f0ff"];
+"controls-page" [id="node-controls-page", label=<<B>Public data-controls instructions</B><BR/><FONT POINT-SIZE="9">public provider help / settings guide</FONT>>, fillcolor="#f7f0ff"];
+"policy-evidence" [id="node-policy-evidence", label=<<B>Source-linked evidence</B><BR/><FONT POINT-SIZE="9">public claim + section references</FONT>>, fillcolor="#f7f0ff"];
+{rank=same; "public-home";"privacy-page";"terms-page";}
+"public-home" -> "privacy-page" [style=invis,weight=100,constraint=false];
+"privacy-page" -> "terms-page" [style=invis,weight=100,constraint=false];
+{rank=same; "controls-page";"policy-evidence";}
+"controls-page" -> "policy-evidence" [style=invis,weight=100,constraint=false];
+"public-home" -> "controls-page" [style=invis,weight=100,minlen=1];
+}
+subgraph "cluster_support" { label="12 / LOCAL STATE + DEMO + QUALITY GATES"; labelloc=t; labeljust=l; style="rounded,filled"; color="#d9d2e5"; fillcolor="#fdfcff"; margin=24;
+"preferences" [id="node-preferences", label=<<B>Non-sensitive local preferences</B><BR/><FONT POINT-SIZE="9">chrome.storage.local</FONT>>, fillcolor="#edf0f4", shape=cylinder];
+"session-storage" [id="node-session-storage", label=<<B>Restricted transient extension state</B><BR/><FONT POINT-SIZE="9">memory / chrome.storage.session</FONT>>, fillcolor="#edf0f4", shape=cylinder];
+"packaged-model" [id="node-packaged-model", label=<<B>Local model assets</B><BR/><FONT POINT-SIZE="9">models/</FONT><BR/><FONT POINT-SIZE="8">PHASE 2</FONT>>, fillcolor="#edf0f4"];
+"demo-site" [id="node-demo-site", label=<<B>Demo website playground</B><BR/><FONT POINT-SIZE="9">web/ / Vite + React</FONT>>, fillcolor="#edf0f4"];
+"fixture-data" [id="node-fixture-data", label=<<B>Fictional examples + expected output</B><BR/><FONT POINT-SIZE="9">fixtures/</FONT>>, fillcolor="#edf0f4"];
+"unit-tests" [id="node-unit-tests", label=<<B>Detection + map + restore tests</B><BR/><FONT POINT-SIZE="9">unit/</FONT>>, fillcolor="#edf0f4"];
+"adapter-tests" [id="node-adapter-tests", label=<<B>Rich-text + streaming adapter tests</B><BR/><FONT POINT-SIZE="9">integration/</FONT>>, fillcolor="#edf0f4"];
+"audit-tests" [id="node-audit-tests", label=<<B>Audit + fail-safe + cache tests</B><BR/><FONT POINT-SIZE="9">tests/</FONT>>, fillcolor="#edf0f4"];
+"cookie-tests" [id="node-cookie-tests", label=<<B>Cookie permission + sign-in tests</B><BR/><FONT POINT-SIZE="9">cookies/</FONT>>, fillcolor="#edf0f4"];
+"accessibility-tests" [id="node-accessibility-tests", label=<<B>Keyboard + reduced-motion checks</B><BR/><FONT POINT-SIZE="9">accessibility/</FONT>>, fillcolor="#edf0f4"];
+"recorded-demo" [id="node-recorded-demo", label=<<B>Raw 2-3 minute live demo</B><BR/><FONT POINT-SIZE="9">hackathon demonstration</FONT>>, fillcolor="#edf0f4"];
+{rank=same; "preferences";"session-storage";"packaged-model";}
+"preferences" -> "session-storage" [style=invis,weight=100,constraint=false];
+"session-storage" -> "packaged-model" [style=invis,weight=100,constraint=false];
+{rank=same; "demo-site";"fixture-data";"unit-tests";}
+"demo-site" -> "fixture-data" [style=invis,weight=100,constraint=false];
+"fixture-data" -> "unit-tests" [style=invis,weight=100,constraint=false];
+"preferences" -> "demo-site" [style=invis,weight=100,minlen=1];
+{rank=same; "adapter-tests";"audit-tests";"cookie-tests";}
+"adapter-tests" -> "audit-tests" [style=invis,weight=100,constraint=false];
+"audit-tests" -> "cookie-tests" [style=invis,weight=100,constraint=false];
+"demo-site" -> "adapter-tests" [style=invis,weight=100,minlen=1];
+{rank=same; "accessibility-tests";"recorded-demo";}
+"accessibility-tests" -> "recorded-demo" [style=invis,weight=100,constraint=false];
+"adapter-tests" -> "accessibility-tests" [style=invis,weight=100,minlen=1];
+}
+subgraph "cluster_stretch" { label="13 / STRETCH / SEPARATE CONSENT"; labelloc=t; labeljust=l; style="rounded,filled"; color="#d9d2e5"; fillcolor="#fdfcff"; margin=24;
+"optout-consent" [id="node-optout-consent", label=<<B>Explicit opt-out authorization</B><BR/><FONT POINT-SIZE="9">stretch / consent UI</FONT><BR/><FONT POINT-SIZE="8">STRETCH</FONT>>, fillcolor="#fff0e1"];
+"optout-run" [id="node-optout-run", label=<<B>Training opt-out automation</B><BR/><FONT POINT-SIZE="9">stretch / execution design</FONT><BR/><FONT POINT-SIZE="8">STRETCH</FONT>>, fillcolor="#fff0e1"];
+{rank=same; "optout-consent";"optout-run";}
+"optout-consent" -> "optout-run" [style=invis,weight=100,constraint=false];
+}
+{rank=same; "user";}
+{rank=same; "input-events";"names";}
+"site-consent" -> "input-events" [style=invis,weight=100,minlen=2];
+"site-consent" -> "names" [style=invis,weight=100,minlen=2];
+{rank=same; "registry";"cookie-jar";}
+"inpage-mode" -> "registry" [style=invis,weight=100,minlen=2];
+"inpage-mode" -> "cookie-jar" [style=invis,weight=100,minlen=2];
+"sessions" -> "registry" [style=invis,weight=100,minlen=2];
+"sessions" -> "cookie-jar" [style=invis,weight=100,minlen=2];
+{rank=same; "adapter";"observer";}
+"missing-map" -> "adapter" [style=invis,weight=100,minlen=2];
+"missing-map" -> "observer" [style=invis,weight=100,minlen=2];
+"site-pause" -> "adapter" [style=invis,weight=100,minlen=2];
+"site-pause" -> "observer" [style=invis,weight=100,minlen=2];
+{rank=same; "domain-observer";}
+"provider-page" -> "domain-observer" [style=invis,weight=100,minlen=2];
+"map-lookup" -> "domain-observer" [style=invis,weight=100,minlen=2];
+{rank=same; "audit-route";"tinyfish-api";"public-home";}
+"audit-events" -> "audit-route" [style=invis,weight=100,minlen=2];
+"audit-events" -> "tinyfish-api" [style=invis,weight=100,minlen=2];
+"audit-events" -> "public-home" [style=invis,weight=100,minlen=2];
+{rank=same; "preferences";"optout-consent";}
+"audit-failure" -> "preferences" [style=invis,weight=100,minlen=2];
+"audit-failure" -> "optout-consent" [style=invis,weight=100,minlen=2];
+"live-preview" -> "preferences" [style=invis,weight=100,minlen=2];
+"live-preview" -> "optout-consent" [style=invis,weight=100,minlen=2];
+"controls-page" -> "preferences" [style=invis,weight=100,minlen=2];
+"controls-page" -> "optout-consent" [style=invis,weight=100,minlen=2];
+"user" -> "shell" [id="edge-e1", xlabel="uses", color="#9a96a3", constraint=false, style=dashed];
+"shell" -> "composer" [id="edge-e2", xlabel="renders", color="#9a96a3", constraint=false, style=dashed];
+"shell" -> "reply-panel" [id="edge-e3", xlabel="renders", color="#9a96a3", constraint=false, style=dashed];
+"shell" -> "popup" [id="edge-e4", xlabel="opens", color="#9a96a3", constraint=false, style=dashed];
+"shell" -> "settings" [id="edge-e5", xlabel="opens", color="#9a96a3", constraint=false, style=dashed];
+"shell" -> "onboarding" [id="edge-e6", xlabel="guides", color="#9a96a3", constraint=false, style=dashed];
+"shell" -> "cookie-panel" [id="edge-e7", xlabel="renders", color="#9a96a3", constraint=false, style=dashed];
+"shell" -> "risk-badge" [id="edge-e8", xlabel="renders", color="#9a96a3", constraint=false, style=dashed];
+"risk-badge" -> "why-panel" [id="edge-e9", xlabel="explains", color="#9a96a3", constraint=false, style=dashed];
+"shell" -> "progress-panel" [id="edge-e10", xlabel="renders", color="#9a96a3", constraint=false, style=dashed];
+"onboarding" -> "site-consent" [id="edge-e11", xlabel="explains permissions", color="#9a96a3", constraint=false, style=dashed];
+"settings" -> "site-consent" [id="edge-e12", xlabel="requests optionally", color="#9a96a3", constraint=false, style=dashed];
+"settings" -> "preferences" [id="edge-e13", xlabel="saves non-sensitive choices", color="#9a96a3", constraint=false, style=dashed];
+"preferences" -> "mode-controller" [id="edge-e14", xlabel="configures", color="#9a96a3", constraint=false, style=dashed];
+"settings" -> "session-clear" [id="edge-e15", xlabel="clears local session", color="#9a96a3", constraint=false, style=dashed];
+"popup" -> "composer" [id="edge-e16", xlabel="opens protected draft", color="#9a96a3", constraint=false, style=dashed];
+"composer" -> "input-events" [id="edge-e17", xlabel="raw draft + input events", color="#557eb9", constraint=false];
+"input-events" -> "normalizer" [id="edge-e18", xlabel="local text + spans", color="#557eb9", constraint=false];
+"normalizer" -> "regex-engine" [id="edge-e19", xlabel="local candidates", color="#557eb9", constraint=false];
+"normalizer" -> "ner-model" [id="edge-e20", xlabel="local inference only", color="#557eb9", constraint=false];
+"normalizer" -> "secret-scanner" [id="edge-e21", xlabel="scan pasted credentials", color="#458468", constraint=false];
+"regex-engine" -> "email" [id="edge-e22", xlabel="email candidates", color="#557eb9", constraint=false];
+"regex-engine" -> "phone-validator" [id="edge-e23", xlabel="phone candidates", color="#557eb9", constraint=false];
+"regex-engine" -> "card-validator" [id="edge-e24", xlabel="card candidates", color="#557eb9", constraint=false];
+"regex-engine" -> "id-validator" [id="edge-e25", xlabel="ID candidates", color="#557eb9", constraint=false];
+"regex-engine" -> "address-rules" [id="edge-e26", xlabel="address context", color="#557eb9", constraint=false];
+"phone-validator" -> "phones" [id="edge-e27", xlabel="validated phones", color="#557eb9", constraint=false];
+"card-validator" -> "cards" [id="edge-e28", xlabel="validated cards", color="#557eb9", constraint=false];
+"id-validator" -> "ids" [id="edge-e29", xlabel="validated IDs", color="#557eb9", constraint=false];
+"address-rules" -> "addresses" [id="edge-e30", xlabel="contextual addresses", color="#557eb9", constraint=false];
+"ner-model" -> "names" [id="edge-e31", xlabel="person spans / phase 2", color="#557eb9", constraint=false];
+"ner-model" -> "addresses" [id="edge-e32", xlabel="place/address spans / phase 2", color="#557eb9", constraint=false];
+"secret-scanner" -> "sessions" [id="edge-e33", xlabel="credential spans", color="#557eb9", constraint=false];
+"names" -> "overlaps" [id="edge-e34", xlabel="typed spans + confidence", color="#557eb9", constraint=false];
+"addresses" -> "overlaps" [id="edge-e35", xlabel="typed spans + confidence", color="#557eb9", constraint=false];
+"email" -> "overlaps" [id="edge-e36", xlabel="typed spans + confidence", color="#557eb9", constraint=false];
+"phones" -> "overlaps" [id="edge-e37", xlabel="typed spans + confidence", color="#557eb9", constraint=false];
+"cards" -> "overlaps" [id="edge-e38", xlabel="typed spans + confidence", color="#557eb9", constraint=false];
+"ids" -> "overlaps" [id="edge-e39", xlabel="typed spans + confidence", color="#557eb9", constraint=false];
+"sessions" -> "overlaps" [id="edge-e40", xlabel="typed spans + confidence", color="#557eb9", constraint=false];
+"overlaps" -> "underline-layer" [id="edge-e41", xlabel="resolved highlights", color="#557eb9", constraint=false];
+"overlaps" -> "review" [id="edge-e42", xlabel="candidates for review", color="#557eb9", constraint=false];
+"underline-layer" -> "review" [id="edge-e43", xlabel="inspect / correct span", color="#557eb9", constraint=false];
+"composer" -> "review" [id="edge-e44", xlabel="manual marking", color="#557eb9", constraint=false];
+"mode-controller" -> "overlaps" [id="edge-e45", xlabel="sets review thresholds", color="#8b64b5", constraint=false];
+"settings" -> "inpage-mode" [id="edge-e46", xlabel="opt into weaker boundary", color="#9a96a3", constraint=false, style=dashed];
+"inpage-mode" -> "provider-page" [id="edge-e47", xlabel="raw draft can be observed", color="#9a96a3", constraint=false, style=dashed];
+"inpage-mode" -> "underline-layer" [id="edge-e48", xlabel="style-isolated overlay", color="#9a96a3", constraint=false, style=dashed];
+"review" -> "registry" [id="edge-e49", xlabel="approved original spans", color="#557eb9", constraint=false];
+"registry" -> "placeholder-map" [id="edge-e50", xlabel="original <-> token, per chat", color="#557eb9", constraint=false];
+"placeholder-map" -> "redactor" [id="edge-e51", xlabel="local values + replacements", color="#557eb9", constraint=false];
+"composer" -> "redactor" [id="edge-e52", xlabel="raw local draft", color="#557eb9", constraint=false];
+"auto-redact" -> "redactor" [id="edge-e53", xlabel="automatic replacement preference", color="#557eb9", constraint=false];
+"settings" -> "auto-redact" [id="edge-e54", xlabel="sets preference", color="#557eb9", constraint=false];
+"redactor" -> "send-gate" [id="edge-e55", xlabel="exact redacted text", color="#557eb9", constraint=false];
+"secret-scanner" -> "send-gate" [id="edge-e56", xlabel="unresolved secret -> block", color="#458468", constraint=false];
+"mode-controller" -> "send-gate" [id="edge-e57", xlabel="review / fail-closed rules", color="#8b64b5", constraint=false];
+"send-gate" -> "review" [id="edge-e58", xlabel="blocked -> correct locally", color="#557eb9", constraint=false];
+"placeholder-map" -> "session-storage" [id="edge-e59", xlabel="transient private state", color="#557eb9", constraint=false];
+"session-clear" -> "placeholder-map" [id="edge-e60", xlabel="wipe on clear / expiry", color="#557eb9", constraint=false];
+"domain-observer" -> "session-clear" [id="edge-e61", xlabel="conversation changed", color="#557eb9", constraint=false];
+"session-storage" -> "missing-map" [id="edge-e62", xlabel="expired / unavailable", color="#557eb9", constraint=false];
+"send-gate" -> "adapter" [id="edge-e63", xlabel="redacted insertion command", color="#557eb9", constraint=false];
+"adapter" -> "chatgpt-adapter" [id="edge-e64", xlabel="select target adapter", color="#557eb9", constraint=false];
+"chatgpt-adapter" -> "redacted-message" [id="edge-e65", xlabel="insert reviewed placeholders", color="#557eb9", constraint=false];
+"chatgpt-adapter" -> "observer" [id="edge-e66", xlabel="bind response region", color="#557eb9", constraint=false];
+"adapter" -> "gemini-adapter" [id="edge-e67", xlabel="select target adapter", color="#557eb9", constraint=false];
+"gemini-adapter" -> "redacted-message" [id="edge-e68", xlabel="insert reviewed placeholders", color="#557eb9", constraint=false];
+"gemini-adapter" -> "observer" [id="edge-e69", xlabel="bind response region", color="#557eb9", constraint=false];
+"adapter" -> "claude-adapter" [id="edge-e70", xlabel="select target adapter", color="#557eb9", constraint=false];
+"claude-adapter" -> "redacted-message" [id="edge-e71", xlabel="insert reviewed placeholders", color="#557eb9", constraint=false];
+"claude-adapter" -> "observer" [id="edge-e72", xlabel="bind response region", color="#557eb9", constraint=false];
+"redacted-message" -> "ai-provider" [id="edge-e73", xlabel="send placeholders only", color="#557eb9", constraint=false];
+"provider-page" -> "ai-provider" [id="edge-e74", xlabel="provider sends its draft", color="#9a96a3", constraint=false, style=dashed];
+"redacted-message" -> "provider-page" [id="edge-e75", xlabel="visible provider draft", color="#557eb9", constraint=false];
+"ai-provider" -> "observer" [id="edge-e76", xlabel="placeholder answer stream", color="#557eb9", constraint=false];
+"observer" -> "stream-buffer" [id="edge-e77", xlabel="response text updates", color="#557eb9", constraint=false];
+"stream-buffer" -> "token-parser" [id="edge-e78", xlabel="complete token candidates", color="#557eb9", constraint=false];
+"token-parser" -> "map-lookup" [id="edge-e79", xlabel="known token IDs", color="#557eb9", constraint=false];
+"placeholder-map" -> "map-lookup" [id="edge-e80", xlabel="local conversation mapping", color="#557eb9", constraint=false];
+"map-lookup" -> "safe-restore" [id="edge-e81", xlabel="resolved personal values", color="#557eb9", constraint=false];
+"map-lookup" -> "missing-map" [id="edge-e82", xlabel="unknown / expired token", color="#557eb9", constraint=false];
+"missing-map" -> "reply-panel" [id="edge-e83", xlabel="leave token literal + explain", color="#557eb9", constraint=false];
+"token-parser" -> "secret-filter" [id="edge-e84", xlabel="check secret token types", color="#557eb9", constraint=false];
+"secret-filter" -> "safe-restore" [id="edge-e85", xlabel="forbid credential restoration", color="#557eb9", constraint=false];
+"safe-restore" -> "reply-panel" [id="edge-e86", xlabel="readable original details locally", color="#557eb9", constraint=false];
+"reply-panel" -> "user" [id="edge-e87", xlabel="private readable answer", color="#557eb9", constraint=false];
+"cookie-panel" -> "site-consent" [id="edge-e88", xlabel="enable inspection for this site", color="#458468", constraint=false];
+"site-consent" -> "cookie-inspector" [id="edge-e89", xlabel="granted host + cookies permission", color="#458468", constraint=false];
+"cookie-jar" -> "cookie-inspector" [id="edge-e90", xlabel="scoped cookie objects", color="#458468", constraint=false];
+"cookie-inspector" -> "discard-values" [id="edge-e91", xlabel="drop returned value fields", color="#458468", constraint=false];
+"cookie-inspector" -> "cookie-metadata" [id="edge-e92", xlabel="allowlisted metadata projection", color="#458468", constraint=false];
+"cookie-metadata" -> "cookie-panel" [id="edge-e93", xlabel="domain / expiry / flags only", color="#458468", constraint=false];
+"cookie-metadata" -> "flag-checks" [id="edge-e94", xlabel="evaluate security flags", color="#458468", constraint=false];
+"flag-checks" -> "cookie-panel" [id="edge-e95", xlabel="explain warnings, no auto-rewrite", color="#458468", constraint=false];
+"cookie-panel" -> "site-pause" [id="edge-e96", xlabel="pause / resume rules", color="#458468", constraint=false];
+"tracker-rules" -> "dnr-engine" [id="edge-e97", xlabel="install reviewed matching rules", color="#458468", constraint=false];
+"site-consent" -> "dnr-engine" [id="edge-e98", xlabel="scope granted hosts", color="#458468", constraint=false];
+"site-pause" -> "dnr-engine" [id="edge-e99", xlabel="update rules for selected site", color="#458468", constraint=false];
+"dnr-engine" -> "tracker-blocked" [id="edge-e100", xlabel="block matching outbound request", color="#458468", constraint=false];
+"cookie-jar" -> "native-auth" [id="edge-e101", xlabel="normal first-party cookie matching", color="#458468", constraint=false];
+"native-auth" -> "ai-provider" [id="edge-e102", xlabel="normal account authentication", color="#458468", constraint=false];
+"site-consent" -> "permission-revoked" [id="edge-e103", xlabel="denied / revoked event", color="#458468", constraint=false];
+"permission-revoked" -> "cookie-inspector" [id="edge-e104", xlabel="stop inspection", color="#458468", constraint=false];
+"permission-revoked" -> "dnr-engine" [id="edge-e105", xlabel="remove unavailable site rules", color="#458468", constraint=false];
+"permission-revoked" -> "cookie-panel" [id="edge-e106", xlabel="show unavailable, clear metadata", color="#458468", constraint=false];
+"settings" -> "site-pause" [id="edge-e107", xlabel="per-site policy", color="#458468", constraint=false];
+"adapter" -> "domain-observer" [id="edge-e108", xlabel="supported navigation event", color="#8b64b5", constraint=false];
+"domain-observer" -> "domain-gate" [id="edge-e109", xlabel="hostname only", color="#8b64b5", constraint=false];
+"domain-gate" -> "audit-client" [id="edge-e110", xlabel="approved canonical domain", color="#8b64b5", constraint=false];
+"audit-client" -> "audit-route" [id="edge-e111", xlabel="POST /api/audit {domain}", color="#8b64b5", constraint=false];
+"api-guards" -> "audit-route" [id="edge-e112", xlabel="origin / auth / limits", color="#8b64b5", constraint=false];
+"audit-route" -> "url-policy" [id="edge-e113", xlabel="derive approved public URL", color="#8b64b5", constraint=false];
+"audit-route" -> "cache-lookup" [id="edge-e114", xlabel="lookup domain + TTL", color="#8b64b5", constraint=false];
+"cache-lookup" -> "sqlite-cache" [id="edge-e115", xlabel="read public result + checked_at", color="#8b64b5", constraint=false];
+"cache-lookup" -> "cached-result" [id="edge-e116", xlabel="fresh record: return cached", color="#8b64b5", constraint=false];
+"cached-result" -> "risk-engine" [id="edge-e117", xlabel="validated saved finding", color="#8b64b5", constraint=false];
+"cache-lookup" -> "tinyfish-client" [id="edge-e118", xlabel="cache miss / expiry", color="#8b64b5", constraint=false];
+"url-policy" -> "tinyfish-client" [id="edge-e119", xlabel="allowlisted HTTPS start URL", color="#8b64b5", constraint=false];
+"agent-goal" -> "tinyfish-client" [id="edge-e120", xlabel="read-only extraction goal", color="#8b64b5", constraint=false];
+"api-key" -> "tinyfish-client" [id="edge-e121", xlabel="server environment key", color="#8b64b5", constraint=false];
+"tinyfish-client" -> "tinyfish-api" [id="edge-e122", xlabel="POST run-sse / url + goal", color="#8b64b5", constraint=false];
+"tinyfish-api" -> "web-agent" [id="edge-e123", xlabel="start browser automation", color="#8b64b5", constraint=false];
+"web-agent" -> "public-home" [id="edge-e124", xlabel="open public site", color="#8b64b5", constraint=false];
+"web-agent" -> "privacy-page" [id="edge-e125", xlabel="follow privacy link", color="#8b64b5", constraint=false];
+"public-home" -> "privacy-page" [id="edge-e126", xlabel="discover official link", color="#8b64b5", constraint=false];
+"privacy-page" -> "policy-evidence" [id="edge-e127", xlabel="claims + sections + URL", color="#8b64b5", constraint=false];
+"web-agent" -> "terms-page" [id="edge-e128", xlabel="follow terms link", color="#8b64b5", constraint=false];
+"public-home" -> "terms-page" [id="edge-e129", xlabel="discover official link", color="#8b64b5", constraint=false];
+"terms-page" -> "policy-evidence" [id="edge-e130", xlabel="claims + sections + URL", color="#8b64b5", constraint=false];
+"web-agent" -> "controls-page" [id="edge-e131", xlabel="find public control guide", color="#8b64b5", constraint=false];
+"public-home" -> "controls-page" [id="edge-e132", xlabel="discover official link", color="#8b64b5", constraint=false];
+"controls-page" -> "policy-evidence" [id="edge-e133", xlabel="claims + sections + URL", color="#8b64b5", constraint=false];
+"policy-evidence" -> "agent-result" [id="edge-e134", xlabel="structured public findings", color="#8b64b5", constraint=false];
+"web-agent" -> "agent-progress" [id="edge-e135", xlabel="real browsing progress", color="#8b64b5", constraint=false];
+"agent-progress" -> "stream-relay" [id="edge-e136", xlabel="actual provider events", color="#8b64b5", constraint=false];
+"web-agent" -> "live-preview" [id="edge-e137", xlabel="verified live preview handoff", color="#8b64b5", constraint=false];
+"agent-result" -> "schema-validator" [id="edge-e138", xlabel="untrusted final JSON", color="#8b64b5", constraint=false];
+"schema-validator" -> "sqlite-cache" [id="edge-e139", xlabel="save validated result + checked_at", color="#8b64b5", constraint=false];
+"schema-validator" -> "risk-engine" [id="edge-e140", xlabel="validated enums + evidence", color="#8b64b5", constraint=false];
+"risk-engine" -> "risk-badge" [id="edge-e141", xlabel="High / Medium / Low", color="#8b64b5", constraint=false];
+"risk-engine" -> "mode-controller" [id="edge-e142", xlabel="Strict / Standard decision", color="#8b64b5", constraint=false];
+"risk-engine" -> "why-panel" [id="edge-e143", xlabel="findings + caveats + evidence", color="#8b64b5", constraint=false];
+"schema-validator" -> "stream-relay" [id="edge-e144", xlabel="validated terminal payload", color="#8b64b5", constraint=false];
+"stream-relay" -> "audit-events" [id="edge-e145", xlabel="allowlisted VeilX SSE events", color="#8b64b5", constraint=false];
+"audit-events" -> "progress-panel" [id="edge-e146", xlabel="current domain live steps", color="#8b64b5", constraint=false];
+"audit-events" -> "risk-badge" [id="edge-e147", xlabel="loading / live / cached state", color="#8b64b5", constraint=false];
+"tinyfish-client" -> "audit-failure" [id="edge-e148", xlabel="timeout / disconnect / blocked", color="#8b64b5", constraint=false];
+"schema-validator" -> "audit-failure" [id="edge-e149", xlabel="invalid or mismatched result", color="#8b64b5", constraint=false];
+"audit-failure" -> "strict-fallback" [id="edge-e150", xlabel="explicit unavailable outcome", color="#8b64b5", constraint=false];
+"audit-client" -> "strict-fallback" [id="edge-e151", xlabel="offline + no fresh cache", color="#8b64b5", constraint=false];
+"strict-fallback" -> "risk-badge" [id="edge-e152", xlabel="High + uncertainty explanation", color="#8b64b5", constraint=false];
+"strict-fallback" -> "mode-controller" [id="edge-e153", xlabel="enable Strict", color="#8b64b5", constraint=false];
+"audit-route" -> "safe-logs" [id="edge-e154", xlabel="coarse status only", color="#8b64b5", constraint=false];
+"audit-failure" -> "safe-logs" [id="edge-e155", xlabel="content-free error code", color="#8b64b5", constraint=false];
+"tinyfish-client" -> "safe-logs" [id="edge-e156", xlabel="duration / result status", color="#8b64b5", constraint=false];
+"packaged-model" -> "ner-model" [id="edge-e157", xlabel="load local model weights", color="#9a96a3", constraint=false, style=dashed];
+"fixture-data" -> "demo-site" [id="edge-e158", xlabel="fictional input samples", color="#9a96a3", constraint=false, style=dashed];
+"demo-site" -> "regex-engine" [id="edge-e159", xlabel="share local detection code", color="#9a96a3", constraint=false, style=dashed];
+"demo-site" -> "redactor" [id="edge-e160", xlabel="share placeholder behavior", color="#9a96a3", constraint=false, style=dashed];
+"fixture-data" -> "unit-tests" [id="edge-e161", xlabel="expected transformations", color="#9a96a3", constraint=false, style=dashed];
+"unit-tests" -> "overlaps" [id="edge-e162", xlabel="validate priorities + spans", color="#9a96a3", constraint=false, style=dashed];
+"unit-tests" -> "registry" [id="edge-e163", xlabel="validate repeat numbering", color="#9a96a3", constraint=false, style=dashed];
+"unit-tests" -> "safe-restore" [id="edge-e164", xlabel="validate safe rehydration", color="#9a96a3", constraint=false, style=dashed];
+"adapter-tests" -> "adapter" [id="edge-e165", xlabel="verify all 3 adapters", color="#9a96a3", constraint=false, style=dashed];
+"adapter-tests" -> "send-gate" [id="edge-e166", xlabel="IME / stale / raw-send prevention", color="#9a96a3", constraint=false, style=dashed];
+"adapter-tests" -> "stream-buffer" [id="edge-e167", xlabel="stream / switch / repeat cases", color="#9a96a3", constraint=false, style=dashed];
+"audit-tests" -> "audit-route" [id="edge-e168", xlabel="request and fail-safe contracts", color="#9a96a3", constraint=false, style=dashed];
+"audit-tests" -> "cache-lookup" [id="edge-e169", xlabel="hit / miss / expiry", color="#9a96a3", constraint=false, style=dashed];
+"audit-tests" -> "schema-validator" [id="edge-e170", xlabel="bad JSON / enum / domain", color="#9a96a3", constraint=false, style=dashed];
+"cookie-tests" -> "cookie-inspector" [id="edge-e171", xlabel="no values in messages / logs", color="#9a96a3", constraint=false, style=dashed];
+"cookie-tests" -> "native-auth" [id="edge-e172", xlabel="first-party login regression", color="#9a96a3", constraint=false, style=dashed];
+"cookie-tests" -> "dnr-engine" [id="edge-e173", xlabel="known-route enforcement only", color="#9a96a3", constraint=false, style=dashed];
+"accessibility-tests" -> "shell" [id="edge-e174", xlabel="keyboard + focus + motion", color="#9a96a3", constraint=false, style=dashed];
+"live-preview" -> "recorded-demo" [id="edge-e175", xlabel="visible real agent browsing", color="#9a96a3", constraint=false, style=dashed];
+"demo-site" -> "recorded-demo" [id="edge-e176", xlabel="safe fictional walkthrough", color="#9a96a3", constraint=false, style=dashed];
+"reply-panel" -> "recorded-demo" [id="edge-e177", xlabel="show local restored response", color="#9a96a3", constraint=false, style=dashed];
+"cookie-panel" -> "recorded-demo" [id="edge-e178", xlabel="show session feature limits", color="#9a96a3", constraint=false, style=dashed];
+"settings" -> "optout-consent" [id="edge-e179", xlabel="explicit separate action", color="#b17c3e", constraint=false, style=dashed];
+"why-panel" -> "optout-consent" [id="edge-e180", xlabel="offer documented opt-out action", color="#b17c3e", constraint=false, style=dashed];
+"optout-consent" -> "optout-run" [id="edge-e181", xlabel="consent gates authenticated action", color="#b17c3e", constraint=false, style=dashed];
+"controls-page" -> "optout-run" [id="edge-e182", xlabel="public instructions only", color="#b17c3e", constraint=false, style=dashed];
+}

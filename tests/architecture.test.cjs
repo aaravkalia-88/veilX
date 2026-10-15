@@ -2,6 +2,8 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+const vm = require('node:vm');
+const { createHash } = require('node:crypto');
 const root = path.join(__dirname, '..');
 const graph = fs.existsSync(path.join(root, 'docs/architecture.json'))
   ? JSON.parse(fs.readFileSync(path.join(root, 'docs/architecture.json'), 'utf8'))
@@ -63,4 +65,38 @@ test('HTML is a self-contained graph with offline SVG and accessible exploration
   const svg = fs.existsSync(path.join(root,'docs/veilx-system-map.svg')) ? fs.readFileSync(path.join(root,'docs/veilx-system-map.svg'),'utf8') : '';
   assert.match(svg, /<svg/);
   assert.ok(svg.includes('placeholder-map') && svg.includes('tinyfish-api'));
+  assert.equal((svg.match(/class="node"/g)||[]).length,graph.nodes.length);
+  assert.equal((svg.match(/class="edge"/g)||[]).length,graph.edges.length);
+  assert.equal((html.match(/role="button"/g)||[]).length,graph.nodes.length);
+  assert.doesNotMatch(svg,/role="button"|<script/);
+});
+
+test('feature traces, direct neighborhoods and literal search preserve the full graph model', () => {
+  const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
+  const core=html.match(/<script id="graph-core">([\s\S]*?)<\/script>/)?.[1]||'';
+  const context=vm.createContext({});
+  vm.runInContext(core,context,{filename:'graph-core.js'});
+  const run=source=>vm.runInContext(source,context);
+  assert.equal(run("graphSelection().nodes.length"),graph.nodes.length);
+  assert.equal(run("graphSelection().edges.length"),graph.edges.length);
+  for(const flow of graph.flows) assert.ok(run(`graphSelection('${flow.id}').edges.length`)>0,flow.id);
+  assert.equal(run("graphSelection('missing').edges.length"),0);
+  assert.equal(run("graphSelection('all','cookie-jar').edges.every(e=>e.from==='cookie-jar'||e.to==='cookie-jar')"),true);
+  assert.equal(run("graphSelection('prompt','cookie-jar').nodes.length"),1);
+  assert.ok(run("searchComponents(' ADDRESS ').some(n=>n.id==='addresses')"));
+  assert.equal(run("searchComponents(' ').length"),0);
+  assert.equal(run("searchComponents('<script>not code</script>').length"),0);
+  assert.ok(run("searchComponents('local').length")<=8);
+});
+
+test('generated scripts, exact CSP hashes and unique IDs remain valid', () => {
+  const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
+  const scripts=[...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g)];
+  assert.equal(scripts.length,2);
+  scripts.forEach(match=>assert.doesNotThrow(()=>new vm.Script(match[1])));
+  for(const block of html.matchAll(/<(?:script|style)[^>]*>([\s\S]*?)<\/(?:script|style)>/g)) {
+    assert.ok(html.includes(`'sha256-${createHash('sha256').update(block[1]).digest('base64')}'`));
+  }
+  const ids=[...html.matchAll(/\sid="([^"]+)"/g)].map(match=>match[1]);
+  assert.equal(new Set(ids).size,ids.length);
 });

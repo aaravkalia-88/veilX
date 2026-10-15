@@ -1,58 +1,75 @@
-# VeilX — graphical product walkthrough
+# VeilX — complete system graph
 
-**Open [index.html](index.html) in a browser.** It is one self-contained file and works offline, including its interactions. No installation, API key, build step, external font, analytics, or server is required.
+**Open [index.html](index.html): 106 components, 182 labeled connections, 13 architectural groups.** This is the extended architecture diagram requested from the reference image. It documents the proposed application; it does not implement the browser extension or backend.
 
-This is the first reviewable artifact requested from the product brief, before the full product specification and application implementation. The brief calls the product Veil; this concept uses **VeilX** to match the requested name and repository.
+The graph is embedded in the HTML and works offline. No installation, server, API key, analytics, remote assets or external renderer is needed to view it. The earlier graphical walkthrough is preserved at [walkthrough.html](walkthrough.html).
 
-## What to try
+## Explore or share
 
-1. **The experience:** advance the fictional draft through detection, placeholder replacement, and local reply restoration. Switch to the session-cookie example; credentials stay hidden even in the restored reply.
-2. **The intelligence:** replay the illustrated TinyFish agent journey. Select training-policy findings to see High/Medium/Low risk and Strict/Standard mode change. Unknown findings fail safe to High/Strict.
-3. **The session shield:** inspect fictional active-cookie metadata, simulate a known tracker request, and pause Cookie Guard to compare behavior. First-party sign-in traffic remains allowed in this model.
-4. **The architecture:** review the local/cloud boundary, integration contract, security constraints, and build order.
+- Drag to pan; scroll or use **+ / −** to zoom. **100%** gives readable labels; **Fit** returns to the current trace.
+- Select a component for its responsibility, proposed module, data boundary and incoming/outgoing connections. Follow another connection from the details panel.
+- Search for a feature, component or module. Choose a feature trace for prompt redaction, reply restoration, active cookies, TinyFish, supporting pieces or stretch opt-out work.
+- Keyboard: Tab to a node, Enter/Space to inspect, arrows to pan, +/− to zoom, Home to fit, Escape to clear selection.
+- Download the [vector SVG](docs/veilx-system-map.svg) for unlimited zoom or sharing. The [DOT graph](docs/architecture.dot) is editable in Graphviz-compatible tools.
 
-Everything is an **illustration**. The file does not detect arbitrary text, contact a chatbot, call TinyFish, read real cookies, or enforce browser network rules. All values are fixed fictional fixtures. Reserved `.invalid` domains cannot be mistaken for a working provider. Policy results make no claims about actual ChatGPT, Gemini, or Claude practices.
+Every application module path is **proposed**, not a claim that the file exists or the feature has been built.
 
-## TinyFish's role in the planned product
+## What connects to what
 
-The extension sends only an approved chatbot domain to a proposed `POST /api/audit` FastAPI route. The backend uses TinyFish to navigate public privacy policies, terms, and data-control instructions; it validates evidence with Pydantic, relays safe progress, and caches results in SQLite for seven days. TinyFish does the live multi-page research. VeilX computes the rating from the findings. Keys stay in backend environment variables.
+| Group | Contents |
+| --- | --- |
+| Person + extension experience | Protected composer, private answer panel, popup, settings, onboarding, risk/evidence/progress and active-session section |
+| Local input + detection | Typing, paste, IME, offsets, regex, phone/card/ID validation, address rules, phase-2 NER, secrets, overlap resolution and review |
+| Placeholder types | `[PERSON_1]`, `[ADDRESS_1]`, `[EMAIL_1]`, `[PHONE_1]`, `[CARD_1]`, `[ID_1]`, `[SESSION_1]` |
+| Local mapping + send | Conversation numbering, temporary map, replacement, auto-redact, pre-send gate, cleanup and expired-map handling |
+| Chatbot boundary | ChatGPT/Gemini/Claude rich-text adapters, outgoing text, provider-owned DOM and AI service |
+| Local restoration | MutationObserver, streaming buffer, exact parsing, map lookup, credential suppression and safe local rendering |
+| Cookie / session protection | Native cookies, site permission, worker, discarded values, metadata, flag warnings, tracker rules, first-party login and pause/revocation |
+| Extension auditor | Domain observation, domain-only request, progress and unknown/offline High/Strict fallback |
+| Backend | FastAPI, origin/auth/rate limits, URL policy, cache hit/miss, TinyFish client/goal, Pydantic, scoring, streaming, SQLite, environment key and safe logs |
+| TinyFish | Streaming endpoint, public-web agent, real progress, live-preview integration point and structured finding |
+| Public sources | Official site, privacy policy, terms, public data-control instructions and source evidence |
+| Supporting pieces | Preferences, temporary state, local model assets, demo fixtures, unit/integration/audit/cookie/accessibility tests and recorded demo |
+| Stretch | Separately authorized training opt-out automation; execution boundary must be designed first |
 
-The official [TinyFish cookbook](https://github.com/tinyfish-io/tinyfish-cookbook) verifies `POST https://agent.tinyfish.ai/v1/automation/run-sse`, the `X-API-Key` header, `url` and `goal` request fields, and streamed progress. The HTML includes the intended agent goal. Event parsing and preview integration must be checked against [official documentation](https://docs.tinyfish.ai/) when the backend is implemented; this artifact does not invent provider event formats.
+## Privacy paths
 
-The intended policy result fields are `domain`, `policy_url`, `trains_on_chats`, `retention`, `human_review`, `opt_out_steps`, `last_updated`, and `evidence` (a list of `{claim, section}`). Training values: `yes_by_default`, `opt_out_available`, `no`, `unclear`. Human-review values: `yes`, `no`, `unclear`. Missing facts stay unknown. Only explicit `no` gives Low training risk; unknown or failed audits give High/Strict. A Low training rating does not certify all privacy practices.
+**Personal information:** raw originals → extension-owned composer → local detection/review → placeholders + temporary map → redacted text to AI → placeholder reply → local map lookup → readable answer in extension-owned UI. The AI does not receive the original mapped values through this protected path. Detection can miss information, so review is still necessary.
 
-## Cookie Guard scope and decisions
+Names, addresses, email and mobile can be restored into the private answer. Session credentials are removed/replaced and **never restored**. Original mappings use memory or restricted `chrome.storage.session` with explicit cleanup; no mapping reaches the backend, TinyFish, synced storage or logs.
 
-- Keep real cookies in the browser's native cookie store. The proposed section displays only local domain, expiry, and security flags, with optional site permissions.
-- The [Chrome cookies API](https://developer.chrome.com/docs/extensions/reference/api/cookies) returns cookie objects that can contain secrets. Isolate this access in the extension worker; discard values immediately, send only allowlisted metadata to the extension UI, and never log, persist, or upload cookie values.
-- Locally block pasted session secrets before prompt submission. Ordinary personal placeholders can be restored; credential placeholders must remain hidden.
-- Use a reviewed [declarativeNetRequest](https://developer.chrome.com/docs/extensions/reference/api/declarativeNetRequest) rule set for known trackers, with per-site permission and pause controls. It is not a general request-body scanner or a guarantee against all leaks.
-- Warn about insecure flags. Do not silently change login cookies or sign users out. Secure, HttpOnly, and SameSite are distinct browser protections; [their meanings are documented by MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Set-Cookie).
-- A chatbot can observe raw drafts and restored replies in its own DOM. For the strong privacy path, compose and show restored replies in an extension-owned side panel or popup, and insert only redacted text into the provider page. In-page convenience mode must disclose its weaker boundary. Shadow DOM only isolates styling.
+A provider can observe raw typing and restored values in its own DOM. The protected design keeps both in an extension-origin side panel/popup; in-page underlines are a disclosed convenience mode. Shadow DOM only isolates styles. Normal first-party login still identifies the account to its provider.
 
-These choices extend the original prompt/privacy concept with the requested active-session feature, without claiming universal browser security. A static HTML file cannot implement extension permissions or enforce a cookie boundary.
+**Cookie Guard:** cookies remain in Chrome’s native store. The optional local worker discards returned values and exposes metadata only. Pasted-secret scanning and reviewed browser rules address specific leakage/tracking paths. This is not an encrypted cookie vault, arbitrary request-body inspection, or a guarantee against all exfiltration. Sites choose their authentication flags; VeilX does not silently rewrite them.
 
-## Planned stack, not yet implemented
+**TinyFish:** approved domain → proposed `POST /api/audit` → validated FastAPI request → fresh SQLite cache hit or real TinyFish run → public policy/terms/data-control pages → evidence → Pydantic validation → seven-day cache → risk/evidence/progress and local redaction mode. The audit backend receives no original prompt, map, session value or user browser profile. TinyFish’s key stays on the backend.
 
-`veil/extension`: Chrome MV3, TypeScript, WXT, React, Tailwind; regex and validators first, libphonenumber-js and Luhn card validation; transformers.js NER later. Local placeholder maps use memory or `chrome.storage.session`, with explicit clear behavior. MutationObserver handles provider streaming replies, with protected restoration in extension UI.
+The [official TinyFish cookbook](https://github.com/tinyfish-io/tinyfish-cookbook) verifies `POST https://agent.tinyfish.ai/v1/automation/run-sse`, `X-API-Key`, and `url`/`goal`. Event parsing and live-preview handoff must be verified during integration; the graph invents neither provider event schemas nor live results. The VeilX `/api/audit` route is a proposed design decision.
 
-`veil/backend`: Python 3.11+, FastAPI, Uvicorn, httpx, Pydantic, python-dotenv, SQLite. Strict body/domain validation, allowlisted targets and redirects, origin restrictions, authentication, rate limits, bounded timeouts, and no private-content logging are required before hosting.
+Training risk: `yes_by_default`/`unclear` → High/Strict; `opt_out_available` → Medium/Standard; `no` → Low/Standard. Missing retention/review evidence stays unknown; Low training risk is not a complete privacy certification.
 
-`veil/web`: Vite + React demo playground. The present single HTML artifact precedes that application. The four full specification files requested in the source brief are deferred until the graphical concept is reviewed, following the user's “HTML first” direction.
+## Edit and rebuild the documentation
 
-## Validation
-
-Run the dependency-free model and artifact checks with Node.js 22 or later:
+View the generated HTML/SVG directly without dependencies. To regenerate from the model, use Node.js 22 or later:
 
 ```sh
-node --test tests/walkthrough.test.cjs
+npm ci --ignore-scripts
+npm run build
+npm test
 ```
 
-The HTML uses hash-authorized inline scripts/styles and a Content Security Policy that denies network connections. If editing those blocks, refresh the hashes:
+`@viz-js/viz` is a pinned **build-only** dependency for Graphviz layout; the delivered HTML never loads it. The planned application stack remains WXT/MV3/TypeScript/React/Tailwind, local regex/validators and later transformers.js, Python 3.11+/FastAPI/httpx/Pydantic/SQLite, and a Vite/React demo. None of that application is built here.
 
-```sh
-node scripts/seal-html.cjs
-node --test tests/walkthrough.test.cjs
-```
+| File | Purpose |
+| --- | --- |
+| `docs/architecture.json` | Editable components, groups, connections, payload boundaries and phases |
+| `docs/map-shell.html` | Explorer template and local interaction |
+| `scripts/build-map.cjs` | Validate references, lay out graph, generate DOT/SVG/HTML and refresh CSP hashes |
+| `scripts/seal-html.cjs` | Authorize exact inline scripts/styles with CSP hashes |
+| `index.html` | Generated offline graph explorer |
+| `docs/veilx-system-map.svg` | Generated static vector diagram |
+| `docs/architecture.dot` | Generated Graphviz source |
+| `tests/architecture.test.cjs` | Completeness, privacy, feature paths, exports, search and traces |
+| `walkthrough.html` | Preserved earlier concept walkthrough |
 
-Browser verification and TDD evidence are recorded in [docs/verification.md](docs/verification.md). Synthetic samples test the walkthrough model, not production PII detection, cookie enforcement, or live policy accuracy. No application dependencies have been introduced. The repository’s existing [LICENSE](LICENSE) is the GNU General Public License, version 3; it is preserved from the initial GitHub commit.
+[Graph verification](docs/system-map-verification.md) records checks and limits. [Earlier walkthrough verification](docs/verification.md) remains historical. Application specifications and implementation are deferred; the current deliverable is the extended graph. The original [GPLv3 license](LICENSE) is preserved.

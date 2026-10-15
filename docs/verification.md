@@ -1,6 +1,6 @@
-# Graphical walkthrough verification
+# Earlier graphical walkthrough verification
 
-Date: 15 October 2026. Scope: the standalone `index.html` concept, its synthetic demonstration model, the CSP hash refresh helper, and review instructions. No existing product callers, fixtures, dependencies, exports, or application configuration existed in the initially empty folder.
+Date: 15 October 2026. Historical scope: the concept originally delivered as `index.html`, now preserved at `walkthrough.html`, its synthetic demonstration model, the CSP hash refresh helper, and review instructions. The current primary deliverable is the extended system graph; see [its verification report](system-map-verification.md). No existing product callers, fixtures, dependencies, exports, or application configuration existed in the initially empty local folder.
 
 ## User journeys and test-first evidence
 

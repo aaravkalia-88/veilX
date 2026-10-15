@@ -5,7 +5,7 @@ const vm = require('node:vm');
 const path = require('node:path');
 const { createHash } = require('node:crypto');
 
-const file = path.join(__dirname, '../index.html');
+const file = path.join(__dirname, '../walkthrough.html');
 const html = fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : '';
 const core = html.match(/<script id="walkthrough-core">([\s\S]*?)<\/script>/)?.[1] || '';
 const context = vm.createContext({});

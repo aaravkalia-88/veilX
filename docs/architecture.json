@@ -1,0 +1,3087 @@
+{
+  "title": "VeilX · complete proposed system",
+  "groups": [
+    {
+      "id": "experience",
+      "label": "01 · PERSON + EXTENSION EXPERIENCE",
+      "trust": "local",
+      "color": "#e8e4ff"
+    },
+    {
+      "id": "detection",
+      "label": "02 · ON-DEVICE INPUT + DETECTION",
+      "trust": "local",
+      "color": "#e8f0ff"
+    },
+    {
+      "id": "entities",
+      "label": "03 · WHAT BECOMES A PLACEHOLDER",
+      "trust": "local",
+      "color": "#eef2ff"
+    },
+    {
+      "id": "redaction",
+      "label": "04 · LOCAL MAPPING + SAFE SEND",
+      "trust": "local",
+      "color": "#e6edff"
+    },
+    {
+      "id": "providers",
+      "label": "05 · CHATBOT ADAPTERS + AI BOUNDARY",
+      "trust": "provider",
+      "color": "#fff0dc"
+    },
+    {
+      "id": "restoration",
+      "label": "06 · STREAMING REPLY + LOCAL REHYDRATION",
+      "trust": "local",
+      "color": "#e7f1ff"
+    },
+    {
+      "id": "cookies",
+      "label": "07 · ACTIVE COOKIE / SESSION GUARD",
+      "trust": "local",
+      "color": "#e4f2e7"
+    },
+    {
+      "id": "auditclient",
+      "label": "08 · EXTENSION POLICY AUDITOR",
+      "trust": "local",
+      "color": "#efe6ff"
+    },
+    {
+      "id": "backend",
+      "label": "09 · DOMAIN-ONLY BACKEND + PERSISTENCE",
+      "trust": "backend",
+      "color": "#e9efff"
+    },
+    {
+      "id": "tinyfish",
+      "label": "10 · TINYFISH WEB AGENT / PUBLIC RESEARCH",
+      "trust": "agent",
+      "color": "#f0e7ff"
+    },
+    {
+      "id": "publicweb",
+      "label": "11 · PUBLIC SOURCE PAGES / NO USER SESSION",
+      "trust": "public",
+      "color": "#f7f0ff"
+    },
+    {
+      "id": "support",
+      "label": "12 · LOCAL STATE + DEMO + QUALITY GATES",
+      "trust": "local",
+      "color": "#edf0f4"
+    },
+    {
+      "id": "stretch",
+      "label": "13 · STRETCH / SEPARATE CONSENT",
+      "trust": "local",
+      "color": "#fff0e1"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "user",
+      "label": "Person using VeilX",
+      "module": "User / browser",
+      "detail": "Starts a private conversation. Chooses protections, reviews detections and controls site permissions.",
+      "phase": "MVP",
+      "group": "experience",
+      "trust": "local"
+    },
+    {
+      "id": "shell",
+      "label": "Extension shell",
+      "module": "extension/entrypoints/sidepanel/App.tsx",
+      "detail": "WXT + Manifest V3, TypeScript, React and Tailwind. Coordinates local features and shows remote policy findings; the actual application is not built yet.",
+      "phase": "MVP",
+      "group": "experience",
+      "trust": "local"
+    },
+    {
+      "id": "composer",
+      "label": "Protected prompt composer",
+      "module": "extension/components/ProtectedComposer.tsx",
+      "detail": "Raw names, addresses, email and phone are typed in an extension-origin side panel, outside the provider page. Only a reviewed redacted draft is copied to the chatbot.",
+      "phase": "MVP",
+      "group": "experience",
+      "trust": "local"
+    },
+    {
+      "id": "reply-panel",
+      "label": "Private restored answer",
+      "module": "extension/components/PrivateReply.tsx",
+      "detail": "Displays the readable answer inside extension UI. Original personal values never return to provider-owned DOM. Missing mappings stay visibly unresolved.",
+      "phase": "MVP",
+      "group": "experience",
+      "trust": "local"
+    },
+    {
+      "id": "popup",
+      "label": "Toolbar popup",
+      "module": "extension/entrypoints/popup/App.tsx",
+      "detail": "Quick access to risk, current protection mode, session controls and opening the protected composer.",
+      "phase": "MVP",
+      "group": "experience",
+      "trust": "local"
+    },
+    {
+      "id": "settings",
+      "label": "Local settings",
+      "module": "extension/entrypoints/options/App.tsx",
+      "detail": "Standard/Strict preferences, auto-redact, per-site enable/pause, region-specific validators, clear-session action and privacy explanation.",
+      "phase": "MVP",
+      "group": "experience",
+      "trust": "local"
+    },
+    {
+      "id": "onboarding",
+      "label": "Onboarding + permission guide",
+      "module": "extension/components/Onboarding.tsx",
+      "detail": "Explain what stays local, what a domain-only audit reveals, cookie permissions, false negatives and the difference between protected and in-page composition.",
+      "phase": "MVP",
+      "group": "experience",
+      "trust": "local"
+    },
+    {
+      "id": "why-panel",
+      "label": "Why this risk?",
+      "module": "extension/components/PolicyEvidence.tsx",
+      "detail": "Shows training, retention, human review, opt-out steps, checked-at and last-updated dates with evidence. Unknown facts remain unknown.",
+      "phase": "MVP",
+      "group": "experience",
+      "trust": "local"
+    },
+    {
+      "id": "progress-panel",
+      "label": "Live agent progress",
+      "module": "extension/components/AuditProgress.tsx",
+      "detail": "Shows sanitized server-relayed public-policy steps. In the real demo a verified TinyFish preview should make browsing visible; this graph performs no audit.",
+      "phase": "MVP",
+      "group": "experience",
+      "trust": "local"
+    },
+    {
+      "id": "cookie-panel",
+      "label": "Active cookies / sessions section",
+      "module": "extension/components/CookiePanel.tsx",
+      "detail": "Dedicated local view of cookie domain, name/category, expiry and security flags. Values are not displayed, copied or sent to the server.",
+      "phase": "MVP",
+      "group": "experience",
+      "trust": "local"
+    },
+    {
+      "id": "site-consent",
+      "label": "Optional site consent",
+      "module": "extension/lib/permissions.ts",
+      "detail": "Request cookies + host access only when the person enables inspection for that site. Permission denial or revocation disables that feature honestly.",
+      "phase": "MVP",
+      "group": "experience",
+      "trust": "local"
+    },
+    {
+      "id": "risk-badge",
+      "label": "Privacy risk badge",
+      "module": "extension/components/RiskBadge.tsx",
+      "detail": "High, Medium or Low describes the documented training-risk rule, not a universal security certification. Loading, stale and failed states are visible.",
+      "phase": "MVP",
+      "group": "experience",
+      "trust": "local"
+    },
+    {
+      "id": "mode-controller",
+      "label": "Standard / Strict mode",
+      "module": "extension/lib/privacy-mode.ts",
+      "detail": "The policy result informs local detection sensitivity and the review gate. High or unknown risk selects Strict. Session secrets are blocked in every mode.",
+      "phase": "MVP",
+      "group": "experience",
+      "trust": "local"
+    },
+    {
+      "id": "input-events",
+      "label": "Typing + paste controller",
+      "module": "extension/lib/input/controller.ts",
+      "detail": "Handle input, paste, compositionstart/end and debounce. Do not run destructive rewrites during IME composition. Never dispatch raw drafts as custom page events.",
+      "phase": "MVP",
+      "group": "detection",
+      "trust": "local"
+    },
+    {
+      "id": "normalizer",
+      "label": "Text spans + offset map",
+      "module": "extension/lib/detection/normalize.ts",
+      "detail": "Maintain source offsets and grapheme boundaries. Normalization for detection cannot shift highlight positions or silently change a user’s message.",
+      "phase": "MVP",
+      "group": "detection",
+      "trust": "local"
+    },
+    {
+      "id": "regex-engine",
+      "label": "Regex candidate engine",
+      "module": "extension/lib/detection/regex.ts",
+      "detail": "Local bounded rules generate candidates for emails, phone numbers, cards, IDs and contextual addresses. Candidates still need validation.",
+      "phase": "MVP",
+      "group": "detection",
+      "trust": "local"
+    },
+    {
+      "id": "phone-validator",
+      "label": "Phone validator",
+      "module": "extension/lib/detection/phone.ts",
+      "detail": "libphonenumber-js checks likely phone numbers using the selected region. Ambiguous local numbers require review; mobile and landline numbers share the PHONE category.",
+      "phase": "MVP",
+      "group": "detection",
+      "trust": "local"
+    },
+    {
+      "id": "card-validator",
+      "label": "Card validator",
+      "module": "extension/lib/detection/cards.ts",
+      "detail": "Apply length/prefix plausibility and Luhn checks. A checksum match does not prove a real card, so false positives remain reviewable.",
+      "phase": "MVP",
+      "group": "detection",
+      "trust": "local"
+    },
+    {
+      "id": "id-validator",
+      "label": "ID / country rules",
+      "module": "extension/lib/detection/ids.ts",
+      "detail": "Use explicit country/type-specific patterns and validators; avoid claiming universal government-ID coverage.",
+      "phase": "MVP",
+      "group": "detection",
+      "trust": "local"
+    },
+    {
+      "id": "address-rules",
+      "label": "Address context rules",
+      "module": "extension/lib/detection/address.ts",
+      "detail": "Phase 1 recognizes explicitly labeled or structured address patterns and allows manual selection. Free-form addresses need local model support and review.",
+      "phase": "MVP",
+      "group": "detection",
+      "trust": "local"
+    },
+    {
+      "id": "ner-model",
+      "label": "In-browser NER model",
+      "module": "extension/lib/detection/ner-worker.ts",
+      "detail": "Phase 2 uses transformers.js in a local worker for people and places. Model assets are packaged or explicitly downloaded; prompt text is never submitted for inference.",
+      "phase": "Phase 2",
+      "group": "detection",
+      "trust": "local"
+    },
+    {
+      "id": "secret-scanner",
+      "label": "Cookie / token secret scanner",
+      "module": "extension/lib/detection/secrets.ts",
+      "detail": "Detect pasted Cookie headers, bearer credentials and session-like tokens locally. These are secrets, not ordinary restorable PII. Blocking is independent of risk mode.",
+      "phase": "MVP",
+      "group": "detection",
+      "trust": "local"
+    },
+    {
+      "id": "overlaps",
+      "label": "Overlap + confidence resolver",
+      "module": "extension/lib/detection/resolve.ts",
+      "detail": "Resolve overlapping spans with deterministic priority: credential secrets first, validated exact patterns next, contextual NER afterward. Preserve offsets and require review for uncertainty.",
+      "phase": "MVP",
+      "group": "detection",
+      "trust": "local"
+    },
+    {
+      "id": "underline-layer",
+      "label": "Highlights + tooltips",
+      "module": "extension/components/DetectionOverlay.tsx",
+      "detail": "Accessible local highlights show category and replacement. Shadow DOM can isolate in-page styling but is not a privacy boundary; protected drafting stays in extension UI.",
+      "phase": "MVP",
+      "group": "detection",
+      "trust": "local"
+    },
+    {
+      "id": "review",
+      "label": "Detection review / manual mark",
+      "module": "extension/components/ReviewDetections.tsx",
+      "detail": "Inspect candidates; remove false positives or manually mark a missed name/address. Auto-redact still offers review and never silently sends a secret.",
+      "phase": "MVP",
+      "group": "detection",
+      "trust": "local"
+    },
+    {
+      "id": "inpage-mode",
+      "label": "Optional in-page convenience mode",
+      "module": "extension/lib/input/inpage.ts",
+      "detail": "Provider scripts can observe raw text typed in their editor. Underlines or late redaction cannot undo that observation. This weaker mode must be disclosed.",
+      "phase": "Optional",
+      "group": "detection",
+      "trust": "local"
+    },
+    {
+      "id": "names",
+      "label": "Name → [PERSON_1]",
+      "module": "entity / PERSON",
+      "detail": "Example: Maya Chen becomes [PERSON_1]. In-browser NER provides general detection in phase 2; phase 1 supports manual marking and controlled demo fixtures.",
+      "phase": "Phase 2 + manual MVP",
+      "group": "entities",
+      "trust": "local"
+    },
+    {
+      "id": "addresses",
+      "label": "Address → [ADDRESS_1]",
+      "module": "entity / ADDRESS",
+      "detail": "Example: 42 Example Lane becomes [ADDRESS_1]. Context patterns/manual selection first; expanded free-form coverage follows local NER.",
+      "phase": "MVP",
+      "group": "entities",
+      "trust": "local"
+    },
+    {
+      "id": "email",
+      "label": "Email → [EMAIL_1]",
+      "module": "entity / EMAIL",
+      "detail": "Example: maya@example.com becomes [EMAIL_1]. Match complete email spans locally; keep punctuation outside the replacement.",
+      "phase": "MVP",
+      "group": "entities",
+      "trust": "local"
+    },
+    {
+      "id": "phones",
+      "label": "Mobile → [PHONE_1]",
+      "module": "entity / PHONE",
+      "detail": "Example: +1 (202) 555-0148 becomes [PHONE_1]. Validate locally, normalize identity for stable repeats, preserve the original value in the private map.",
+      "phase": "MVP",
+      "group": "entities",
+      "trust": "local"
+    },
+    {
+      "id": "cards",
+      "label": "Card → [CARD_1]",
+      "module": "entity / CARD",
+      "detail": "Use local patterns plus Luhn. Store the original only in the temporary local map and keep it off audit requests and logs.",
+      "phase": "MVP",
+      "group": "entities",
+      "trust": "local"
+    },
+    {
+      "id": "ids",
+      "label": "ID → [ID_1]",
+      "module": "entity / ID",
+      "detail": "Use the chosen jurisdiction’s detector. Highlight uncertainty rather than claiming every numeric string is an identity number.",
+      "phase": "MVP",
+      "group": "entities",
+      "trust": "local"
+    },
+    {
+      "id": "sessions",
+      "label": "Secret → [SESSION_1]",
+      "module": "entity / SESSION / SECRET",
+      "detail": "A credential is replaced or removed before sending, and never restored in a reply. The temporary secret need not be retained in the placeholder map.",
+      "phase": "MVP",
+      "group": "entities",
+      "trust": "local"
+    },
+    {
+      "id": "registry",
+      "label": "Entity registry + numbering",
+      "module": "extension/lib/redaction/registry.ts",
+      "detail": "Assign a stable type-specific counter per conversation. Repeated values share a placeholder; reserve/escape user-typed placeholder syntax to avoid accidental restoration collisions.",
+      "phase": "MVP",
+      "group": "redaction",
+      "trust": "local"
+    },
+    {
+      "id": "placeholder-map",
+      "label": "Temporary private mapping",
+      "module": "extension/lib/redaction/session-map.ts",
+      "detail": "Conversation-scoped mapping from placeholder to original value. Only ordinary PII is restorable. Use memory or restricted chrome.storage.session, never synced or persistent storage.",
+      "phase": "MVP",
+      "group": "redaction",
+      "trust": "local"
+    },
+    {
+      "id": "redactor",
+      "label": "Replace spans with placeholders",
+      "module": "extension/lib/redaction/replace.ts",
+      "detail": "Replace spans from the end of the string to preserve offsets. The exported draft contains placeholders in place of every reviewed original.",
+      "phase": "MVP",
+      "group": "redaction",
+      "trust": "local"
+    },
+    {
+      "id": "auto-redact",
+      "label": "Auto-redact control",
+      "module": "extension/components/AutoRedactToggle.tsx",
+      "detail": "Controls whether reviewed spans are replaced automatically. It does not weaken secret blocking or authorize automatic send.",
+      "phase": "MVP",
+      "group": "redaction",
+      "trust": "local"
+    },
+    {
+      "id": "send-gate",
+      "label": "Pre-send privacy gate",
+      "module": "extension/lib/redaction/send-gate.ts",
+      "detail": "Re-scan the exact outgoing draft. Block unresolved secrets, stale detection state and incomplete IME composition. A failed adapter never falls back to sending the raw draft.",
+      "phase": "MVP",
+      "group": "redaction",
+      "trust": "local"
+    },
+    {
+      "id": "session-clear",
+      "label": "Explicit clear + lifecycle cleanup",
+      "module": "extension/lib/redaction/lifecycle.ts",
+      "detail": "Clear mappings on conversation close, explicit action and defined expiry. chrome.storage.session clears on browser restart/reload/extension disable, but does not replace application cleanup.",
+      "phase": "MVP",
+      "group": "redaction",
+      "trust": "local"
+    },
+    {
+      "id": "missing-map",
+      "label": "Missing / expired map state",
+      "module": "extension/components/UnresolvedPlaceholder.tsx",
+      "detail": "Leave unknown placeholders unchanged and explain the local session has expired. Never guess the original, retrieve it from the cloud or restore a different chat’s value.",
+      "phase": "MVP",
+      "group": "redaction",
+      "trust": "local"
+    },
+    {
+      "id": "adapter",
+      "label": "Provider adapter registry",
+      "module": "extension/lib/adapters/index.ts",
+      "detail": "Select only approved ChatGPT, Gemini and Claude adapters. An isolated-world content script accepts only redacted insertion commands from the extension.",
+      "phase": "MVP",
+      "group": "providers",
+      "trust": "local"
+    },
+    {
+      "id": "chatgpt-adapter",
+      "label": "ChatGPT rich-text adapter",
+      "module": "extension/lib/adapters/chatgpt.ts",
+      "detail": "Find the approved editor and response region; update via provider-compatible input events; test paste, composition, regenerate and provider UI changes.",
+      "phase": "MVP",
+      "group": "providers",
+      "trust": "local"
+    },
+    {
+      "id": "gemini-adapter",
+      "label": "Gemini rich-text adapter",
+      "module": "extension/lib/adapters/gemini.ts",
+      "detail": "Support its contenteditable editor and response region. Fail visibly if selectors or editor behavior change; do not send the unredacted fallback.",
+      "phase": "MVP",
+      "group": "providers",
+      "trust": "local"
+    },
+    {
+      "id": "claude-adapter",
+      "label": "Claude rich-text adapter",
+      "module": "extension/lib/adapters/claude.ts",
+      "detail": "Support its rich-text editor, streaming messages and navigation. Keep chat identities isolated when the conversation changes.",
+      "phase": "MVP",
+      "group": "providers",
+      "trust": "local"
+    },
+    {
+      "id": "redacted-message",
+      "label": "Only the redacted prompt crosses",
+      "module": "provider-visible draft",
+      "detail": "The provider receives [PERSON_1], [ADDRESS_1], [EMAIL_1] and [PHONE_1]. It receives neither the private map nor original values through the protected path.",
+      "phase": "MVP",
+      "group": "providers",
+      "trust": "provider"
+    },
+    {
+      "id": "ai-provider",
+      "label": "ChatGPT / Gemini / Claude",
+      "module": "external AI service",
+      "detail": "Generates an answer using placeholder text. Normal first-party sign-in cookies can still authenticate the user; VeilX does not make the provider anonymous or hide its account identity.",
+      "phase": "MVP",
+      "group": "providers",
+      "trust": "provider"
+    },
+    {
+      "id": "provider-page",
+      "label": "Provider-owned page",
+      "module": "external DOM / scripts",
+      "detail": "A trust boundary: page scripts may observe their own editor, DOM and account state. Protected original drafts and restored values stay outside this page.",
+      "phase": "MVP",
+      "group": "providers",
+      "trust": "provider"
+    },
+    {
+      "id": "observer",
+      "label": "Response MutationObserver",
+      "module": "extension/lib/restore/observer.ts",
+      "detail": "Observe only the provider response area and copy provider-produced text to the extension channel. Tag/ignore own changes and avoid observer feedback loops.",
+      "phase": "MVP",
+      "group": "restoration",
+      "trust": "local"
+    },
+    {
+      "id": "stream-buffer",
+      "label": "Streaming token buffer",
+      "module": "extension/lib/restore/buffer.ts",
+      "detail": "Wait for complete placeholder tokens across streamed chunks. Preserve partial [PERSON_ fragments until their closing bracket arrives.",
+      "phase": "MVP",
+      "group": "restoration",
+      "trust": "local"
+    },
+    {
+      "id": "token-parser",
+      "label": "Exact placeholder parser",
+      "module": "extension/lib/restore/parser.ts",
+      "detail": "Match complete tokens with the known type and number grammar. Unknown, malformed or user-escaped tokens remain literal text.",
+      "phase": "MVP",
+      "group": "restoration",
+      "trust": "local"
+    },
+    {
+      "id": "map-lookup",
+      "label": "Conversation-scoped map lookup",
+      "module": "extension/lib/restore/lookup.ts",
+      "detail": "Resolve only tokens belonging to the current conversation and local session. A repeated token resolves to the same value; no cloud lookup exists.",
+      "phase": "MVP",
+      "group": "restoration",
+      "trust": "local"
+    },
+    {
+      "id": "secret-filter",
+      "label": "Never restore credential tokens",
+      "module": "extension/lib/restore/secret-filter.ts",
+      "detail": "Reject restoration for SESSION, SECRET and credential types even if a model echoes them. Secret values must never reappear in provider output or its DOM.",
+      "phase": "MVP",
+      "group": "restoration",
+      "trust": "local"
+    },
+    {
+      "id": "safe-restore",
+      "label": "Local plain-text restoration",
+      "module": "extension/lib/restore/render.ts",
+      "detail": "Reinsert approved original personal values with text nodes or React escaping. Show the restored result in extension-owned UI; do not execute model-supplied HTML.",
+      "phase": "MVP",
+      "group": "restoration",
+      "trust": "local"
+    },
+    {
+      "id": "cookie-jar",
+      "label": "Browser-native cookie store",
+      "module": "Chrome cookie jar",
+      "detail": "The browser owns actual cookies. A panel does not create an encrypted vault or move cookies to a separate protected container.",
+      "phase": "MVP",
+      "group": "cookies",
+      "trust": "local"
+    },
+    {
+      "id": "cookie-inspector",
+      "label": "Permission-scoped cookie worker",
+      "module": "extension/lib/cookies/inspect.ts",
+      "detail": "chrome.cookies + approved host permissions returns cookie objects, including values. Project the approved metadata immediately within the worker and never log or persist values.",
+      "phase": "MVP",
+      "group": "cookies",
+      "trust": "local"
+    },
+    {
+      "id": "discard-values",
+      "label": "Discard returned cookie values",
+      "module": "extension/lib/cookies/project-metadata.ts",
+      "detail": "Drop raw values immediately after local metadata projection. No UI message, storage entry, audit request or TinyFish request contains them.",
+      "phase": "MVP",
+      "group": "cookies",
+      "trust": "local"
+    },
+    {
+      "id": "cookie-metadata",
+      "label": "Metadata-only local objects",
+      "module": "extension/lib/cookies/types.ts",
+      "detail": "Domain, path/name category, expiry/session status, Secure, HttpOnly, SameSite and partition metadata where available. No cookie value field in UI contracts.",
+      "phase": "MVP",
+      "group": "cookies",
+      "trust": "local"
+    },
+    {
+      "id": "flag-checks",
+      "label": "Cookie flag checks + warnings",
+      "module": "extension/lib/cookies/risk.ts",
+      "detail": "Explain missing Secure/HttpOnly and SameSite context. Sites set their login flags; VeilX does not silently rewrite authentication cookies or guarantee no exfiltration.",
+      "phase": "MVP",
+      "group": "cookies",
+      "trust": "local"
+    },
+    {
+      "id": "tracker-rules",
+      "label": "Reviewed tracker rule set",
+      "module": "extension/rules/trackers.json",
+      "detail": "Explicitly reviewed known tracker endpoints. Broad blocking can break login; rules need site regression tests and clear versioning.",
+      "phase": "MVP",
+      "group": "cookies",
+      "trust": "local"
+    },
+    {
+      "id": "dnr-engine",
+      "label": "Chrome declarativeNetRequest",
+      "module": "browser-enforced request rules",
+      "detail": "Use matching rules to block known tracking routes without reading request bodies. This does not inspect arbitrary payloads or stop every leak.",
+      "phase": "MVP",
+      "group": "cookies",
+      "trust": "local"
+    },
+    {
+      "id": "tracker-blocked",
+      "label": "Known tracker request blocked",
+      "module": "browser network boundary",
+      "detail": "The browser blocks a matching request before it is sent. Unknown routes and permitted traffic are not automatically classified as leaks.",
+      "phase": "MVP",
+      "group": "cookies",
+      "trust": "local"
+    },
+    {
+      "id": "native-auth",
+      "label": "First-party login stays native",
+      "module": "browser cookie attachment",
+      "detail": "Chrome attaches applicable cookies only under its domain/path/Secure/SameSite/partition rules. These normal authentication cookies can identify the account to its provider.",
+      "phase": "MVP",
+      "group": "cookies",
+      "trust": "local"
+    },
+    {
+      "id": "site-pause",
+      "label": "Per-site guard pause / resume",
+      "module": "extension/lib/cookies/site-controls.ts",
+      "detail": "Let the person pause optional request rules for a broken site. Secret scanning remains on, and the dashboard clearly shows paused enforcement.",
+      "phase": "MVP",
+      "group": "cookies",
+      "trust": "local"
+    },
+    {
+      "id": "permission-revoked",
+      "label": "Permission denied / revoked",
+      "module": "extension/lib/permissions.ts",
+      "detail": "Remove associated rules and metadata where appropriate, stop inspection, show the feature as unavailable and keep local prompt protection running.",
+      "phase": "MVP",
+      "group": "cookies",
+      "trust": "local"
+    },
+    {
+      "id": "domain-observer",
+      "label": "Approved chatbot navigation",
+      "module": "extension/lib/audit/domain-observer.ts",
+      "detail": "Notice supported-domain and conversation changes. Do not send visited URL paths, browsing history, prompts or cookie state to the backend.",
+      "phase": "MVP",
+      "group": "auditclient",
+      "trust": "local"
+    },
+    {
+      "id": "domain-gate",
+      "label": "Canonical domain allowlist",
+      "module": "extension/lib/audit/targets.ts",
+      "detail": "Canonicalize approved ChatGPT/Gemini/Claude domains; reject arbitrary URLs. The exact supported domains must be verified when provider adapters are built.",
+      "phase": "MVP",
+      "group": "auditclient",
+      "trust": "local"
+    },
+    {
+      "id": "audit-client",
+      "label": "Domain-only audit client",
+      "module": "extension/lib/audit/client.ts",
+      "detail": "Planned POST /api/audit body contains only {domain}. Do not give this module a prompt or cookie-value parameter. Separate installation authentication from TinyFish’s server key.",
+      "phase": "MVP",
+      "group": "auditclient",
+      "trust": "local"
+    },
+    {
+      "id": "audit-events",
+      "label": "Sanitized progress reader",
+      "module": "extension/lib/audit/events.ts",
+      "detail": "Read the VeilX-owned streaming contract. Abort on domain switch, do not rebind old-domain results, and distinguish cached results from live research.",
+      "phase": "MVP",
+      "group": "auditclient",
+      "trust": "local"
+    },
+    {
+      "id": "strict-fallback",
+      "label": "Unknown / offline → High + Strict",
+      "module": "extension/lib/audit/fallback.ts",
+      "detail": "When validation fails, browsing is blocked, the deadline expires or no fresh cache is available, show uncertainty with High risk and Strict mode. Do not invent evidence.",
+      "phase": "MVP",
+      "group": "auditclient",
+      "trust": "local"
+    },
+    {
+      "id": "audit-route",
+      "label": "FastAPI audit endpoint",
+      "module": "backend/app/routes/audit.py",
+      "detail": "Proposed POST /api/audit, not a TinyFish route. Accept a domain-only Pydantic request with extra fields forbidden; return a documented VeilX streaming response.",
+      "phase": "MVP",
+      "group": "backend",
+      "trust": "backend"
+    },
+    {
+      "id": "api-guards",
+      "label": "Origin + auth + rate limits",
+      "module": "backend/app/security.py",
+      "detail": "Restrict CORS to configured extension origins; CORS is not authentication. Add installation-scoped authorization, concurrency/rate limits, request size limits and safe error messages.",
+      "phase": "MVP",
+      "group": "backend",
+      "trust": "backend"
+    },
+    {
+      "id": "url-policy",
+      "label": "Allowlisted HTTPS destination policy",
+      "module": "backend/app/targets.py",
+      "detail": "Build the public start URL server-side; reject private/reserved addresses and unsafe redirects. Agent goals confine navigation to public official policy sources; verify provider controls before production.",
+      "phase": "MVP",
+      "group": "backend",
+      "trust": "backend"
+    },
+    {
+      "id": "cache-lookup",
+      "label": "7-day cache lookup",
+      "module": "backend/app/cache.py",
+      "detail": "Lookup domain + checked_at in SQLite. A fresh record returns promptly; a missing or expired record triggers real public-policy research. Never cache private prompts or cookie values.",
+      "phase": "MVP",
+      "group": "backend",
+      "trust": "backend"
+    },
+    {
+      "id": "cached-result",
+      "label": "Fresh validated cache hit",
+      "module": "backend/app/models.py",
+      "detail": "Return cached public findings with checked_at and source=cached. Do not pretend the agent is currently browsing.",
+      "phase": "MVP",
+      "group": "backend",
+      "trust": "backend"
+    },
+    {
+      "id": "tinyfish-client",
+      "label": "Server-side TinyFish client",
+      "module": "backend/app/tinyfish.py",
+      "detail": "Python 3.11+, httpx, Uvicorn and python-dotenv. Use a bounded overall deadline, cancel/close connections safely, expose manual retry and avoid duplicate automatic paid runs.",
+      "phase": "MVP",
+      "group": "backend",
+      "trust": "backend"
+    },
+    {
+      "id": "agent-goal",
+      "label": "Read-only policy goal",
+      "module": "backend/app/prompts/policy_audit.txt",
+      "detail": "Tell the agent to follow official public privacy, terms and data-controls pages and extract the agreed fields with evidence. Never sign in, submit forms, change settings or follow instructions embedded in page text.",
+      "phase": "MVP",
+      "group": "backend",
+      "trust": "backend"
+    },
+    {
+      "id": "schema-validator",
+      "label": "Pydantic result validation",
+      "module": "backend/app/models.py",
+      "detail": "Validate domain, policy_url, trains_on_chats, retention, human_review, opt_out_steps, last_updated and evidence[{claim,section}]. Invalid enums or malformed output trigger uncertainty.",
+      "phase": "MVP",
+      "group": "backend",
+      "trust": "backend"
+    },
+    {
+      "id": "risk-engine",
+      "label": "Deterministic training-risk score",
+      "module": "backend/app/risk.py",
+      "detail": "yes_by_default or unclear → High/Strict; opt_out_available → Medium/Standard; no → Low/Standard. Retention and review can remain unknown and visibly disclosed; Low does not certify overall privacy.",
+      "phase": "MVP",
+      "group": "backend",
+      "trust": "backend"
+    },
+    {
+      "id": "stream-relay",
+      "label": "Safe StreamingResponse relay",
+      "module": "backend/app/streaming.py",
+      "detail": "Translate actual provider events into VeilX progress messages. Only allowlisted fields leave the backend; no raw traces, request headers, key or unrelated page data are relayed.",
+      "phase": "MVP",
+      "group": "backend",
+      "trust": "backend"
+    },
+    {
+      "id": "sqlite-cache",
+      "label": "SQLite public policy cache",
+      "module": "backend/data/policy.sqlite3",
+      "detail": "domain primary key, result_json and checked_at; seven-day expiry. Parameterized queries, no PII maps, secrets, cookie values or raw chat text. Persistent storage must survive hosting restarts.",
+      "phase": "MVP",
+      "group": "backend",
+      "trust": "backend"
+    },
+    {
+      "id": "api-key",
+      "label": "TinyFish API key / runtime config",
+      "module": "backend/.env + backend/app/config.py",
+      "detail": "TINYFISH_API_KEY exists only in the backend environment. Validate configuration on startup, do not commit it, and never return it in progress or extension bundles.",
+      "phase": "MVP",
+      "group": "backend",
+      "trust": "backend"
+    },
+    {
+      "id": "audit-failure",
+      "label": "Timeout / blocked page / bad JSON",
+      "module": "backend/app/errors.py",
+      "detail": "Use an explicit 90-second design budget and honest unavailable/error states. No automatic paid retry; manual retry is user-visible. Test stream disconnect and terminal failures.",
+      "phase": "MVP",
+      "group": "backend",
+      "trust": "backend"
+    },
+    {
+      "id": "safe-logs",
+      "label": "Content-free operational logs",
+      "module": "backend/app/logging.py",
+      "detail": "Log status codes, coarse durations and run identifiers only under a documented policy. No raw prompts, originals, cookie values, API keys or complete agent traces.",
+      "phase": "MVP",
+      "group": "backend",
+      "trust": "backend"
+    },
+    {
+      "id": "tinyfish-api",
+      "label": "TinyFish streaming API",
+      "module": "POST agent.tinyfish.ai/v1/automation/run-sse",
+      "detail": "Verified official cookbook request: X-API-Key header plus url and goal. Exact event schema and preview handoff must be verified against current docs during implementation.",
+      "phase": "MVP",
+      "group": "tinyfish",
+      "trust": "agent"
+    },
+    {
+      "id": "web-agent",
+      "label": "Multi-step browser agent",
+      "module": "TinyFish managed web automation",
+      "detail": "Browses public sites, follows relevant links, finds claims across pages and gathers evidence. It receives the public URL and goal, not the user’s browser profile, prompt or cookies.",
+      "phase": "MVP",
+      "group": "tinyfish",
+      "trust": "agent"
+    },
+    {
+      "id": "agent-progress",
+      "label": "Provider progress stream",
+      "module": "TinyFish SSE events",
+      "detail": "Real progress, not timed decorative steps. Backend parses provider events defensively and maps allowed steps to its own contract.",
+      "phase": "MVP",
+      "group": "tinyfish",
+      "trust": "agent"
+    },
+    {
+      "id": "live-preview",
+      "label": "Live browsing preview / recording",
+      "module": "TinyFish preview + hackathon capture",
+      "detail": "Show an actual live run in the raw 2–3 minute demo. Preview permissions and returned URL handling are an integration check, not an invented API contract.",
+      "phase": "MVP",
+      "group": "tinyfish",
+      "trust": "agent"
+    },
+    {
+      "id": "agent-result",
+      "label": "Structured policy finding",
+      "module": "TinyFish final result",
+      "detail": "Return the agreed policy fields and source claims. Unknown facts remain unclear/null. Agent output is untrusted until the backend validates it.",
+      "phase": "MVP",
+      "group": "tinyfish",
+      "trust": "agent"
+    },
+    {
+      "id": "public-home",
+      "label": "Official provider public website",
+      "module": "public HTTPS pages",
+      "detail": "Starting point for public policy discovery. Pages can change, redirect or block the agent; static summaries do not replace evidence collection.",
+      "phase": "MVP",
+      "group": "publicweb",
+      "trust": "public"
+    },
+    {
+      "id": "privacy-page",
+      "label": "Privacy policy",
+      "module": "public provider privacy URL",
+      "detail": "Evidence about training, retention, review and last-updated date. Claims should include a section reference and the relevant source URL.",
+      "phase": "MVP",
+      "group": "publicweb",
+      "trust": "public"
+    },
+    {
+      "id": "terms-page",
+      "label": "Terms of service",
+      "module": "public provider terms URL",
+      "detail": "Read the applicable terms and linked policies. A plan or region may change the claim; do not silently generalize one page to every account tier.",
+      "phase": "MVP",
+      "group": "publicweb",
+      "trust": "public"
+    },
+    {
+      "id": "controls-page",
+      "label": "Public data-controls instructions",
+      "module": "public provider help / settings guide",
+      "detail": "Find documented opt-out steps without entering the user’s account or using their authenticated cookies.",
+      "phase": "MVP",
+      "group": "publicweb",
+      "trust": "public"
+    },
+    {
+      "id": "policy-evidence",
+      "label": "Source-linked evidence",
+      "module": "public claim + section references",
+      "detail": "Evidence stays attached to the rating. Conflicting/blocked/unclear material is surfaced honestly; it does not become a low-risk guess.",
+      "phase": "MVP",
+      "group": "publicweb",
+      "trust": "public"
+    },
+    {
+      "id": "preferences",
+      "label": "Non-sensitive local preferences",
+      "module": "chrome.storage.local",
+      "detail": "Only modes, site choices and UI preferences persist. No prompt text, PII map or cookie values; never use sync storage for private mappings.",
+      "phase": "MVP",
+      "group": "support",
+      "trust": "local"
+    },
+    {
+      "id": "session-storage",
+      "label": "Restricted transient extension state",
+      "module": "memory / chrome.storage.session",
+      "detail": "Restrict sensitive storage to trusted extension contexts. Browser-session lifetime plus explicit clear/expiry policies; no raw PII sent to content scripts.",
+      "phase": "MVP",
+      "group": "support",
+      "trust": "local"
+    },
+    {
+      "id": "packaged-model",
+      "label": "Local model assets",
+      "module": "extension/assets/models/",
+      "detail": "Packaged or user-approved model download; verify integrity/licensing, keep the NER worker local and report unavailable-model fallback.",
+      "phase": "Phase 2",
+      "group": "support",
+      "trust": "local"
+    },
+    {
+      "id": "demo-site",
+      "label": "Demo website playground",
+      "module": "web/ · Vite + React",
+      "detail": "Future local redaction playground using fictional samples and the same shared detection behavior. No real PII collection, analytics or external text submission.",
+      "phase": "MVP",
+      "group": "support",
+      "trust": "local"
+    },
+    {
+      "id": "fixture-data",
+      "label": "Fictional examples + expected output",
+      "module": "tests/fixtures/",
+      "detail": "Names, addresses, email, mobile, overlapping spans, unicode, repeated values, credential examples and unknown placeholders; no real accounts or cookie values.",
+      "phase": "MVP",
+      "group": "support",
+      "trust": "local"
+    },
+    {
+      "id": "unit-tests",
+      "label": "Detection + map + restore tests",
+      "module": "tests/unit/",
+      "detail": "Validate regex/validators, overlap priority, numbering, map expiry, unknown/partial placeholders and non-restoration of secrets.",
+      "phase": "MVP",
+      "group": "support",
+      "trust": "local"
+    },
+    {
+      "id": "adapter-tests",
+      "label": "Rich-text + streaming adapter tests",
+      "module": "tests/integration/",
+      "detail": "Exercise each target: IME input, paste, keyboard send, button send, regeneration, conversation switch and UI selector failure.",
+      "phase": "MVP",
+      "group": "support",
+      "trust": "local"
+    },
+    {
+      "id": "audit-tests",
+      "label": "Audit + fail-safe + cache tests",
+      "module": "backend/tests/",
+      "detail": "Mock provider events: malformed JSON, cache hit/miss/expiry, timeout, blocked public pages, redirects, disconnects, rate limits and domain mismatch.",
+      "phase": "MVP",
+      "group": "support",
+      "trust": "local"
+    },
+    {
+      "id": "cookie-tests",
+      "label": "Cookie permission + sign-in tests",
+      "module": "tests/cookies/",
+      "detail": "Verify value-free messages/logs, permission denial/revocation, rule matching, site pause, first-party sign-in compatibility and no arbitrary payload-inspection claim.",
+      "phase": "MVP",
+      "group": "support",
+      "trust": "local"
+    },
+    {
+      "id": "accessibility-tests",
+      "label": "Keyboard + reduced-motion checks",
+      "module": "tests/accessibility/",
+      "detail": "Keyboard access, tooltips, visible focus, risk label not color alone, screen-reader progress and reduced motion.",
+      "phase": "MVP",
+      "group": "support",
+      "trust": "local"
+    },
+    {
+      "id": "recorded-demo",
+      "label": "Raw 2–3 minute live demo",
+      "module": "hackathon demonstration",
+      "detail": "Unfamiliar chatbot → real public policy audit visible → High/Strict → fictional PII redaction → local restored answer. Cookie Guard is shown with honest capability limits.",
+      "phase": "MVP",
+      "group": "support",
+      "trust": "local"
+    },
+    {
+      "id": "optout-consent",
+      "label": "Explicit opt-out authorization",
+      "module": "stretch / consent UI",
+      "detail": "A future separate action to change provider training settings. Public policy auditing never authorizes account changes.",
+      "phase": "Stretch",
+      "group": "stretch",
+      "trust": "local"
+    },
+    {
+      "id": "optout-run",
+      "label": "Training opt-out automation",
+      "module": "stretch / execution design",
+      "detail": "Design the authenticated execution boundary separately before implementation; prefer local settings navigation. Do not reuse or upload browser cookies to the public audit agent.",
+      "phase": "Stretch",
+      "group": "stretch",
+      "trust": "local"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "from": "user",
+      "to": "shell",
+      "label": "uses",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e2",
+      "from": "shell",
+      "to": "composer",
+      "label": "renders",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e3",
+      "from": "shell",
+      "to": "reply-panel",
+      "label": "renders",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e4",
+      "from": "shell",
+      "to": "popup",
+      "label": "opens",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e5",
+      "from": "shell",
+      "to": "settings",
+      "label": "opens",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e6",
+      "from": "shell",
+      "to": "onboarding",
+      "label": "guides",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e7",
+      "from": "shell",
+      "to": "cookie-panel",
+      "label": "renders",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e8",
+      "from": "shell",
+      "to": "risk-badge",
+      "label": "renders",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e9",
+      "from": "risk-badge",
+      "to": "why-panel",
+      "label": "explains",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e10",
+      "from": "shell",
+      "to": "progress-panel",
+      "label": "renders",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e11",
+      "from": "onboarding",
+      "to": "site-consent",
+      "label": "explains permissions",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e12",
+      "from": "settings",
+      "to": "site-consent",
+      "label": "requests optionally",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e13",
+      "from": "settings",
+      "to": "preferences",
+      "label": "saves non-sensitive choices",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e14",
+      "from": "preferences",
+      "to": "mode-controller",
+      "label": "configures",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e15",
+      "from": "settings",
+      "to": "session-clear",
+      "label": "clears local session",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e16",
+      "from": "popup",
+      "to": "composer",
+      "label": "opens protected draft",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e17",
+      "from": "composer",
+      "to": "input-events",
+      "label": "raw draft + input events",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e18",
+      "from": "input-events",
+      "to": "normalizer",
+      "label": "local text + spans",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e19",
+      "from": "normalizer",
+      "to": "regex-engine",
+      "label": "local candidates",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e20",
+      "from": "normalizer",
+      "to": "ner-model",
+      "label": "local inference only",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e21",
+      "from": "normalizer",
+      "to": "secret-scanner",
+      "label": "scan pasted credentials",
+      "flows": [
+        "prompt",
+        "cookie"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e22",
+      "from": "regex-engine",
+      "to": "email",
+      "label": "email candidates",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e23",
+      "from": "regex-engine",
+      "to": "phone-validator",
+      "label": "phone candidates",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e24",
+      "from": "regex-engine",
+      "to": "card-validator",
+      "label": "card candidates",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e25",
+      "from": "regex-engine",
+      "to": "id-validator",
+      "label": "ID candidates",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e26",
+      "from": "regex-engine",
+      "to": "address-rules",
+      "label": "address context",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e27",
+      "from": "phone-validator",
+      "to": "phones",
+      "label": "validated phones",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e28",
+      "from": "card-validator",
+      "to": "cards",
+      "label": "validated cards",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e29",
+      "from": "id-validator",
+      "to": "ids",
+      "label": "validated IDs",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e30",
+      "from": "address-rules",
+      "to": "addresses",
+      "label": "contextual addresses",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e31",
+      "from": "ner-model",
+      "to": "names",
+      "label": "person spans · phase 2",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e32",
+      "from": "ner-model",
+      "to": "addresses",
+      "label": "place/address spans · phase 2",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e33",
+      "from": "secret-scanner",
+      "to": "sessions",
+      "label": "credential spans",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e34",
+      "from": "names",
+      "to": "overlaps",
+      "label": "typed spans + confidence",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e35",
+      "from": "addresses",
+      "to": "overlaps",
+      "label": "typed spans + confidence",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e36",
+      "from": "email",
+      "to": "overlaps",
+      "label": "typed spans + confidence",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e37",
+      "from": "phones",
+      "to": "overlaps",
+      "label": "typed spans + confidence",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e38",
+      "from": "cards",
+      "to": "overlaps",
+      "label": "typed spans + confidence",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e39",
+      "from": "ids",
+      "to": "overlaps",
+      "label": "typed spans + confidence",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e40",
+      "from": "sessions",
+      "to": "overlaps",
+      "label": "typed spans + confidence",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e41",
+      "from": "overlaps",
+      "to": "underline-layer",
+      "label": "resolved highlights",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e42",
+      "from": "overlaps",
+      "to": "review",
+      "label": "candidates for review",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e43",
+      "from": "underline-layer",
+      "to": "review",
+      "label": "inspect / correct span",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e44",
+      "from": "composer",
+      "to": "review",
+      "label": "manual marking",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e45",
+      "from": "mode-controller",
+      "to": "overlaps",
+      "label": "sets review thresholds",
+      "flows": [
+        "prompt",
+        "audit"
+      ],
+      "payload": "control",
+      "back": true
+    },
+    {
+      "id": "e46",
+      "from": "settings",
+      "to": "inpage-mode",
+      "label": "opt into weaker boundary",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e47",
+      "from": "inpage-mode",
+      "to": "provider-page",
+      "label": "raw draft can be observed",
+      "flows": [
+        "platform"
+      ],
+      "payload": "raw-exposure",
+      "back": false
+    },
+    {
+      "id": "e48",
+      "from": "inpage-mode",
+      "to": "underline-layer",
+      "label": "style-isolated overlay",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": true
+    },
+    {
+      "id": "e49",
+      "from": "review",
+      "to": "registry",
+      "label": "approved original spans",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e50",
+      "from": "registry",
+      "to": "placeholder-map",
+      "label": "original ↔ token, per chat",
+      "flows": [
+        "prompt",
+        "restore"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e51",
+      "from": "placeholder-map",
+      "to": "redactor",
+      "label": "local values + replacements",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e52",
+      "from": "composer",
+      "to": "redactor",
+      "label": "raw local draft",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e53",
+      "from": "auto-redact",
+      "to": "redactor",
+      "label": "automatic replacement preference",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e54",
+      "from": "settings",
+      "to": "auto-redact",
+      "label": "sets preference",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e55",
+      "from": "redactor",
+      "to": "send-gate",
+      "label": "exact redacted text",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "redacted",
+      "back": false
+    },
+    {
+      "id": "e56",
+      "from": "secret-scanner",
+      "to": "send-gate",
+      "label": "unresolved secret → block",
+      "flows": [
+        "prompt",
+        "cookie"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e57",
+      "from": "mode-controller",
+      "to": "send-gate",
+      "label": "review / fail-closed rules",
+      "flows": [
+        "prompt",
+        "audit"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e58",
+      "from": "send-gate",
+      "to": "review",
+      "label": "blocked → correct locally",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "control",
+      "back": true
+    },
+    {
+      "id": "e59",
+      "from": "placeholder-map",
+      "to": "session-storage",
+      "label": "transient private state",
+      "flows": [
+        "prompt",
+        "restore"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e60",
+      "from": "session-clear",
+      "to": "placeholder-map",
+      "label": "wipe on clear / expiry",
+      "flows": [
+        "prompt",
+        "restore"
+      ],
+      "payload": "control",
+      "back": true
+    },
+    {
+      "id": "e61",
+      "from": "domain-observer",
+      "to": "session-clear",
+      "label": "conversation changed",
+      "flows": [
+        "restore"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e62",
+      "from": "session-storage",
+      "to": "missing-map",
+      "label": "expired / unavailable",
+      "flows": [
+        "restore"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e63",
+      "from": "send-gate",
+      "to": "adapter",
+      "label": "redacted insertion command",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "redacted",
+      "back": false
+    },
+    {
+      "id": "e64",
+      "from": "adapter",
+      "to": "chatgpt-adapter",
+      "label": "select target adapter",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e65",
+      "from": "chatgpt-adapter",
+      "to": "redacted-message",
+      "label": "insert reviewed placeholders",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "redacted",
+      "back": false
+    },
+    {
+      "id": "e66",
+      "from": "chatgpt-adapter",
+      "to": "observer",
+      "label": "bind response region",
+      "flows": [
+        "restore"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e67",
+      "from": "adapter",
+      "to": "gemini-adapter",
+      "label": "select target adapter",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e68",
+      "from": "gemini-adapter",
+      "to": "redacted-message",
+      "label": "insert reviewed placeholders",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "redacted",
+      "back": false
+    },
+    {
+      "id": "e69",
+      "from": "gemini-adapter",
+      "to": "observer",
+      "label": "bind response region",
+      "flows": [
+        "restore"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e70",
+      "from": "adapter",
+      "to": "claude-adapter",
+      "label": "select target adapter",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e71",
+      "from": "claude-adapter",
+      "to": "redacted-message",
+      "label": "insert reviewed placeholders",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "redacted",
+      "back": false
+    },
+    {
+      "id": "e72",
+      "from": "claude-adapter",
+      "to": "observer",
+      "label": "bind response region",
+      "flows": [
+        "restore"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e73",
+      "from": "redacted-message",
+      "to": "ai-provider",
+      "label": "send placeholders only",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "redacted",
+      "back": false
+    },
+    {
+      "id": "e74",
+      "from": "provider-page",
+      "to": "ai-provider",
+      "label": "provider sends its draft",
+      "flows": [
+        "platform"
+      ],
+      "payload": "redacted",
+      "back": false
+    },
+    {
+      "id": "e75",
+      "from": "redacted-message",
+      "to": "provider-page",
+      "label": "visible provider draft",
+      "flows": [
+        "prompt"
+      ],
+      "payload": "redacted",
+      "back": false
+    },
+    {
+      "id": "e76",
+      "from": "ai-provider",
+      "to": "observer",
+      "label": "placeholder answer stream",
+      "flows": [
+        "restore"
+      ],
+      "payload": "redacted",
+      "back": false
+    },
+    {
+      "id": "e77",
+      "from": "observer",
+      "to": "stream-buffer",
+      "label": "response text updates",
+      "flows": [
+        "restore"
+      ],
+      "payload": "redacted",
+      "back": false
+    },
+    {
+      "id": "e78",
+      "from": "stream-buffer",
+      "to": "token-parser",
+      "label": "complete token candidates",
+      "flows": [
+        "restore"
+      ],
+      "payload": "redacted",
+      "back": false
+    },
+    {
+      "id": "e79",
+      "from": "token-parser",
+      "to": "map-lookup",
+      "label": "known token IDs",
+      "flows": [
+        "restore"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e80",
+      "from": "placeholder-map",
+      "to": "map-lookup",
+      "label": "local conversation mapping",
+      "flows": [
+        "restore"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e81",
+      "from": "map-lookup",
+      "to": "safe-restore",
+      "label": "resolved personal values",
+      "flows": [
+        "restore"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e82",
+      "from": "map-lookup",
+      "to": "missing-map",
+      "label": "unknown / expired token",
+      "flows": [
+        "restore"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e83",
+      "from": "missing-map",
+      "to": "reply-panel",
+      "label": "leave token literal + explain",
+      "flows": [
+        "restore"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e84",
+      "from": "token-parser",
+      "to": "secret-filter",
+      "label": "check secret token types",
+      "flows": [
+        "restore"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e85",
+      "from": "secret-filter",
+      "to": "safe-restore",
+      "label": "forbid credential restoration",
+      "flows": [
+        "restore"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e86",
+      "from": "safe-restore",
+      "to": "reply-panel",
+      "label": "readable original details locally",
+      "flows": [
+        "restore"
+      ],
+      "payload": "pii",
+      "back": false
+    },
+    {
+      "id": "e87",
+      "from": "reply-panel",
+      "to": "user",
+      "label": "private readable answer",
+      "flows": [
+        "restore"
+      ],
+      "payload": "pii",
+      "back": true
+    },
+    {
+      "id": "e88",
+      "from": "cookie-panel",
+      "to": "site-consent",
+      "label": "enable inspection for this site",
+      "flows": [
+        "cookie"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e89",
+      "from": "site-consent",
+      "to": "cookie-inspector",
+      "label": "granted host + cookies permission",
+      "flows": [
+        "cookie"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e90",
+      "from": "cookie-jar",
+      "to": "cookie-inspector",
+      "label": "scoped cookie objects",
+      "flows": [
+        "cookie"
+      ],
+      "payload": "cookie-secret",
+      "back": false
+    },
+    {
+      "id": "e91",
+      "from": "cookie-inspector",
+      "to": "discard-values",
+      "label": "drop returned value fields",
+      "flows": [
+        "cookie"
+      ],
+      "payload": "cookie-secret",
+      "back": false
+    },
+    {
+      "id": "e92",
+      "from": "cookie-inspector",
+      "to": "cookie-metadata",
+      "label": "allowlisted metadata projection",
+      "flows": [
+        "cookie"
+      ],
+      "payload": "cookie-meta",
+      "back": false
+    },
+    {
+      "id": "e93",
+      "from": "cookie-metadata",
+      "to": "cookie-panel",
+      "label": "domain / expiry / flags only",
+      "flows": [
+        "cookie"
+      ],
+      "payload": "cookie-meta",
+      "back": false
+    },
+    {
+      "id": "e94",
+      "from": "cookie-metadata",
+      "to": "flag-checks",
+      "label": "evaluate security flags",
+      "flows": [
+        "cookie"
+      ],
+      "payload": "cookie-meta",
+      "back": false
+    },
+    {
+      "id": "e95",
+      "from": "flag-checks",
+      "to": "cookie-panel",
+      "label": "explain warnings, no auto-rewrite",
+      "flows": [
+        "cookie"
+      ],
+      "payload": "cookie-meta",
+      "back": true
+    },
+    {
+      "id": "e96",
+      "from": "cookie-panel",
+      "to": "site-pause",
+      "label": "pause / resume rules",
+      "flows": [
+        "cookie"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e97",
+      "from": "tracker-rules",
+      "to": "dnr-engine",
+      "label": "install reviewed matching rules",
+      "flows": [
+        "cookie"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e98",
+      "from": "site-consent",
+      "to": "dnr-engine",
+      "label": "scope granted hosts",
+      "flows": [
+        "cookie"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e99",
+      "from": "site-pause",
+      "to": "dnr-engine",
+      "label": "update rules for selected site",
+      "flows": [
+        "cookie"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e100",
+      "from": "dnr-engine",
+      "to": "tracker-blocked",
+      "label": "block matching outbound request",
+      "flows": [
+        "cookie"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e101",
+      "from": "cookie-jar",
+      "to": "native-auth",
+      "label": "normal first-party cookie matching",
+      "flows": [
+        "cookie"
+      ],
+      "payload": "native-auth",
+      "back": false
+    },
+    {
+      "id": "e102",
+      "from": "native-auth",
+      "to": "ai-provider",
+      "label": "normal account authentication",
+      "flows": [
+        "cookie"
+      ],
+      "payload": "native-auth",
+      "back": false
+    },
+    {
+      "id": "e103",
+      "from": "site-consent",
+      "to": "permission-revoked",
+      "label": "denied / revoked event",
+      "flows": [
+        "cookie"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e104",
+      "from": "permission-revoked",
+      "to": "cookie-inspector",
+      "label": "stop inspection",
+      "flows": [
+        "cookie"
+      ],
+      "payload": "control",
+      "back": true
+    },
+    {
+      "id": "e105",
+      "from": "permission-revoked",
+      "to": "dnr-engine",
+      "label": "remove unavailable site rules",
+      "flows": [
+        "cookie"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e106",
+      "from": "permission-revoked",
+      "to": "cookie-panel",
+      "label": "show unavailable, clear metadata",
+      "flows": [
+        "cookie"
+      ],
+      "payload": "control",
+      "back": true
+    },
+    {
+      "id": "e107",
+      "from": "settings",
+      "to": "site-pause",
+      "label": "per-site policy",
+      "flows": [
+        "cookie"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e108",
+      "from": "adapter",
+      "to": "domain-observer",
+      "label": "supported navigation event",
+      "flows": [
+        "audit"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e109",
+      "from": "domain-observer",
+      "to": "domain-gate",
+      "label": "hostname only",
+      "flows": [
+        "audit"
+      ],
+      "payload": "domain",
+      "back": false
+    },
+    {
+      "id": "e110",
+      "from": "domain-gate",
+      "to": "audit-client",
+      "label": "approved canonical domain",
+      "flows": [
+        "audit"
+      ],
+      "payload": "domain",
+      "back": false
+    },
+    {
+      "id": "e111",
+      "from": "audit-client",
+      "to": "audit-route",
+      "label": "POST /api/audit {domain}",
+      "flows": [
+        "audit"
+      ],
+      "payload": "domain",
+      "back": false
+    },
+    {
+      "id": "e112",
+      "from": "api-guards",
+      "to": "audit-route",
+      "label": "origin / auth / limits",
+      "flows": [
+        "audit"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e113",
+      "from": "audit-route",
+      "to": "url-policy",
+      "label": "derive approved public URL",
+      "flows": [
+        "audit"
+      ],
+      "payload": "domain",
+      "back": false
+    },
+    {
+      "id": "e114",
+      "from": "audit-route",
+      "to": "cache-lookup",
+      "label": "lookup domain + TTL",
+      "flows": [
+        "audit"
+      ],
+      "payload": "domain",
+      "back": false
+    },
+    {
+      "id": "e115",
+      "from": "cache-lookup",
+      "to": "sqlite-cache",
+      "label": "read public result + checked_at",
+      "flows": [
+        "audit"
+      ],
+      "payload": "policy",
+      "back": false
+    },
+    {
+      "id": "e116",
+      "from": "cache-lookup",
+      "to": "cached-result",
+      "label": "fresh record: return cached",
+      "flows": [
+        "audit"
+      ],
+      "payload": "policy",
+      "back": false
+    },
+    {
+      "id": "e117",
+      "from": "cached-result",
+      "to": "risk-engine",
+      "label": "validated saved finding",
+      "flows": [
+        "audit"
+      ],
+      "payload": "policy",
+      "back": false
+    },
+    {
+      "id": "e118",
+      "from": "cache-lookup",
+      "to": "tinyfish-client",
+      "label": "cache miss / expiry",
+      "flows": [
+        "audit"
+      ],
+      "payload": "domain",
+      "back": false
+    },
+    {
+      "id": "e119",
+      "from": "url-policy",
+      "to": "tinyfish-client",
+      "label": "allowlisted HTTPS start URL",
+      "flows": [
+        "audit"
+      ],
+      "payload": "domain",
+      "back": false
+    },
+    {
+      "id": "e120",
+      "from": "agent-goal",
+      "to": "tinyfish-client",
+      "label": "read-only extraction goal",
+      "flows": [
+        "audit"
+      ],
+      "payload": "policy",
+      "back": false
+    },
+    {
+      "id": "e121",
+      "from": "api-key",
+      "to": "tinyfish-client",
+      "label": "server environment key",
+      "flows": [
+        "audit"
+      ],
+      "payload": "server-secret",
+      "back": false
+    },
+    {
+      "id": "e122",
+      "from": "tinyfish-client",
+      "to": "tinyfish-api",
+      "label": "POST run-sse · url + goal",
+      "flows": [
+        "audit"
+      ],
+      "payload": "public-request",
+      "back": false
+    },
+    {
+      "id": "e123",
+      "from": "tinyfish-api",
+      "to": "web-agent",
+      "label": "start browser automation",
+      "flows": [
+        "audit"
+      ],
+      "payload": "public-request",
+      "back": false
+    },
+    {
+      "id": "e124",
+      "from": "web-agent",
+      "to": "public-home",
+      "label": "open public site",
+      "flows": [
+        "audit"
+      ],
+      "payload": "public-request",
+      "back": false
+    },
+    {
+      "id": "e125",
+      "from": "web-agent",
+      "to": "privacy-page",
+      "label": "follow privacy link",
+      "flows": [
+        "audit"
+      ],
+      "payload": "public-request",
+      "back": false
+    },
+    {
+      "id": "e126",
+      "from": "public-home",
+      "to": "privacy-page",
+      "label": "discover official link",
+      "flows": [
+        "audit"
+      ],
+      "payload": "policy",
+      "back": false
+    },
+    {
+      "id": "e127",
+      "from": "privacy-page",
+      "to": "policy-evidence",
+      "label": "claims + sections + URL",
+      "flows": [
+        "audit"
+      ],
+      "payload": "policy",
+      "back": false
+    },
+    {
+      "id": "e128",
+      "from": "web-agent",
+      "to": "terms-page",
+      "label": "follow terms link",
+      "flows": [
+        "audit"
+      ],
+      "payload": "public-request",
+      "back": false
+    },
+    {
+      "id": "e129",
+      "from": "public-home",
+      "to": "terms-page",
+      "label": "discover official link",
+      "flows": [
+        "audit"
+      ],
+      "payload": "policy",
+      "back": false
+    },
+    {
+      "id": "e130",
+      "from": "terms-page",
+      "to": "policy-evidence",
+      "label": "claims + sections + URL",
+      "flows": [
+        "audit"
+      ],
+      "payload": "policy",
+      "back": false
+    },
+    {
+      "id": "e131",
+      "from": "web-agent",
+      "to": "controls-page",
+      "label": "find public control guide",
+      "flows": [
+        "audit"
+      ],
+      "payload": "public-request",
+      "back": false
+    },
+    {
+      "id": "e132",
+      "from": "public-home",
+      "to": "controls-page",
+      "label": "discover official link",
+      "flows": [
+        "audit"
+      ],
+      "payload": "policy",
+      "back": false
+    },
+    {
+      "id": "e133",
+      "from": "controls-page",
+      "to": "policy-evidence",
+      "label": "claims + sections + URL",
+      "flows": [
+        "audit"
+      ],
+      "payload": "policy",
+      "back": false
+    },
+    {
+      "id": "e134",
+      "from": "policy-evidence",
+      "to": "agent-result",
+      "label": "structured public findings",
+      "flows": [
+        "audit"
+      ],
+      "payload": "policy",
+      "back": false
+    },
+    {
+      "id": "e135",
+      "from": "web-agent",
+      "to": "agent-progress",
+      "label": "real browsing progress",
+      "flows": [
+        "audit"
+      ],
+      "payload": "policy",
+      "back": false
+    },
+    {
+      "id": "e136",
+      "from": "agent-progress",
+      "to": "stream-relay",
+      "label": "actual provider events",
+      "flows": [
+        "audit"
+      ],
+      "payload": "policy",
+      "back": false
+    },
+    {
+      "id": "e137",
+      "from": "web-agent",
+      "to": "live-preview",
+      "label": "verified live preview handoff",
+      "flows": [
+        "audit"
+      ],
+      "payload": "policy",
+      "back": false
+    },
+    {
+      "id": "e138",
+      "from": "agent-result",
+      "to": "schema-validator",
+      "label": "untrusted final JSON",
+      "flows": [
+        "audit"
+      ],
+      "payload": "policy",
+      "back": false
+    },
+    {
+      "id": "e139",
+      "from": "schema-validator",
+      "to": "sqlite-cache",
+      "label": "save validated result + checked_at",
+      "flows": [
+        "audit"
+      ],
+      "payload": "policy",
+      "back": false
+    },
+    {
+      "id": "e140",
+      "from": "schema-validator",
+      "to": "risk-engine",
+      "label": "validated enums + evidence",
+      "flows": [
+        "audit"
+      ],
+      "payload": "policy",
+      "back": false
+    },
+    {
+      "id": "e141",
+      "from": "risk-engine",
+      "to": "risk-badge",
+      "label": "High / Medium / Low",
+      "flows": [
+        "audit"
+      ],
+      "payload": "policy",
+      "back": true
+    },
+    {
+      "id": "e142",
+      "from": "risk-engine",
+      "to": "mode-controller",
+      "label": "Strict / Standard decision",
+      "flows": [
+        "audit"
+      ],
+      "payload": "policy",
+      "back": true
+    },
+    {
+      "id": "e143",
+      "from": "risk-engine",
+      "to": "why-panel",
+      "label": "findings + caveats + evidence",
+      "flows": [
+        "audit"
+      ],
+      "payload": "policy",
+      "back": true
+    },
+    {
+      "id": "e144",
+      "from": "schema-validator",
+      "to": "stream-relay",
+      "label": "validated terminal payload",
+      "flows": [
+        "audit"
+      ],
+      "payload": "policy",
+      "back": false
+    },
+    {
+      "id": "e145",
+      "from": "stream-relay",
+      "to": "audit-events",
+      "label": "allowlisted VeilX SSE events",
+      "flows": [
+        "audit"
+      ],
+      "payload": "policy",
+      "back": true
+    },
+    {
+      "id": "e146",
+      "from": "audit-events",
+      "to": "progress-panel",
+      "label": "current domain live steps",
+      "flows": [
+        "audit"
+      ],
+      "payload": "policy",
+      "back": true
+    },
+    {
+      "id": "e147",
+      "from": "audit-events",
+      "to": "risk-badge",
+      "label": "loading / live / cached state",
+      "flows": [
+        "audit"
+      ],
+      "payload": "policy",
+      "back": true
+    },
+    {
+      "id": "e148",
+      "from": "tinyfish-client",
+      "to": "audit-failure",
+      "label": "timeout / disconnect / blocked",
+      "flows": [
+        "audit"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e149",
+      "from": "schema-validator",
+      "to": "audit-failure",
+      "label": "invalid or mismatched result",
+      "flows": [
+        "audit"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e150",
+      "from": "audit-failure",
+      "to": "strict-fallback",
+      "label": "explicit unavailable outcome",
+      "flows": [
+        "audit"
+      ],
+      "payload": "control",
+      "back": true
+    },
+    {
+      "id": "e151",
+      "from": "audit-client",
+      "to": "strict-fallback",
+      "label": "offline + no fresh cache",
+      "flows": [
+        "audit"
+      ],
+      "payload": "control",
+      "back": true
+    },
+    {
+      "id": "e152",
+      "from": "strict-fallback",
+      "to": "risk-badge",
+      "label": "High + uncertainty explanation",
+      "flows": [
+        "audit"
+      ],
+      "payload": "control",
+      "back": true
+    },
+    {
+      "id": "e153",
+      "from": "strict-fallback",
+      "to": "mode-controller",
+      "label": "enable Strict",
+      "flows": [
+        "audit"
+      ],
+      "payload": "control",
+      "back": true
+    },
+    {
+      "id": "e154",
+      "from": "audit-route",
+      "to": "safe-logs",
+      "label": "coarse status only",
+      "flows": [
+        "audit"
+      ],
+      "payload": "operational",
+      "back": false
+    },
+    {
+      "id": "e155",
+      "from": "audit-failure",
+      "to": "safe-logs",
+      "label": "content-free error code",
+      "flows": [
+        "audit"
+      ],
+      "payload": "operational",
+      "back": false
+    },
+    {
+      "id": "e156",
+      "from": "tinyfish-client",
+      "to": "safe-logs",
+      "label": "duration / result status",
+      "flows": [
+        "audit"
+      ],
+      "payload": "operational",
+      "back": false
+    },
+    {
+      "id": "e157",
+      "from": "packaged-model",
+      "to": "ner-model",
+      "label": "load local model weights",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": true
+    },
+    {
+      "id": "e158",
+      "from": "fixture-data",
+      "to": "demo-site",
+      "label": "fictional input samples",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e159",
+      "from": "demo-site",
+      "to": "regex-engine",
+      "label": "share local detection code",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": true
+    },
+    {
+      "id": "e160",
+      "from": "demo-site",
+      "to": "redactor",
+      "label": "share placeholder behavior",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": true
+    },
+    {
+      "id": "e161",
+      "from": "fixture-data",
+      "to": "unit-tests",
+      "label": "expected transformations",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e162",
+      "from": "unit-tests",
+      "to": "overlaps",
+      "label": "validate priorities + spans",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": true
+    },
+    {
+      "id": "e163",
+      "from": "unit-tests",
+      "to": "registry",
+      "label": "validate repeat numbering",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": true
+    },
+    {
+      "id": "e164",
+      "from": "unit-tests",
+      "to": "safe-restore",
+      "label": "validate safe rehydration",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": true
+    },
+    {
+      "id": "e165",
+      "from": "adapter-tests",
+      "to": "adapter",
+      "label": "verify all 3 adapters",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": true
+    },
+    {
+      "id": "e166",
+      "from": "adapter-tests",
+      "to": "send-gate",
+      "label": "IME / stale / raw-send prevention",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": true
+    },
+    {
+      "id": "e167",
+      "from": "adapter-tests",
+      "to": "stream-buffer",
+      "label": "stream / switch / repeat cases",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": true
+    },
+    {
+      "id": "e168",
+      "from": "audit-tests",
+      "to": "audit-route",
+      "label": "request and fail-safe contracts",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": true
+    },
+    {
+      "id": "e169",
+      "from": "audit-tests",
+      "to": "cache-lookup",
+      "label": "hit / miss / expiry",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": true
+    },
+    {
+      "id": "e170",
+      "from": "audit-tests",
+      "to": "schema-validator",
+      "label": "bad JSON / enum / domain",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": true
+    },
+    {
+      "id": "e171",
+      "from": "cookie-tests",
+      "to": "cookie-inspector",
+      "label": "no values in messages / logs",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": true
+    },
+    {
+      "id": "e172",
+      "from": "cookie-tests",
+      "to": "native-auth",
+      "label": "first-party login regression",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": true
+    },
+    {
+      "id": "e173",
+      "from": "cookie-tests",
+      "to": "dnr-engine",
+      "label": "known-route enforcement only",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": true
+    },
+    {
+      "id": "e174",
+      "from": "accessibility-tests",
+      "to": "shell",
+      "label": "keyboard + focus + motion",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": true
+    },
+    {
+      "id": "e175",
+      "from": "live-preview",
+      "to": "recorded-demo",
+      "label": "visible real agent browsing",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e176",
+      "from": "demo-site",
+      "to": "recorded-demo",
+      "label": "safe fictional walkthrough",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e177",
+      "from": "reply-panel",
+      "to": "recorded-demo",
+      "label": "show local restored response",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e178",
+      "from": "cookie-panel",
+      "to": "recorded-demo",
+      "label": "show session feature limits",
+      "flows": [
+        "platform"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e179",
+      "from": "settings",
+      "to": "optout-consent",
+      "label": "explicit separate action",
+      "flows": [
+        "stretch"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e180",
+      "from": "why-panel",
+      "to": "optout-consent",
+      "label": "offer documented opt-out action",
+      "flows": [
+        "stretch"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e181",
+      "from": "optout-consent",
+      "to": "optout-run",
+      "label": "consent gates authenticated action",
+      "flows": [
+        "stretch"
+      ],
+      "payload": "control",
+      "back": false
+    },
+    {
+      "id": "e182",
+      "from": "controls-page",
+      "to": "optout-run",
+      "label": "public instructions only",
+      "flows": [
+        "stretch"
+      ],
+      "payload": "policy",
+      "back": false
+    }
+  ],
+  "flows": [
+    {
+      "id": "all",
+      "label": "Full system",
+      "description": "All proposed components and labeled connections. Zoom in or select a node to inspect its direct dependencies."
+    },
+    {
+      "id": "prompt",
+      "label": "PII → placeholders → AI",
+      "description": "Raw names, addresses, emails and mobile numbers stay in extension-owned UI and local temporary maps. Only placeholders reach the AI."
+    },
+    {
+      "id": "restore",
+      "label": "AI reply → local originals",
+      "description": "Read placeholder replies, buffer streamed tokens, look up this conversation’s private map and restore personal values only in the extension panel."
+    },
+    {
+      "id": "cookie",
+      "label": "Active cookie protection",
+      "description": "Native cookies remain in Chrome. Optional local metadata inspection, pasted-secret blocking and known-tracker rules reduce specific risks; normal first-party login continues."
+    },
+    {
+      "id": "audit",
+      "label": "TinyFish integration",
+      "description": "Only an approved domain enters the backend audit route. TinyFish researches public pages; validation, cache, safe progress and deterministic risk connect back to local protection."
+    },
+    {
+      "id": "platform",
+      "label": "UI, storage + tests",
+      "description": "The proposed extension surfaces, non-sensitive preferences, temporary private state, local model assets, demo and acceptance checks."
+    },
+    {
+      "id": "stretch",
+      "label": "Stretch: opt-out agent",
+      "description": "Optional future authenticated settings changes require separate consent and an execution design that does not hand browser cookies to the public audit agent."
+    }
+  ]
+}
