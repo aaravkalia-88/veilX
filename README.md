@@ -55,4 +55,4 @@ node scripts/seal-html.cjs
 node --test tests/walkthrough.test.cjs
 ```
 
-Browser verification and TDD evidence are recorded in [docs/verification.md](docs/verification.md). Synthetic samples test the walkthrough model, not production PII detection, cookie enforcement, or live policy accuracy. No application dependencies have been introduced. No license is selected yet; the repository owner should choose one before reuse outside this project.
+Browser verification and TDD evidence are recorded in [docs/verification.md](docs/verification.md). Synthetic samples test the walkthrough model, not production PII detection, cookie enforcement, or live policy accuracy. No application dependencies have been introduced. The repository’s existing [LICENSE](LICENSE) is the GNU General Public License, version 3; it is preserved from the initial GitHub commit.
