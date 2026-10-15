@@ -1,0 +1,6 @@
+.DS_Store
+.preview/
+coverage/
+.env
+.env.*
+!.env.example

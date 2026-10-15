@@ -3,6 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
 const path = require('node:path');
+const { createHash } = require('node:crypto');
 
 const file = path.join(__dirname, '../index.html');
 const html = fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : '';
@@ -26,6 +27,7 @@ test('reply restoration is local, repeatable, and leaves unknown placeholders al
 test('synthetic session values never appear in the redacted cookie sample', () => {
   assert.equal(run("redactSample('cookie').includes('fictional-session-value')"), false);
   assert.equal(run("redactSample('cookie').includes('[SESSION_1]')"), true);
+  assert.equal(run("restoreSample('cookie', '[SESSION_1]')"), '[SESSION_1]');
 });
 
 test('only verified no-training maps to low; unclear or unknown fails to strict', () => {
@@ -48,4 +50,23 @@ test('artifact has no external assets, outbound API, or persistent browser stora
   assert.doesNotMatch(html, /<script[^>]+src=|<link[^>]+href=|@import|fetch\s*\(|XMLHttpRequest|sendBeacon|localStorage|sessionStorage|document\.cookie/);
   assert.doesNotMatch(html, /on(?:click|load|error)\s*=/i);
   assert.match(html, /connect-src 'none'/);
+  assert.doesNotMatch(html, /style="|unsafe-inline|unsafe-eval/);
+});
+
+test('every inline script and style is authorized by its exact CSP hash', () => {
+  const blocks = [...html.matchAll(/<(?:script|style)[^>]*>([\s\S]*?)<\/(?:script|style)>/g)];
+  assert.equal(blocks.length, 3);
+  for (const block of blocks) {
+    const hash = createHash('sha256').update(block[1]).digest('base64');
+    assert.ok(html.includes(`'sha256-${hash}'`), 'Refresh CSP hashes after edits');
+  }
+});
+
+test('all embedded scripts parse and in-page navigation targets exist', () => {
+  for (const match of html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g)) {
+    assert.doesNotThrow(() => new vm.Script(match[1]));
+  }
+  const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map(match => match[1]);
+  assert.equal(new Set(ids).size, ids.length, 'IDs must be unique');
+  for (const match of html.matchAll(/href="#([^"]+)"/g)) assert.ok(ids.includes(match[1]), `Missing anchor ${match[1]}`);
 });
