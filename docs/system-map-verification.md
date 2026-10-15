@@ -40,4 +40,6 @@ Chrome window resizing clamped at 500px, so mobile evidence uses device emulatio
 
 ## Product-design limits
 
+Raster export: `docs/veilx-system-map.png` was rendered directly from the complete SVG at 6000 × 8312 pixels and tagged 300 DPI. Metadata and aspect-ratio assertions passed; the full image and a detail crop were visually inspected. PNG size is 3,706,798 bytes. No PowerPoint/PDF document was created or tested for placement. The SVG remains the vector source; the PNG is a snapshot of this version.
+
 The graph describes intended behavior, not verified product protection. Detection can miss data. Protected composition/restoration requires extension-owned UI; provider DOM cannot safely hold originals under a promise that the provider never sees them. Cookie metadata is not a vault, known-tracker rules are not arbitrary exfiltration detection, and native login can identify the user. Names/places NER is phase 2 with manual marking in the first phase; opt-out automation is stretch and requires separate consent/execution design. Exact TinyFish events/preview, real provider adapters, permissions, deployment and every future acceptance-test node still require implementation and integration testing.

@@ -10,7 +10,7 @@ The graph is embedded in the HTML and works offline. No installation, server, AP
 - Select a component for its responsibility, proposed module, data boundary and incoming/outgoing connections. Follow another connection from the details panel.
 - Search for a feature, component or module. Choose a feature trace for prompt redaction, reply restoration, active cookies, TinyFish, supporting pieces or stretch opt-out work.
 - Keyboard: Tab to a node, Enter/Space to inspect, arrows to pan, +/− to zoom, Home to fit, Escape to clear selection.
-- Download the [vector SVG](docs/veilx-system-map.svg) for unlimited zoom or sharing. The [DOT graph](docs/architecture.dot) is editable in Graphviz-compatible tools.
+- For PDF or PowerPoint, download the [high-resolution PNG](docs/veilx-system-map.png): 6000 × 8312 pixels, 300 DPI. The [vector SVG](docs/veilx-system-map.svg) stays sharp at any size. The [DOT graph](docs/architecture.dot) is editable in Graphviz-compatible tools.
 
 Every application module path is **proposed**, not a claim that the file exists or the feature has been built.
 
@@ -68,6 +68,7 @@ npm test
 | `scripts/seal-html.cjs` | Authorize exact inline scripts/styles with CSP hashes |
 | `index.html` | Generated offline graph explorer |
 | `docs/veilx-system-map.svg` | Generated static vector diagram |
+| `docs/veilx-system-map.png` | High-resolution image export for PDF/PowerPoint |
 | `docs/architecture.dot` | Generated Graphviz source |
 | `tests/architecture.test.cjs` | Completeness, privacy, feature paths, exports, search and traces |
 | `walkthrough.html` | Preserved earlier concept walkthrough |
