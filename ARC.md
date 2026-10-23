@@ -3,9 +3,9 @@
 > **Living architecture record.** Codex: keep this document short and accurate. Update it **as code is written**, after each meaningful implementation or architectural change. Never describe planned functionality as implemented.
 
 ## Current state
-- **Phase:** Specification / repository audit pending.
-- **Implemented:** Not yet verified. Codex must inspect the repository and replace this line with actual findings.
-- **Next:** Inspect project and installed reverse-engineering skill; implement the smallest end-to-end browser-extension privacy-protection flow.
+- **Phase:** Hackathon MVP implementation, 2026-10-23.
+- **Implemented:** Shared local NLP/pattern masking and restoration engine; Python aggregate-only validation/security boundary. Verified: 25 Node tests and 3 Python tests pass, including the 16 original documentation checks.
+- **Next:** Extension panel and ChatGPT adapter, web workspace, actual MCP transport integration, packaging and browser verification.
 
 ## System map
 ```text
@@ -36,19 +36,20 @@ opt-in risk rules; no raw cookie/session harvesting.
 ## Modules — update paths as they actually appear
 | Module | Actual path | Status |
 | --- | --- | --- |
-| Detection + classification | TBD | Not verified |
-| Placeholder mapping | TBD | Not verified |
+| Detection + classification | `shared/privacy.mjs` | Local fixtures verified |
+| Placeholder mapping | `shared/privacy.mjs` | Stability, collision, scope, expiry and non-restoration tests pass |
 | Extension content script + overlay | TBD | Not verified |
 | Session Shield | TBD | Not verified |
 | Dashboard / settings | TBD | Not verified |
 | Desktop companion | TBD | Not verified |
-| Alexa+ adapter | TBD | Not verified |
-| Tests | TBD | Not verified |
+| Alexa+ adapter | `backend/app.py` | MCP tools registered; transport not yet exercised |
+| Tests | `tests/app/`, existing `tests/*.test.cjs` | 28 checks pass |
 
 ## Decisions / changes
 - **Initial:** A Grammarly-inspired *interaction pattern*, not Grammarly code or proprietary internals.
 - **Initial:** MVP is a Chrome Manifest V3 extension with local masking and explicit user control.
 - **Initial:** `PRO.md` is the product source of truth; revise this file only for implemented design and changed decisions.
+- **2026-10-23:** Python API accepts aggregate counts only. Alexa+ is a frontend simulation backed by real MCP; no Amazon account linking. Current scope excludes desktop, cookies, TinyFish and hosting.
 
 <!-- Codex: When something ships, update Current state, the relevant module path/status,
      and at most one short Decisions line. Remove obsolete entries. Keep ARC.md roughly
