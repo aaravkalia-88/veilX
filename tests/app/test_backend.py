@@ -125,7 +125,9 @@ def test_vercel_entrypoint_and_build_configuration():
     assert importlib.import_module("app").app is app
 
 
-def test_assistant_calls_mounted_mcp_without_a_loopback_server(local_client, monkeypatch):
+def test_assistant_calls_mounted_mcp_without_a_loopback_server(
+    local_client, monkeypatch
+):
     def no_network(*_args, **_kwargs):
         raise OSError("Serverless functions have no separate loopback server")
 
@@ -168,5 +170,6 @@ with TestClient(app, base_url='https://veilx-preview.vercel.app') as client:
         capture_output=True,
         text=True,
         timeout=30,
+        check=False,
     )
     assert result.returncode == 0, result.stderr

@@ -45,7 +45,15 @@ npm run build:app
 npm start
 ```
 
-Open **http://127.0.0.1:8000**. Keep port 8000: the simulator’s SDK client calls the local MCP endpoint on that port. The backend binds to loopback and does not log request bodies. This is a local hackathon build, with no public-hosting configuration.
+Open **http://127.0.0.1:8000**. Local startup binds to loopback and does not log request bodies. The simulator uses the official SDK's Streamable HTTP transport against the mounted MCP application, so it also works inside a serverless function without a separate listener on port 8000.
+
+### Deploy on Vercel
+
+Import this repository with **Root Directory `./`**, select **`feat/hackathon-mvp`**, and use the **FastAPI** framework preset. Keep the Output Directory override disabled. The committed `vercel.json` builds the website and extension ZIP; root `app.py` exposes the Python application. Python 3.14 is pinned in `.python-version`.
+
+The backend explicitly trusts the current deployment and production domains from `VERCEL_URL` and `VERCEL_PROJECT_PRODUCTION_URL`, while retaining MCP Host/Origin checks. For a custom domain, set **`VEILX_PUBLIC_ORIGIN=https://your-domain.example`** and redeploy. Other projects' domains remain rejected.
+
+After deployment, check `/healthz`, `/download/veilx-extension.zip`, and the Alexa+ simulator's **Summarize this protection** button. The real external MCP endpoint remains `/mcp`. The deployed website processes drafts locally; the extension still connects only to ChatGPT and local demo pages.
 
 ## Install the Chrome extension
 
@@ -128,7 +136,7 @@ See [ARC.md](ARC.md) for implemented architecture and [PRO.md](PRO.md) for the s
 - DOM changes, interruptions and altered/unknown placeholders can require manual restoration. Provider account identity, the OS, and other extensions remain outside VeilX’s protection boundary.
 - Maps expire after **30 minutes of inactivity**. Restoration rejects an expired map immediately; the worker’s periodic alarm removes inactive storage within about a minute. Website reloads lose their memory-only map.
 - The extension’s local engine works offline. Live ChatGPT needs internet; the Alexa+ simulator needs the local Python server. Extension activity is not synced into the website’s counts.
-- Desktop companion, cookie access, TinyFish, OAuth, database, public hosting, Chrome Web Store publication and Amazon account linking are outside this MVP.
+- Desktop companion, cookie access, TinyFish, OAuth, database, Chrome Web Store publication and Amazon account linking are outside this MVP. Vercel deployment configuration is included; live hosting must be checked separately.
 
 ## Submission notes
 

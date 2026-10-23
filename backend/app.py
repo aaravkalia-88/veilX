@@ -1,24 +1,47 @@
-"""Loopback-only demo host. Its API accepts aggregate counts, never private text."""
+"""Privacy demo host. Its API accepts aggregate counts, never private text."""
 
 import logging
+import os
 import time
 from collections import deque
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Annotated, Literal
+from urllib.parse import urlsplit
 
+import httpx2
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from mcp import Client, MCPError
+from mcp.client.streamable_http import streamable_http_client
 from mcp.server import MCPServer
+from mcp.server.transport_security import TransportSecuritySettings
 from pydantic import BaseModel, ConfigDict, Field, StrictInt
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 ROOT = Path(__file__).resolve().parents[1]
 Count = Annotated[StrictInt, Field(ge=0, le=100000)]
 ALLOWED_ORIGINS = {"http://127.0.0.1:8000", "http://localhost:8000"}
+for name in ("VERCEL_URL", "VERCEL_PROJECT_PRODUCTION_URL", "VEILX_PUBLIC_ORIGIN"):
+    if value := os.environ.get(name):
+        origin = value if name == "VEILX_PUBLIC_ORIGIN" else f"https://{value}"
+        parsed = urlsplit(origin)
+        if (
+            parsed.scheme != "https"
+            or not parsed.hostname
+            or parsed.username
+            or parsed.password
+            or parsed.path not in {"", "/"}
+            or parsed.query
+            or parsed.fragment
+        ):
+            raise ValueError(f"{name} must identify a single HTTPS origin.")
+        ALLOWED_ORIGINS.add(origin.rstrip("/"))
+ALLOWED_HOSTS = sorted(
+    {host for origin in ALLOWED_ORIGINS if (host := urlsplit(origin).hostname)}
+)
 CSP = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'"
 logging.getLogger("mcp").setLevel(logging.WARNING)
 
@@ -115,7 +138,15 @@ def summarize_protection(
 
 
 mcp_app = mcp.streamable_http_app(
-    json_response=True, stateless_http=True, max_request_body_size=8192
+    json_response=True,
+    stateless_http=True,
+    max_request_body_size=8192,
+    transport_security=TransportSecuritySettings(
+        allowed_hosts=[
+            entry for host in ALLOWED_HOSTS for entry in (host, f"{host}:*")
+        ],
+        allowed_origins=sorted(ALLOWED_ORIGINS),
+    ),
 )
 
 
@@ -132,7 +163,7 @@ app = FastAPI(
     redoc_url=None,
     openapi_url=None,
 )
-app.add_middleware(TrustedHostMiddleware, allowed_hosts=["127.0.0.1", "localhost"])
+app.add_middleware(TrustedHostMiddleware, allowed_hosts=ALLOWED_HOSTS)
 recent_requests: deque[float] = deque()
 
 
@@ -243,10 +274,17 @@ async def assistant(body: AssistantRequest):
         else {}
     )
     try:
-        async with Client(
-            "http://127.0.0.1:8000/mcp", read_timeout_seconds=10
-        ) as client:
-            result = await client.call_tool(tool, arguments)
+        # ASGI HTTP transport reaches the real mounted endpoint without a serverless loopback socket.
+        async with httpx2.AsyncClient(
+            transport=httpx2.ASGITransport(app=app), timeout=10
+        ) as http_client:
+            async with Client(
+                streamable_http_client(
+                    "http://127.0.0.1:8000/mcp", http_client=http_client
+                ),
+                read_timeout_seconds=10,
+            ) as client:
+                result = await client.call_tool(tool, arguments)
             if result.is_error or not isinstance(result.structured_content, dict):
                 raise RuntimeError("Tool call failed")
             return {
@@ -256,9 +294,7 @@ async def assistant(body: AssistantRequest):
             }
     except (MCPError, OSError, TimeoutError, RuntimeError, ValueError, ExceptionGroup):
         return JSONResponse(
-            {
-                "detail": "The local MCP tool is unavailable. Run the server on port 8000 and retry."
-            },
+            {"detail": "The MCP tool is temporarily unavailable. Please retry."},
             status_code=503,
         )
 
