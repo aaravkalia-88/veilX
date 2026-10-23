@@ -12,7 +12,7 @@ Built for the **Alexa+ track** of [Build, Ship, Shape: Amazon Developer Hackatho
 
 ## Solo contribution
 
-I built VeilX end to end as a solo developer during a short hackathon sprint, covering the local privacy engine, Chrome extension, website, FastAPI backend, MCP tools, tests, and Vercel deployment. I used Python, JavaScript, Chrome Manifest V3, compromise, Tailwind CSS, Motion, esbuild, Playwright, and pytest, with GitHub for version control and Codex for development assistance.
+I built VeilX end to end as a solo developer during a short hackathon sprint, covering the local privacy engine, Chrome extension, website, FastAPI backend, MCP tools, tests, and Vercel deployment. I used Python, JavaScript, Chrome Manifest V3, compromise, Tailwind CSS, Motion, esbuild, Playwright, and pytest, with GitHub for version control.
 
 ## The idea
 
