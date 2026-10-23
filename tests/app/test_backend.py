@@ -1,6 +1,10 @@
-from fastapi.testclient import TestClient
-from backend.app import app
+import asyncio
+
 import pytest
+from fastapi.testclient import TestClient
+from mcp import Client, MCPError
+
+from backend.app import Counts, app, get_protection_capabilities, mcp, summarize_protection
 
 
 @pytest.fixture(scope='module')
@@ -38,3 +42,29 @@ def test_rejects_untrusted_origins_and_hosts(local_client):
     client = local_client
     assert client.post('/api/assistant', json={'intent': 'capabilities'}, headers={'Origin': 'https://evil.example'}).status_code == 403
     assert client.get('/healthz', headers={'Host': 'evil.example'}).status_code == 400
+
+
+def test_tools_report_real_counts_without_exposing_private_values():
+    result = summarize_protection(Counts(email=2, person=1, secret=1), 3)
+    assert result['total_masked'] == 4
+    assert result['credentials_masked'] == 1
+    assert result['unresolved_count'] == 3
+    assert 'cannot access your private map' in ' '.join(get_protection_capabilities()['limits'])
+
+
+def test_body_limit_and_build_artifacts(local_client):
+    assert local_client.post('/api/assistant', content=b'x' * 8193).status_code == 413
+    assert local_client.get('/').status_code == 200
+    assert local_client.get('/download/veilx-extension.zip').status_code == 200
+
+
+def test_mcp_rejects_extra_private_fields():
+    async def check():
+        async with Client(mcp) as client:
+            for name, arguments in [
+                ('summarize_protection', {'counts_by_type': {'email': 1}, 'draft': 'synthetic-private-field'}),
+                ('get_protection_capabilities', {'draft': 'synthetic-private-field'}),
+            ]:
+                with pytest.raises(MCPError):
+                    await client.call_tool(name, arguments)
+    asyncio.run(check())
