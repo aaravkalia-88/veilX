@@ -6,7 +6,13 @@
 
 Built for the **Alexa+ track** of [Build, Ship, Shape: Amazon Developer Hackathon](https://amazonappdev2026.devpost.com/). VeilX pairs a working Chrome privacy companion with a real Python MCP server and an explicitly labeled Alexa+ web simulation.
 
+**Live on Vercel:** [veilx-kappa.vercel.app](https://veilx-kappa.vercel.app/) · [Download Chrome extension](https://veilx-kappa.vercel.app/download/veilx-extension.zip)
+
 [Quick start](#quick-start) · [Chrome installation](#install-the-chrome-extension) · [Alexa+ integration](#the-alexa-demonstration) · [Demo script](docs/demo-script.md) · [Verification](docs/mvp-verification.md) · [Architecture](ARC.md)
+
+## Solo contribution
+
+I built VeilX end to end as a solo developer during a short hackathon sprint, covering the local privacy engine, Chrome extension, website, FastAPI backend, MCP tools, tests, and Vercel deployment. I used Python, JavaScript, Chrome Manifest V3, compromise, Tailwind CSS, Motion, esbuild, Playwright, and pytest, with GitHub for version control and Codex for development assistance.
 
 ## The idea
 
@@ -48,6 +54,8 @@ npm start
 Open **http://127.0.0.1:8000**. Local startup binds to loopback and does not log request bodies. The simulator uses the official SDK's Streamable HTTP transport against the mounted MCP application, so it also works inside a serverless function without a separate listener on port 8000.
 
 ### Deploy on Vercel
+
+The [live production site](https://veilx-kappa.vercel.app/) is available without credentials. All 12 production checks passed, including the extension ZIP, MCP protocol handshake and tool calls, and rejection of unsupported private-text fields and untrusted origins.
 
 Import this repository with **Root Directory `./`**, select **`feat/hackathon-mvp`**, and use the **FastAPI** framework preset. Keep the Output Directory override disabled. The committed `vercel.json` builds the website and extension ZIP; root `app.py` exposes the Python application. Python 3.14 is pinned in `.python-version`.
 
@@ -135,8 +143,8 @@ See [ARC.md](ARC.md) for implemented architecture and [PRO.md](PRO.md) for the s
 - Only ChatGPT and connected local demo pages are supported. Password, OTP, payment/authentication and secret-marked fields are excluded. Nested iframes and closed shadow editors are unsupported.
 - DOM changes, interruptions and altered/unknown placeholders can require manual restoration. Provider account identity, the OS, and other extensions remain outside VeilX’s protection boundary.
 - Maps expire after **30 minutes of inactivity**. Restoration rejects an expired map immediately; the worker’s periodic alarm removes inactive storage within about a minute. Website reloads lose their memory-only map.
-- The extension’s local engine works offline. Live ChatGPT needs internet; the Alexa+ simulator needs the local Python server. Extension activity is not synced into the website’s counts.
-- Desktop companion, cookie access, TinyFish, OAuth, database, Chrome Web Store publication and Amazon account linking are outside this MVP. Vercel deployment configuration is included; live hosting must be checked separately.
+- The extension’s local engine works offline. Live ChatGPT needs internet; the Alexa+ simulator needs the Python backend, available locally or on Vercel. Extension activity is not synced into the website’s counts.
+- Desktop companion, cookie access, TinyFish, OAuth, database, Chrome Web Store publication and Amazon account linking are outside this MVP. Vercel production hosting is verified at the live demo link above.
 
 ## Submission notes
 
