@@ -62,3 +62,30 @@ test('responsive layout, native popover keyboard dismissal and downloadable pack
   expect(response.ok()).toBe(true);
   expect(response.headers()['content-type']).toContain('application/zip');
 });
+
+test('light surfaces and optional scroll motion respect user preferences', async ({ page }) => {
+  await page.goto('/');
+  expect(await page.evaluate(() => getComputedStyle(document.documentElement).colorScheme)).toBe('light');
+  expect(await page.locator('.hero-visual').evaluate(el => getComputedStyle(el).backgroundImage)).toBe('none');
+  await page.getByRole('button', { name: 'Pause motion', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Resume motion', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect(page.getByRole('button', { name: 'Reduced motion enabled' })).toBeDisabled();
+  await page.locator('#alexa').scrollIntoViewIfNeeded();
+  await expect(page.getByRole('button', { name: 'Summarize this protection' })).toBeVisible();
+  expect(await page.locator('canvas').count()).toBe(0);
+});
+
+test('automatic veiling updates the preview locally and can be turned off', async ({ page }) => {
+  const outbound = [];
+  page.on('request', request => { if (request.method() === 'POST') outbound.push(request.url()); });
+  await page.goto('/');
+  await page.getByLabel('Private draft').fill('Email maya@example.com.');
+  await expect(page.locator('#protected-text')).toHaveText('Email [EMAIL_1].');
+  expect(outbound).toEqual([]);
+  await page.getByLabel('Automatically veil while typing').uncheck();
+  await page.getByLabel('Private draft').fill('Email other@example.com.');
+  await expect(page.locator('#protected-text')).toContainText('Your protected text appears here');
+  await page.getByRole('button', { name: 'Mask all', exact: true }).click();
+  await expect(page.locator('#protected-text')).toHaveText('Email [EMAIL_2].');
+});

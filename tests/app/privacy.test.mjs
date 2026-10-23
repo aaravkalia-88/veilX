@@ -82,3 +82,14 @@ test('only prose surfaces are eligible; credentials, OTPs and payment fields sta
     { tag: 'TEXTAREA', readOnly: true }, { tag: 'DIV', editable: false },
   ]) assert.equal(eligibleField(field), false, JSON.stringify(field));
 });
+
+test('an editor may retain only its previously emitted tokens while masking new details', () => {
+  const session = createSession('inline');
+  const first = maskText('hi my name is sophia', session);
+  assert.equal(first.maskedText, 'hi my name is [PERSON_1]');
+  assert.throws(() => maskText(first.maskedText, session));
+  const next = maskText(`${first.maskedText}. Email maya@example.com.`, session, { preserveTokens: ['[PERSON_1]'] });
+  assert.equal(next.maskedText, 'hi my name is [PERSON_1]. Email [EMAIL_1].');
+  assert.equal(next.counts.person, 1);
+  assert.equal(restoreText(next.maskedText, session), 'hi my name is sophia. Email maya@example.com.');
+});

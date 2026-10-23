@@ -19,3 +19,10 @@ test('only a pending first ChatGPT reply can bind the initial conversation URL',
   assert.equal(transitionScope({ scope, pending: false }, 3, 'https://chatgpt.com/?x=1'), 'keep');
   assert.equal(transitionScope({ scope, pending: true }, 3, 'https://evil.example/'), 'clear');
 });
+
+test('guest ChatGPT conversations bind once and remain isolated', () => {
+  const scope = scopeFor(3, 'https://chatgpt.com/');
+  assert.equal(transitionScope({ scope, pending: true }, 3, 'https://chatgpt.com/uc/guest-123'), 'bind');
+  assert.equal(scopeFor(3, 'https://chatgpt.com/uc/guest-123'), '3|https://chatgpt.com|/uc/guest-123');
+  assert.equal(transitionScope({ scope: scopeFor(3, 'https://chatgpt.com/uc/guest-123'), pending: true }, 3, 'https://chatgpt.com/uc/other-456'), 'clear');
+});
