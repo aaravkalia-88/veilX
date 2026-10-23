@@ -13,6 +13,8 @@ __pycache__/
 htmlcov/
 test-results/
 playwright-report/
-.env
-.env.*
-!.env.example
+/decision.md
+
+.ruff_cache/
+.project-notes/
+.super-clean-backup/

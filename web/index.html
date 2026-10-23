@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="VeilX replaces sensitive details with local placeholders before you share, and restores your AI replies privately."
+    />
+    <title>VeilX — Your data stays yours.</title>
+    <link rel="icon" href="/assets/icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/assets/styles.css" />
+    <script type="module" src="/assets/app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#private-draft">Skip to private workspace</a>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="VeilX home"
+        ><img src="/assets/icon.svg" alt="" width="32" height="36" /><span
+          >veil<span class="brand-x">X</span></span
+        ><span class="beta-tag">LOCAL FIRST</span></a
+      >
+      <nav aria-label="Main navigation">
+        <a href="#workspace">Workspace</a><a href="#alexa">Alexa+ demo</a
+        ><a class="button small" href="/download/veilx-extension.zip"
+          >Get the extension <span aria-hidden="true">↗</span></a
+        >
+      </nav>
+    </header>
+    <main class="site-main">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-ambient" aria-hidden="true">
+          <div class="ambient-shape"></div>
+        </div>
+        <div class="hero-copy">
+          <p class="eyebrow">
+            <span class="status-dot"></span> A PRIVATE LAYER FOR YOUR AI
+            CONVERSATIONS
+          </p>
+          <h1 id="hero-title">Your data<br />stays <span>yours.</span></h1>
+          <p class="hero-description">
+            Share the context. Keep the personal details.<br />VeilX masks
+            sensitive information before you send it,<br
+              class="desktop-break"
+            />
+            then brings it back into your answer — locally.
+          </p>
+          <div class="hero-actions">
+            <a href="#private-draft" class="hero-link"
+              >Try the private workspace <span aria-hidden="true">↘</span></a
+            ><button
+              id="toggle-motion"
+              class="text-button"
+              type="button"
+              aria-pressed="false"
+            >
+              Pause motion
+            </button>
+          </div>
+        </div>
+        <div
+          class="hero-visual"
+          aria-label="Fictional example: Maya Sharma becomes PERSON 1, then restores locally"
+        >
+          <div class="visual-topline">
+            <span>ONE MESSAGE. TWO WORLDS.</span
+            ><span class="mini-lock" aria-hidden="true">◇</span>
+          </div>
+          <div class="example-original">
+            <span class="example-caption">YOUR DEVICE</span>
+            <p>
+              “Write an introduction for<br /><span class="sensitive-example"
+                >Maya Sharma</span
+              >.”
+            </p>
+          </div>
+          <div class="veil-line">
+            <span></span
+            ><img
+              src="/assets/icon.svg"
+              alt=""
+              width="34"
+              height="38"
+            /><span></span>
+          </div>
+          <div class="example-protected">
+            <span class="example-caption">WHAT THE AI SEES</span>
+            <p>
+              “Write an introduction for<br /><span class="token-example"
+                >[PERSON_1]</span
+              >.”
+            </p>
+          </div>
+          <div class="visual-bottom">
+            <span class="status-dot"></span> Original restored only on your
+            device <span class="example-caption">FICTIONAL EXAMPLE</span>
+          </div>
+        </div>
+      </section>
+      <!-- WORKSPACE -->
+      <section
+        class="below-workspace"
+        aria-label="Install and Alexa demonstration"
+      >
+        <section
+          class="install-section"
+          id="install"
+          aria-labelledby="install-title"
+        >
+          <p class="eyebrow">02 / TAKE IT WITH YOU</p>
+          <h2 id="install-title">A quieter kind of assistant.</h2>
+          <p class="section-description">
+            A protected composer beside your browser. Small privacy hints where
+            you type. You stay in control.
+          </p>
+          <a class="button primary" href="/download/veilx-extension.zip"
+            >Download Chrome extension <span aria-hidden="true">↓</span></a
+          >
+          <ol class="install-steps">
+            <li><span>1</span>Download and extract the ZIP.</li>
+            <li>
+              <span>2</span>Open <code>chrome://extensions</code> and enable
+              Developer mode.
+            </li>
+            <li>
+              <span>3</span>Choose <strong>Load unpacked</strong>, select the
+              extracted folder, then pin VeilX.
+            </li>
+          </ol>
+          <p class="boundary-note">
+            Chrome 135+ · Local demo and ChatGPT permissions only. Connect a
+            site explicitly. This is an unpacked hackathon build.
+          </p>
+          <details class="editor-fixture">
+            <summary>Test supported editor hints</summary>
+            <p class="boundary-note">
+              After enabling VeilX on this local page, type in the prose field
+              below. Secure fields remain excluded.
+            </p>
+            <label for="fixture-prose">Prose editor</label
+            ><textarea
+              id="fixture-prose"
+              placeholder="Paste fictional contact details here"
+            ></textarea
+            ><label for="fixture-password">Password (excluded)</label
+            ><input
+              id="fixture-password"
+              type="password"
+              autocomplete="new-password"
+            /><label for="fixture-otp">Verification code (excluded)</label
+            ><input id="fixture-otp" type="text" autocomplete="one-time-code" />
+          </details>
+        </section>
+        <section
+          class="assistant-section"
+          id="alexa"
+          aria-labelledby="assistant-title"
+        >
+          <div class="assistant-heading">
+            <p class="eyebrow">03 / ALEXA+ DEMONSTRATION</p>
+            <span class="simulation-tag">SIMULATION</span>
+          </div>
+          <h2 id="assistant-title">
+            Ask about the protection.<br />Keep the details out.
+          </h2>
+          <p class="section-description">
+            These commands call a real local MCP server. Only counts leave this
+            workspace — never your message or private map.
+          </p>
+          <div class="assistant-commands">
+            <button type="button" id="ask-summary">
+              <span aria-hidden="true">↗</span> Summarize this protection</button
+            ><button type="button" id="ask-capabilities">
+              <span aria-hidden="true">↗</span> What can VeilX protect?
+            </button>
+          </div>
+          <div class="assistant-answer">
+            <div class="answer-heading">
+              <span class="status-dot"></span
+              ><span id="assistant-tool">MCP / READY</span>
+            </div>
+            <p id="assistant-result" role="status" aria-live="polite">
+              Mask a message above, then ask for a summary of this workspace.
+            </p>
+          </div>
+          <p class="boundary-note">
+            No linked Amazon account, microphone, or AI model. This simulator
+            displays actual MCP tool results. Extension activity is not synced
+            to this page.
+          </p>
+        </section>
+      </section>
+      <aside class="privacy-footer">
+        <span class="privacy-symbol" aria-hidden="true">◇</span>
+        <div>
+          <strong>Built to know less.</strong>
+          <p>
+            No analytics. No cloud vault. No remote text detection. Clear the
+            session to discard your map. Detection can miss information; review
+            before sharing.
+          </p>
+        </div>
+      </aside>
+    </main>
+    <footer class="site-footer">
+      <span>veilX <span class="muted">/ Your data stays yours.</span></span
+      ><span>LOCAL BY DESIGN · HACKATHON BUILD</span>
+    </footer>
+  </body>
+</html>

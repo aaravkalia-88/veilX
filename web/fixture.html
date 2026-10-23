@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en" data-veilx-fixture="chat">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>VeilX — synthetic adapter fixture</title>
+    <link rel="stylesheet" href="/assets/styles.css" />
+    <script type="module" src="/assets/fixture.js"></script>
+  </head>
+  <body>
+    <main class="site-main fixture-main">
+      <p class="eyebrow">SYNTHETIC LOCAL FIXTURE / NOT CHATGPT</p>
+      <h1>Verify what actually gets submitted.</h1>
+      <p class="section-description">
+        This controlled editor exercises the adapter. Its reply is deterministic
+        test data, not a live AI response.
+      </p>
+      <form id="fixture-form">
+        <label for="prompt-textarea">Website composer</label
+        ><textarea
+          id="prompt-textarea"
+          rows="7"
+          aria-label="Website composer"
+        ></textarea
+        ><button type="submit" class="button primary" data-testid="send-button">
+          Send</button
+        ><button type="button" class="button" data-testid="stop-button" hidden>
+          Stop generating
+        </button>
+      </form>
+      <h2>Actual submitted value</h2>
+      <pre class="text-output" id="submitted-text"></pre>
+      <h2>Synthetic assistant reply</h2>
+      <div id="fixture-replies"></div>
+      <p class="boundary-note">
+        Open VeilX, connect this site, mask a fictional draft in the panel, then
+        choose Send protected.
+      </p>
+    </main>
+  </body>
+</html>

@@ -19,6 +19,7 @@
     "tailwindcss": "4.3.3"
   },
   "dependencies": {
-    "compromise": "14.19.0"
+    "compromise": "14.19.0",
+    "motion": "14.6.0"
   }
 }
