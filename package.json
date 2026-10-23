@@ -1,13 +1,25 @@
 {
-  "name": "veilx-system-map",
+  "name": "veilx",
   "version": "1.0.0",
   "private": true,
-  "description": "Offline architecture documentation, not the VeilX application",
+  "description": "Local-first privacy masking, Chrome companion, and Alexa+ MCP demonstration",
   "scripts": {
     "build": "node scripts/build-map.cjs",
-    "test": "node --test tests/*.test.cjs"
+    "test": "node --test tests/*.test.cjs tests/app/*.test.mjs",
+    "build:app": "node scripts/build-app.mjs",
+    "test:core": "node --test --experimental-test-coverage --test-coverage-include='shared/*.mjs' --test-coverage-lines=80 tests/app/*.test.mjs",
+    "test:browser": "playwright test",
+    "start": ".venv/bin/python -m uvicorn backend.app:app --host 127.0.0.1 --port 8000 --no-access-log"
   },
   "devDependencies": {
-    "@viz-js/viz": "3.31.0"
+    "@playwright/test": "1.64.1",
+    "@tailwindcss/cli": "4.3.3",
+    "@viz-js/viz": "3.31.0",
+    "esbuild": "0.28.2",
+    "tailwindcss": "4.3.3"
+  },
+  "dependencies": {
+    "compromise": "14.19.0",
+    "motion": "14.6.0"
   }
 }

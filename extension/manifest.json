@@ -1,0 +1,35 @@
+{
+  "manifest_version": 3,
+  "name": "VeilX \u2014 local privacy companion",
+  "version": "1.0.1",
+  "description": "Review sensitive details locally, send placeholders, and restore your AI replies privately.",
+  "minimum_chrome_version": "135",
+  "permissions": ["activeTab", "scripting", "sidePanel", "storage", "alarms"],
+  "host_permissions": ["http://localhost/*", "http://127.0.0.1/*"],
+  "optional_host_permissions": ["https://chatgpt.com/*"],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "Open VeilX private composer",
+    "default_icon": {
+      "16": "icon16.png",
+      "32": "icon32.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icon16.png",
+    "32": "icon32.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "side_panel": {
+    "default_path": "panel.html"
+  },
+  "content_security_policy": {
+    "extension_pages": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"
+  }
+}

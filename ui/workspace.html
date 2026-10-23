@@ -1,0 +1,177 @@
+<section class="workspace" id="workspace" aria-labelledby="workspace-title">
+  <div class="workspace-heading">
+    <div>
+      <p class="eyebrow">01 / THE PRIVACY WORKSPACE</p>
+      <h2 id="workspace-title">Your words. Without your details.</h2>
+    </div>
+    <button class="button quiet" id="load-sample" type="button">
+      <span aria-hidden="true">↗</span> Load fictional sample
+    </button>
+  </div>
+  <div class="workspace-bar">
+    <span class="local-pill"
+      ><span class="status-dot"></span> Processing on this device</span
+    ><button type="button" class="text-button" id="clear-session">
+      Clear session
+    </button>
+  </div>
+  <div class="stages">
+    <section class="stage original-stage" aria-labelledby="original-title">
+      <header class="stage-heading">
+        <span class="step-number">01</span>
+        <h3 id="original-title">Original</h3>
+        <span class="stage-tag">PRIVATE</span>
+      </header>
+      <p class="stage-description">Write freely. This draft stays here.</p>
+      <label class="sr-only" for="private-draft">Private draft</label>
+      <textarea
+        id="private-draft"
+        maxlength="20000"
+        spellcheck="false"
+        autocomplete="off"
+        placeholder="Type or paste your message…&#10;&#10;Names, emails, phone numbers and other sensitive details can be veiled before you share."
+      ></textarea>
+      <label class="auto-veil-control"
+        ><input type="checkbox" id="auto-veil" checked /> Automatically veil
+        while typing</label
+      >
+      <div class="draft-meta">
+        <span id="character-count">0 / 20,000</span
+        ><span>Local detection · Review required</span>
+      </div>
+      <div class="manual-controls">
+        <label class="sr-only" for="manual-type"
+          >Selected information type</label
+        ><select id="manual-type">
+          <option value="person">Name</option>
+          <option value="address">Address</option>
+          <option value="email">Email</option>
+          <option value="phone">Phone</option>
+          <option value="id">Identifier</option>
+          <option value="dob">Birth date</option>
+          <option value="card">Card</option>
+          <option value="secret">Secret</option>
+          <option value="session_token">Session credential</option></select
+        ><button type="button" class="button small" id="mark-selection">
+          Mark selection
+        </button>
+      </div>
+      <div class="stage-actions">
+        <button type="button" class="button primary" id="mask-all">
+          Mask all <span aria-hidden="true">→</span></button
+        ><button
+          type="button"
+          class="button quiet"
+          id="review-findings"
+          commandfor="findings-popover"
+          command="toggle-popover"
+        >
+          Review 0 findings
+        </button>
+      </div>
+    </section>
+    <section class="stage protected-stage" aria-labelledby="protected-title">
+      <header class="stage-heading">
+        <span class="step-number accent-step">02</span>
+        <h3 id="protected-title">Protected</h3>
+        <span class="stage-tag teal">SAFE TO REVIEW</span>
+      </header>
+      <p class="stage-description">The exact text you choose to share.</p>
+      <pre
+        id="protected-text"
+        class="text-output empty-output"
+        aria-live="polite"
+      >
+Your protected text appears here.</pre>
+      <div class="protection-summary">
+        <span class="shield-small" aria-hidden="true">◇</span
+        ><span id="protection-count">Nothing masked yet</span>
+      </div>
+      <p class="boundary-note">
+        Placeholders keep details out of your prompt. Detection can miss
+        information; check this preview.
+      </p>
+      <div class="stage-actions">
+        <button type="button" class="button" id="copy-protected" disabled>
+          Copy protected text</button
+        ><button type="button" class="text-button" id="undo-masking" disabled>
+          Undo masking
+        </button>
+      </div>
+      <div class="extension-only send-controls">
+        <button
+          type="button"
+          class="button primary"
+          id="send-protected"
+          disabled
+        >
+          Send protected to ChatGPT <span aria-hidden="true">↗</span></button
+        ><button type="button" class="text-button" id="cancel-reply" hidden>
+          Cancel reply collection
+        </button>
+      </div>
+    </section>
+    <section class="stage restored-stage" aria-labelledby="restored-title">
+      <header class="stage-heading">
+        <span class="step-number">03</span>
+        <h3 id="restored-title">Restored</h3>
+        <span class="stage-tag">ONLY HERE</span>
+      </header>
+      <p class="stage-description">
+        Bring personal details back into the reply.
+      </p>
+      <label for="masked-reply" class="reply-label">AI reply (masked)</label>
+      <textarea
+        id="masked-reply"
+        class="reply-input"
+        maxlength="20000"
+        spellcheck="false"
+        autocomplete="off"
+        placeholder="Paste the AI’s reply with placeholders…"
+      ></textarea>
+      <button type="button" class="button restore-button" id="restore-locally">
+        Restore locally <span aria-hidden="true">↙</span>
+      </button>
+      <pre
+        id="restored-text"
+        class="text-output restored-output empty-output"
+        aria-live="polite"
+      >
+The readable answer stays on your device.</pre>
+      <p class="boundary-note">
+        Secrets and session credentials always stay masked. Unknown tokens stay
+        unchanged.
+      </p>
+    </section>
+  </div>
+  <p
+    id="workspace-status"
+    class="workspace-status"
+    role="status"
+    aria-live="polite"
+  >
+    Ready when you are. Nothing is uploaded as you type.
+  </p>
+  <div id="findings-popover" popover class="findings-popover">
+    <header>
+      <div>
+        <p class="eyebrow">LOCAL REVIEW</p>
+        <h3>What should stay private?</h3>
+      </div>
+      <button
+        class="icon-button"
+        type="button"
+        commandfor="findings-popover"
+        command="hide-popover"
+        aria-label="Close findings"
+      >
+        ×
+      </button>
+    </header>
+    <p class="boundary-note">
+      Values are concealed. Reveal only on this device. Names and addresses are
+      suggestions.
+    </p>
+    <div id="findings-list"></div>
+  </div>
+</section>

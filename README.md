@@ -1,76 +1,137 @@
-# VeilX — complete system graph
+# VeilX
 
-**Open [index.html](index.html): 106 components, 182 labeled connections, 13 architectural groups.** This is the extended architecture diagram requested from the reference image. It documents the proposed application; it does not implement the browser extension or backend.
+### Your data stays yours.
 
-The graph is embedded in the HTML and works offline. No installation, server, API key, analytics, remote assets or external renderer is needed to view it. The earlier graphical walkthrough is preserved at [walkthrough.html](walkthrough.html).
+**A local privacy round trip for AI conversations: Original → Protected → Restored.**
 
-## Explore or share
+Built for the **Alexa+ track** of [Build, Ship, Shape: Amazon Developer Hackathon](https://amazonappdev2026.devpost.com/). VeilX pairs a working Chrome privacy companion with a real Python MCP server and an explicitly labeled Alexa+ web simulation.
 
-- Drag to pan; scroll or use **+ / −** to zoom. **100%** gives readable labels; **Fit** returns to the current trace.
-- Select a component for its responsibility, proposed module, data boundary and incoming/outgoing connections. Follow another connection from the details panel.
-- Search for a feature, component or module. Choose a feature trace for prompt redaction, reply restoration, active cookies, TinyFish, supporting pieces or stretch opt-out work.
-- Keyboard: Tab to a node, Enter/Space to inspect, arrows to pan, +/− to zoom, Home to fit, Escape to clear selection.
-- For PDF or PowerPoint, download the [high-resolution PNG](docs/veilx-system-map.png): 6000 × 8312 pixels, 300 DPI. The [vector SVG](docs/veilx-system-map.svg) stays sharp at any size. The [DOT graph](docs/architecture.dot) is editable in Graphviz-compatible tools.
+[Quick start](#quick-start) · [Chrome installation](#install-the-chrome-extension) · [Alexa+ integration](#the-alexa-demonstration) · [Demo script](docs/demo-script.md) · [Verification](docs/mvp-verification.md) · [Architecture](ARC.md)
 
-Every application module path is **proposed**, not a claim that the file exists or the feature has been built.
+## The idea
 
-## What connects to what
+Useful AI prompts often contain details an AI does not need: a name, contact address, phone number, identifier or pasted credential. VeilX replaces detected details with consistent placeholders, keeps the mapping on your device, and brings personal details back into the completed answer locally.
 
-| Group | Contents |
-| --- | --- |
-| Person + extension experience | Protected composer, private answer panel, popup, settings, onboarding, risk/evidence/progress and active-session section |
-| Local input + detection | Typing, paste, IME, offsets, regex, phone/card/ID validation, address rules, phase-2 NER, secrets, overlap resolution and review |
-| Placeholder types | `[PERSON_1]`, `[ADDRESS_1]`, `[EMAIL_1]`, `[PHONE_1]`, `[CARD_1]`, `[ID_1]`, `[SESSION_1]` |
-| Local mapping + send | Conversation numbering, temporary map, replacement, auto-redact, pre-send gate, cleanup and expired-map handling |
-| Chatbot boundary | ChatGPT/Gemini/Claude rich-text adapters, outgoing text, provider-owned DOM and AI service |
-| Local restoration | MutationObserver, streaming buffer, exact parsing, map lookup, credential suppression and safe local rendering |
-| Cookie / session protection | Native cookies, site permission, worker, discarded values, metadata, flag warnings, tracker rules, first-party login and pause/revocation |
-| Extension auditor | Domain observation, domain-only request, progress and unknown/offline High/Strict fallback |
-| Backend | FastAPI, origin/auth/rate limits, URL policy, cache hit/miss, TinyFish client/goal, Pydantic, scoring, streaming, SQLite, environment key and safe logs |
-| TinyFish | Streaming endpoint, public-web agent, real progress, live-preview integration point and structured finding |
-| Public sources | Official site, privacy policy, terms, public data-control instructions and source evidence |
-| Supporting pieces | Preferences, temporary state, local model assets, demo fixtures, unit/integration/audit/cookie/accessibility tests and recorded demo |
-| Stretch | Separately authorized training opt-out automation; execution boundary must be designed first |
-
-## Privacy paths
-
-**Personal information:** raw originals → extension-owned composer → local detection/review → placeholders + temporary map → redacted text to AI → placeholder reply → local map lookup → readable answer in extension-owned UI. The AI does not receive the original mapped values through this protected path. Detection can miss information, so review is still necessary.
-
-Names, addresses, email and mobile can be restored into the private answer. Session credentials are removed/replaced and **never restored**. Original mappings use memory or restricted `chrome.storage.session` with explicit cleanup; no mapping reaches the backend, TinyFish, synced storage or logs.
-
-A provider can observe raw typing and restored values in its own DOM. The protected design keeps both in an extension-origin side panel/popup; in-page underlines are a disclosed convenience mode. Shadow DOM only isolates styles. Normal first-party login still identifies the account to its provider.
-
-**Cookie Guard:** cookies remain in Chrome’s native store. The optional local worker discards returned values and exposes metadata only. Pasted-secret scanning and reviewed browser rules address specific leakage/tracking paths. This is not an encrypted cookie vault, arbitrary request-body inspection, or a guarantee against all exfiltration. Sites choose their authentication flags; VeilX does not silently rewrite them.
-
-**TinyFish:** approved domain → proposed `POST /api/audit` → validated FastAPI request → fresh SQLite cache hit or real TinyFish run → public policy/terms/data-control pages → evidence → Pydantic validation → seven-day cache → risk/evidence/progress and local redaction mode. The audit backend receives no original prompt, map, session value or user browser profile. TinyFish’s key stays on the backend.
-
-The [official TinyFish cookbook](https://github.com/tinyfish-io/tinyfish-cookbook) verifies `POST https://agent.tinyfish.ai/v1/automation/run-sse`, `X-API-Key`, and `url`/`goal`. Event parsing and live-preview handoff must be verified during integration; the graph invents neither provider event schemas nor live results. The VeilX `/api/audit` route is a proposed design decision.
-
-Training risk: `yes_by_default`/`unclear` → High/Strict; `opt_out_available` → Medium/Standard; `no` → Low/Standard. Missing retention/review evidence stays unknown; Low training risk is not a complete privacy certification.
-
-## Edit and rebuild the documentation
-
-View the generated HTML/SVG directly without dependencies. To regenerate from the model, use Node.js 22 or later:
-
-```sh
-npm ci --ignore-scripts
-npm run build
-npm test
+```text
+You write:    My name is Maya Sharma. Email maya@example.com.
+AI receives: My name is [PERSON_1]. Email [EMAIL_1].
+AI replies:  Hello [PERSON_1], I'll use [EMAIL_1].
+VeilX shows: Hello Maya Sharma, I'll use maya@example.com.
 ```
 
-`@viz-js/viz` is a pinned **build-only** dependency for Graphviz layout; the delivered HTML never loads it. The planned application stack remains WXT/MV3/TypeScript/React/Tailwind, local regex/validators and later transformers.js, Python 3.11+/FastAPI/httpx/Pydantic/SQLite, and a Vite/React demo. None of that application is built here.
+The readable answer appears **inside VeilX**. ChatGPT’s page retains placeholders. Secrets and session credentials stay masked even in the local reply.
 
-| File | Purpose |
+## What works
+
+- **Activate and continue:** connect VeilX on ChatGPT to veil an existing eligible draft, then keep replacing detected details during later typing. Use the website’s normal Send button; VeilX collects the newly completed reply and restores it in its private panel.
+- **Private composition:** type directly in the extension-owned composer to keep originals out of the provider’s editor. Local automatic preview, manual selection/classification, detection review, copy, undo and Clear session are available.
+- **Shared local engine:** bundled `compromise` suggestions plus structured patterns for email, phone, contextual birth dates/IDs, card shapes and common credentials. Repeated values have stable tokens; literal tokens are reserved; exact known personal-information tokens alone restore.
+- **Temporary maps:** restricted extension session storage, scoped to one tab and conversation. Website maps remain in page memory. Reset, conversation change, tab closure, browser restart and inactivity invalidate mappings.
+- **Real backend integration:** FastAPI serves the website and extension ZIP; the simulator invokes actual MCP tools over Streamable HTTP through the official Python SDK. No API key, database or cloud detection service is required.
+
+**Two entry modes have different privacy boundaries.** A website can observe text typed into its own editor before VeilX replaces it. Use the private composer for private entry. Detection can miss information, so review the protected text before sharing.
+
+## Quick start
+
+Verified locally with **Node 24.19, Python 3.14 and Chrome 156**. The extension requires **Chrome 135+**.
+
+```sh
+git clone --branch feat/hackathon-mvp https://github.com/aaravkalia-88/veilX.git
+cd veilX
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.lock
+npm ci
+npm run build:app
+npm start
+```
+
+Open **http://127.0.0.1:8000**. Keep port 8000: the simulator’s SDK client calls the local MCP endpoint on that port. The backend binds to loopback and does not log request bodies. This is a local hackathon build, with no public-hosting configuration.
+
+## Install the Chrome extension
+
+1. Click **Download Chrome extension** on the local website. The build also creates `dist/veilx-extension.zip`.
+2. **Extract** the ZIP into a folder.
+3. Open `chrome://extensions`, enable **Developer Mode**, select **Load unpacked**, and choose the extracted folder containing `manifest.json`.
+4. Open ChatGPT, select VeilX from Chrome’s extensions menu, then **Connect current site** and approve the optional ChatGPT site access.
+5. Review the replaced site draft, then send normally. The completed reply returns automatically to VeilX’s **Restored** section.
+
+For stronger privacy, start in the private composer and choose **Send protected to ChatGPT** after review. Unrelated provider drafts are preserved. If Send outruns the local replacement delay, VeilX blocks that attempt, updates the draft, and asks you to review and send again.
+
+**After code changes:** rebuild, choose **Reload** on VeilX’s card with Developer Mode enabled, then reconnect. Keep the extension panel open during automatic reply collection. Reopening it can recover a still-pending map; manual paste-to-restore remains available.
+
+## The Alexa+ demonstration
+
+This project uses the hackathon’s **MCP + simulated experience** path. The website is a simulation; it does not link an Amazon account, invoke a microphone or claim a deployed Alexa skill.
+
+```text
+Frontend simulator → POST /api/assistant → official MCP SDK client
+                   → Streamable HTTP /mcp → actual tool result
+```
+
+| MCP tool | Accepted input | Output |
+| --- | --- | --- |
+| `get_protection_capabilities()` | None | Supported categories and clear limitations |
+| `summarize_protection(counts_by_type, unresolved_count)` | Enumerated categories and strict integers from 0 to 100,000 | Actual aggregate totals, credential count and review summary |
+
+The real `/mcp` endpoint is initialized with protocol **2025-11-25** in the HTTP acceptance test. Python rejects extra fields, unsupported categories, booleans and invalid counts; it accepts no prompt, identifier, map, credential or browsing-history fields. Validation errors do not echo rejected values.
+
+The mounted server’s session-manager lifespan follows the [official MCP SDK ASGI integration](https://py.sdk.modelcontextprotocol.io/run/asgi/). The simulation’s displayed result comes from a real tool call, with no fabricated AI response.
+
+## Verify it
+
+```sh
+npm run build:app
+npm test
+npm run test:core
+.venv/bin/python -m pytest tests/app/test_backend.py --cov=backend --cov-report=term-missing --cov-fail-under=80
+.venv/bin/ruff check backend tests/app/test_backend.py
+npx playwright install chromium
+npm run test:browser
+```
+
+The original 16 architecture checks are retained. Additional checks cover token collisions, Unicode offsets, overlap priority, exact restoration, credential suppression, expiry/scope isolation, actual loaded-extension workflows, protected normal Send, interrupted replies, excluded fields, keyboard use, 1440px/390px layouts and real MCP HTTP calls.
+
+**Live evidence:** a native Chrome walkthrough on guest ChatGPT replaced a fictional name/email in its actual editor, used its normal Send button, and restored the completed reply locally. Captured conversation POSTs contained the tested placeholders and no tested originals or map fields. Local fixture success is recorded separately; a signed-in ChatGPT account was not live-tested. See [exact results and TDD evidence](docs/mvp-verification.md).
+
+## Demo in under three minutes
+
+Follow the [2:40 demo script](docs/demo-script.md). To reproduce the captioned website recording while the server runs:
+
+```sh
+node scripts/record-demo.mjs --discover
+node scripts/record-demo.mjs --rehearse
+node scripts/record-demo.mjs
+```
+
+The local recording is `dist/evidence/veilx-demo.webm`. It labels its manual sample reply as synthetic; its MCP result is real. The separate `/assets/fixture.html` test editor is explicitly **not ChatGPT**.
+
+## Architecture and repository
+
+| Path | Responsibility |
 | --- | --- |
-| `docs/architecture.json` | Editable components, groups, connections, payload boundaries and phases |
-| `docs/map-shell.html` | Explorer template and local interaction |
-| `scripts/build-map.cjs` | Validate references, lay out graph, generate DOT/SVG/HTML and refresh CSP hashes |
-| `scripts/seal-html.cjs` | Authorize exact inline scripts/styles with CSP hashes |
-| `index.html` | Generated offline graph explorer |
-| `docs/veilx-system-map.svg` | Generated static vector diagram |
-| `docs/veilx-system-map.png` | High-resolution image export for PDF/PowerPoint |
-| `docs/architecture.dot` | Generated Graphviz source |
-| `tests/architecture.test.cjs` | Completeness, privacy, feature paths, exports, search and traces |
-| `walkthrough.html` | Preserved earlier concept walkthrough |
+| `shared/` | Shared detector, placeholder engine and tab/conversation scope |
+| `extension/` | MV3 worker, restricted session storage, protected panel, hints and ChatGPT DOM adapter |
+| `ui/` | Shared workspace/controller, original shield mark and compiled CSS source |
+| `web/` | Local website, Alexa+ simulator and labeled adapter fixtures |
+| `backend/app.py` | FastAPI host, strict metadata boundary, SDK client and real MCP tools |
+| `scripts/` | Reproducible application/ZIP builds and demo recording |
+| `tests/` | Privacy, backend, browser and preserved architecture checks |
 
-[Graph verification](docs/system-map-verification.md) records checks and limits. [Earlier walkthrough verification](docs/verification.md) remains historical. Application specifications and implementation are deferred; the current deliverable is the extended graph. The original [GPLv3 license](LICENSE) is preserved.
+See [ARC.md](ARC.md) for implemented architecture and [PRO.md](PRO.md) for the supplied broader product specification. The [reference study](docs/implementation-references.md) explains the original Grammarly-inspired interaction design and 21st.dev visual references.
+
+**What changed for the hackathon:** the repository originally contained an offline architecture graph and concept walkthrough. This branch adds the runnable local engine, extension, website, FastAPI/MCP integration, packaging and regression tests. The original [graph](index.html), [walkthrough](walkthrough.html), exports and [historical guide](docs/system-map-guide.md) remain intact; their broader proposed modules are not claims of implemented features.
+
+## Supported limits
+
+- Detection uses language suggestions and common patterns, not a guarantee of finding every private value. Names/addresses can be missed or misclassified; manual marking is available. Ordinary numbers are not automatically private.
+- Only ChatGPT and connected local demo pages are supported. Password, OTP, payment/authentication and secret-marked fields are excluded. Nested iframes and closed shadow editors are unsupported.
+- DOM changes, interruptions and altered/unknown placeholders can require manual restoration. Provider account identity, the OS, and other extensions remain outside VeilX’s protection boundary.
+- Maps expire after **30 minutes of inactivity**. Restoration rejects an expired map immediately; the worker’s periodic alarm removes inactive storage within about a minute. Website reloads lose their memory-only map.
+- The extension’s local engine works offline. Live ChatGPT needs internet; the Alexa+ simulator needs the local Python server. Extension activity is not synced into the website’s counts.
+- Desktop companion, cookie access, TinyFish, OAuth, database, public hosting, Chrome Web Store publication and Amazon account linking are outside this MVP.
+
+## Submission notes
+
+The [hackathon requirements](https://amazonappdev2026.devpost.com/) request working source, a demo under three minutes and product/tool feedback. This repository supplies runnable source, a demo script and [implementation feedback](docs/implementation-references.md). The demo still needs to be uploaded to the submission platform, and judges need access to the repository. VeilX does not change repository visibility or send collaborator invitations automatically.
+
+The original [GPLv3 license](LICENSE) is preserved. Bundled third-party notices ship with the extension ZIP.

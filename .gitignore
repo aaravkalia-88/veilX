@@ -5,3 +5,16 @@ node_modules/
 .env
 .env.*
 !.env.example
+dist/
+.venv/
+__pycache__/
+.pytest_cache/
+.coverage
+htmlcov/
+test-results/
+playwright-report/
+/decision.md
+
+.ruff_cache/
+.project-notes/
+.super-clean-backup/

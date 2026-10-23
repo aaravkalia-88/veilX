@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>VeilX — private composer</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script type="module" src="panel.js"></script>
+  </head>
+  <body data-surface="extension">
+    <header class="panel-header">
+      <a class="brand" href="panel.html" aria-label="VeilX private composer"
+        ><img src="icon.svg" alt="" width="27" height="30" /><span
+          >veil<span class="brand-x">X</span></span
+        ></a
+      ><span class="panel-subtitle"
+        >Your private side of the conversation.</span
+      >
+    </header>
+    <section class="panel-connection" aria-label="Site connection">
+      <div class="panel-connection-row">
+        <button type="button" class="button" id="connect-site">
+          Connect current site</button
+        ><label class="pause-control"
+          ><input type="checkbox" id="pause-hints" /> Pause hints</label
+        >
+      </div>
+      <div class="site-veil-controls">
+        <label class="pause-control"
+          ><input type="checkbox" id="auto-site" checked /> Veil site editor
+          automatically</label
+        ><button class="text-button" id="veil-current" type="button">
+          Veil current draft
+        </button>
+      </div>
+      <p class="boundary-note">
+        A website may see original typing before replacement. Use the private
+        composer below for private entry. Connecting enables local replacement
+        in eligible editors.
+      </p>
+      <p class="boundary-note" id="connection-status">
+        Connect ChatGPT or the local demo explicitly. Offline masking works
+        without a connection.
+      </p>
+    </section>
+    <!-- WORKSPACE -->
+  </body>
+</html>
