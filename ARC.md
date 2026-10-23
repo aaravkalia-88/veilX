@@ -1,56 +1,47 @@
 # VeilX — ARC.md
 
-> **Living architecture record.** Codex: keep this document short and accurate. Update it **as code is written**, after each meaningful implementation or architectural change. Never describe planned functionality as implemented.
+> Living architecture record. Implemented status only; detailed requirements remain in PRO.md.
 
 ## Current state
-- **Phase:** Hackathon MVP implementation, 2026-10-23.
-- **Implemented:** Shared local NLP/pattern masking and restoration engine; Python aggregate-only validation/security boundary. Verified: 25 Node tests and 3 Python tests pass, including the 16 original documentation checks.
-- **Next:** Extension panel and ChatGPT adapter, web workspace, actual MCP transport integration, packaging and browser verification.
+- **Phase:** Local hackathon MVP, 2026-10-23. Original offline architecture artifacts remain intact.
+- **Implemented:** Shared local masking/restoration engine; light website and extension-owned composer; automatic protected-composer/site-editor veiling, review/manual marking, explicit protected send, manual reply fallback; aggregate-only FastAPI/MCP simulator; extension ZIP packaging.
+- **Verification:** Engine, backend and loaded-extension fixture checks pass. Actual guest ChatGPT masks through its normal Send button and restores automatically in the panel. Final verification passes: 29 Node, 6 Python and 12 browser checks; core lines 100%, backend 87.59%. See `docs/mvp-verification.md` for exact evidence.
 
-## System map
-```text
-Supported web text fields
-    ↓ (MV3 content script: user-enabled, no password fields)
-Local detector → span classifier → placeholder mapper
-    ↓                         ↓
-Inline VeilX UI          Local-only mapping vault
-    ↓
-User confirms / enabled policy applies masked text
-    ↓
-Browser sends user-controlled masked content
-
-Extension UI ↔ settings/local metadata ↔ optional desktop app
-                                   ↔ optional API ↔ Alexa+ skill
-
-Session Shield (separate module): token-like text warning +
-opt-in risk rules; no raw cookie/session harvesting.
+## Runtime boundaries
+```mermaid
+flowchart LR
+    C["Private composer / page memory"] --> E["Shared local engine"]
+    S["Optional site editor: typing visible to site"] --> W["Content script + trusted worker"]
+    W <--> V["Restricted storage.session"]
+    E --> P["Reviewed placeholders"]
+    W --> P
+    P --> A["ChatGPT normal interface"]
+    A --> R["Local restoration in VeilX only"]
+    E --> R
+    V --> R
+    U["Website aggregate counts"] --> F["FastAPI /api/assistant"]
+    F --> M["Official SDK HTTP client → /mcp tools"]
 ```
 
-## Boundaries
-- **Local first:** detection, replacement, and reversible mapping happen on device by default.
-- **Untrusted:** all website DOM content and third-party integrations.
-- **Sensitive:** raw personal data, passwords, cookie values, session IDs and tokens must never enter logs/telemetry or Alexa requests.
-- **Browser limits:** protection is scoped to supported, permissioned surfaces; no guarantee against all cookie theft, XSS, hostile extensions or OS compromise.
-- **Alexa+ and TinyFish:** optional, separate, consent-based services; never receive originals or raw browser session material.
+Raw originals and mappings never enter Python/MCP. Inline hints disclose that websites can observe typing in their own editors. Credentials never restore. Passwords, OTP, payment and authentication surfaces are excluded. No cookie access, history access, telemetry or cloud NLP.
 
-## Modules — update paths as they actually appear
+## Modules
 | Module | Actual path | Status |
 | --- | --- | --- |
-| Detection + classification | `shared/privacy.mjs` | Local fixtures verified |
-| Placeholder mapping | `shared/privacy.mjs` | Stability, collision, scope, expiry and non-restoration tests pass |
-| Extension content script + overlay | TBD | Not verified |
-| Session Shield | TBD | Not verified |
-| Dashboard / settings | TBD | Not verified |
-| Desktop companion | TBD | Not verified |
-| Alexa+ adapter | `backend/app.py` | MCP tools registered; transport not yet exercised |
-| Tests | `tests/app/`, existing `tests/*.test.cjs` | 28 checks pass |
+| Detection, mapping, restoration | `shared/privacy.mjs` | Local tests; exact tokens, precedence, Unicode, collisions, expiry |
+| Tab/conversation scope | `shared/scope.mjs` | Tests include signed-in `/c/` and observed guest `/uc/` routes |
+| Trusted session storage | `extension/background.mjs` | RAM-only restricted session storage; reset/navigation/closure/expiry |
+| Protected composer | `ui/workspace.*`, `extension/panel.*` | Automatic local preview; manual review/restore; explicit send |
+| Inline hints + ChatGPT adapter | `extension/content.mjs` | Loaded-extension fixtures and actual guest ChatGPT round trip verified |
+| Website + scroll reveals | `web/`, `ui/styles.css` | Light responsive layout, reduced-motion and pause controls |
+| FastAPI + MCP tools | `backend/app.py` | Real HTTP SDK transport; strict aggregate-only validation |
+| Build + ZIP | `scripts/build-app.mjs`, `scripts/package-extension.py` | Bundled MV3 assets, compiled local CSS, downloadable ZIP |
+| Regression tests | `tests/app/`, `tests/browser/`, `tests/*.test.cjs` | Core/backend/browser checks; historical 16 preserved |
 
-## Decisions / changes
-- **Initial:** A Grammarly-inspired *interaction pattern*, not Grammarly code or proprietary internals.
-- **Initial:** MVP is a Chrome Manifest V3 extension with local masking and explicit user control.
-- **Initial:** `PRO.md` is the product source of truth; revise this file only for implemented design and changed decisions.
-- **2026-10-23:** Python API accepts aggregate counts only. Alexa+ is a frontend simulation backed by real MCP; no Amazon account linking. Current scope excludes desktop, cookies, TinyFish and hosting.
-
-<!-- Codex: When something ships, update Current state, the relevant module path/status,
-     and at most one short Decisions line. Remove obsolete entries. Keep ARC.md roughly
-     one page; detailed tasks, edge cases and requirements belong in PRO.md. -->
+## Decisions
+- General Grammarly interaction patterns are recreated with original code; proprietary internals are not copied.
+- HTML/vanilla JavaScript, locally compiled Tailwind, esbuild, compromise, Motion, FastAPI and official MCP SDK. No React or 3D runtime.
+- Latest user preference: light ivory, white, teal and coral; flat background geometry and restrained scroll reveals, informed by 21st.dev references.
+- Session mappings are local, tab/conversation bound and expire after 30 minutes of inactivity. Website mappings live only in page memory.
+- Alexa+ is a labeled frontend simulation backed by a real MCP endpoint. No Amazon account linking, desktop companion, TinyFish, cookie access, database, OAuth or public hosting in this MVP.
+- The private decision ledger is excluded from Git at the user's request.

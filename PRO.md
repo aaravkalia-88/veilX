@@ -1,5 +1,7 @@
 # VeilX — PRO.md
 
+> **Implementation status, 2026-10-23:** The approved hackathon slice is implemented in `shared/`, `extension/`, `ui/`, `web/` and `backend/`. It includes automatic local veiling in the protected composer and, after activation, eligible site editors, manual review, explicit ChatGPT send, exact local restoration, and a real aggregate-only MCP simulator. Inline replacement and hints are a convenience that the provider can observe; originals are never restored into the provider page. Final verification is recorded in `docs/mvp-verification.md`. Broader requirements below remain the supplied product specification, not claims of completed functionality. Desktop, cookie access, TinyFish, OAuth, public hosting and Amazon account linking are deferred. The latest visual direction is light ivory/teal/coral with a flat background and accessible scroll reveals.
+
 ## 0. Mission and instruction to Codex
 
 **VeilX — Your data stays yours.**
