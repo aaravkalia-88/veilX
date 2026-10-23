@@ -2,11 +2,17 @@
 
 ### Your data stays yours.
 
+**Live on Vercel:** [veilx-kappa.vercel.app](https://veilx-kappa.vercel.app/) · [Download Chrome extension](https://veilx-kappa.vercel.app/download/veilx-extension.zip)
+
 **A local privacy round trip for AI conversations: Original → Protected → Restored.**
 
 Built for the **Alexa+ track** of [Build, Ship, Shape: Amazon Developer Hackathon](https://amazonappdev2026.devpost.com/). VeilX pairs a working Chrome privacy companion with a real Python MCP server and an explicitly labeled Alexa+ web simulation.
 
 [Quick start](#quick-start) · [Chrome installation](#install-the-chrome-extension) · [Alexa+ integration](#the-alexa-demonstration) · [Demo script](docs/demo-script.md) · [Verification](docs/mvp-verification.md) · [Architecture](ARC.md)
+
+## Solo contribution
+
+I built VeilX end to end as a solo developer during a short hackathon sprint, covering the local privacy engine, Chrome extension, website, FastAPI backend, MCP tools, tests, and Vercel deployment. I used Python, JavaScript, Chrome Manifest V3, compromise, Tailwind CSS, Motion, esbuild, Playwright, and pytest, with GitHub for version control and Codex for development assistance.
 
 ## The idea
 
