@@ -95,7 +95,7 @@ The mounted server’s session-manager lifespan follows the [official MCP SDK AS
 
 ## Verify it
 
-**Rechecked on 22 November 2026.** The application build succeeded. All 29 Node tests passed, including the 13 core tests that measured 100% line coverage across the selected shared modules. The FastAPI/MCP suite passed 9 tests with 91% backend line coverage after building the application assets. [Tested revision](https://github.com/aaravkalia-88/veilX/commit/72f77fe3b535b48c6880187cc34d7c147fc48a43)
+**Rechecked on 22 November 2026.** The application build passed. The suites passed **29 Node tests, 9 FastAPI/MCP tests and 12 Chromium tests**. Pytest measured **91% backend line coverage**. Chromium used synthetic messages and the local server to exercise the loaded MV3 extension, masking and restoration, scoped MCP inputs, navigation, and keyboard interactions. [Tested revision](https://github.com/aaravkalia-88/veilX/commit/4cb5d70964eb82a12d8e219dde8d3fd4dc03b179)
 
 The backend's homepage and download checks require generated assets. Run `npm run build:app` before pytest.
 
