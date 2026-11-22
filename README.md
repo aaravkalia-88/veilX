@@ -8,8 +8,6 @@
 
 Built for the **Alexa+ track** of [Build, Ship, Shape: Amazon Developer Hackathon](https://amazonappdev2026.devpost.com/). VeilX pairs a working Chrome privacy companion with a real Python MCP server and an explicitly labeled Alexa+ web simulation.
 
-**Live on Vercel:** [veilx-kappa.vercel.app](https://veilx-kappa.vercel.app/) · [Download Chrome extension](https://veilx-kappa.vercel.app/download/veilx-extension.zip)
-
 [Quick start](#quick-start) · [Chrome installation](#install-the-chrome-extension) · [Alexa+ integration](#the-alexa-demonstration) · [Demo script](docs/demo-script.md) · [Verification](docs/mvp-verification.md) · [Architecture](ARC.md)
 
 ## Solo contribution
@@ -96,6 +94,10 @@ The real `/mcp` endpoint is initialized with protocol **2025-11-25** in the HTTP
 The mounted server’s session-manager lifespan follows the [official MCP SDK ASGI integration](https://py.sdk.modelcontextprotocol.io/run/asgi/). The simulation’s displayed result comes from a real tool call, with no fabricated AI response.
 
 ## Verify it
+
+**Rechecked on 22 November 2026.** The application build succeeded. All 29 Node tests passed, including the 13 core tests that measured 100% line coverage across the selected shared modules. The FastAPI/MCP suite passed 9 tests with 91% backend line coverage after building the application assets. [Tested revision](https://github.com/aaravkalia-88/veilX/commit/72f77fe3b535b48c6880187cc34d7c147fc48a43)
+
+The backend's homepage and download checks require generated assets. Run `npm run build:app` before pytest.
 
 ```sh
 npm run build:app
